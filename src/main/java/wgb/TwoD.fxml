@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.canvas.*?>
+<?import javafx.scene.web.*?>
+<?import java.lang.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import wgb.fx.FoilCanvas?>
+<?import javafx.scene.control.TextArea?>
+
+<VBox xmlns:fx="http://javafx.com/fxml/1" fx:controller="wgb.TwoDController"
+	HBox.hgrow="ALWAYS" VBox.vgrow="ALWAYS">
+	<children>
+		<HBox VBox.vgrow="ALWAYS">
+			<children>
+				<VBox minHeight="300" HBox.hgrow="ALWAYS">
+					<children>
+						<FoilCanvas id="canvasRoot" fx:id="canvasRoot"
+							VBox.vgrow="ALWAYS" />
+						<ToolBar scaleShape="false" VBox.vgrow="NEVER">
+							<items>
+								<Button mnemonicParsing="false" onMouseClicked="#onSelectFoilRoot"
+									scaleShape="false" text="Select Root" />
+							</items>
+						</ToolBar>
+					</children>
+				</VBox>
+				<Separator orientation="VERTICAL" />
+				<VBox minHeight="300" HBox.hgrow="ALWAYS">
+					<children>
+						<FoilCanvas id="canvasTip" fx:id="canvasTip"
+							VBox.vgrow="ALWAYS" />
+						<ToolBar scaleShape="false" VBox.vgrow="NEVER">
+							<items>
+								<Button mnemonicParsing="false" onMouseClicked="#onSelectFoilTip"
+									scaleShape="false" text="Select Tip" />
+							</items>
+						</ToolBar>
+					</children>
+				</VBox>
+			</children>
+		</HBox>
+	</children>
+</VBox>

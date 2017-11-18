@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.canvas.*?>
+<?import javafx.scene.web.*?>
+<?import java.lang.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.TextArea?>
+
+<VBox id="vbox" prefHeight="809.0" prefWidth="1198.0"
+	xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+	fx:controller="wgb.MainController">
+	<children>
+		<MenuBar fx:id="menuBar">
+			<menus>
+				<Menu text="File">
+					<items>
+						<MenuItem text="New" onAction="#processNew" />
+						<MenuItem text="Open" onAction="#processOpen" />
+						<MenuItem text="Save" onAction="#processSave" />
+						<MenuItem text="Save As" onAction="#processSaveAs" />
+						<SeparatorMenuItem />
+						<MenuItem text="Exit" onAction="#processExit" />
+					</items>
+				</Menu>
+				<Menu text="View">
+					<items>
+						<RadioMenuItem fx:id="menuMirror" selected="false"
+							onAction="#processMirrorWing" text="Mirror Wing" />
+					</items>
+				</Menu>
+				<fx:define>
+					<ToggleGroup fx:id="toggleGroup1" />
+				</fx:define>
+				<Menu text="Units">
+					<items>
+						<RadioMenuItem toggleGroup="$toggleGroup1" selected="true"
+							onAction="#processSetMillimeters" text="Millimeters" />
+						<RadioMenuItem toggleGroup="$toggleGroup1" onAction="#processSetInches"
+							text="Inches" />
+					</items>
+				</Menu>
+				<Menu text="Help">
+					<items>
+						<!-- <MenuItem disable="true" text="Search" /> <MenuItem text="Online
+							Manual" visible="false" /> <SeparatorMenuItem /> -->
+						<MenuItem onAction="#processAbout" text="About" />
+					</items>
+				</Menu>
+			</menus>
+		</MenuBar>
+		<VBox VBox.vgrow="ALWAYS">
+			<children>
+				<TabPane side="LEFT" tabClosingPolicy="UNAVAILABLE"
+					VBox.vgrow="ALWAYS">
+					<tabs>
+						<Tab text="Build">
+							<content>
+								<SplitPane dividerPositions="0.85" orientation="VERTICAL">
+									<items>
+										<TabPane tabClosingPolicy="UNAVAILABLE" side="BOTTOM">
+											<tabs>
+												<Tab text="2D">
+													<content>
+														<fx:include source="TwoD.fxml" />
+													</content>
+												</Tab>
+												<Tab text="3D">
+													<content>
+														<fx:include source="ThreeD.fxml" />
+													</content>
+												</Tab>
+												<Tab text="GCODE">
+													<content>
+														<fx:include source="Gcode.fxml" />
+													</content>
+												</Tab>
+											</tabs>
+										</TabPane>
+										<VBox>
+											<children>
+												<TableView fx:id="tvSections" VBox.vgrow="ALWAYS"
+													prefHeight="100" onMouseClicked="#ontvSectionsMouseClicked" />
+											</children>
+										</VBox>
+									</items>
+								</SplitPane>
+							</content>
+						</Tab>
+						<!-- <Tab text="Control"> <content> <fx:include source="Cnc.fxml" />
+							</content> </Tab> -->
+					</tabs>
+				</TabPane>
+			</children>
+		</VBox>
+		<Pane id="messageBar" prefHeight="50.0" VBox.vgrow="NEVER" />
+	</children>
+</VBox>

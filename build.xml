@@ -1,0 +1,389 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<project name="WingGcodeBuilder" default="do-deploy" basedir="."  xmlns:fx="javafx:com.sun.javafx.tools.ant">
+	<target name="init-fx-tasks">
+		<path id="fxant">
+			<filelist>
+				<file name="${java.home}\..\lib\ant-javafx.jar"/>
+				<file name="${java.home}\lib\jfxrt.jar"/>
+			</filelist>
+		</path>
+
+		<taskdef resource="com/sun/javafx/tools/ant/antlib.xml"
+			uri="javafx:com.sun.javafx.tools.ant"
+			classpathref="fxant"/>
+	</target>
+	<target name="setup-staging-area">
+		<delete dir="externalLibs" />
+		<delete dir="project" />
+		<delete dir="projectRefs" />
+
+		<mkdir dir="externalLibs" />
+
+		<copy todir="externalLibs">
+			<fileset dir="C:\Users\Chris\.gradle\caches\modules-2\files-2.1\org.glassfish\javax.json\1.0.4\3178f73569fd7a1e5ffc464e680f7a8cc784b85a">
+				<filename name="javax.json-1.0.4.jar"/>
+			</fileset>
+		</copy>
+		<copy todir="externalLibs">
+			<fileset dir="C:\Users\Chris\.gradle\caches\modules-2\files-2.1\org.springframework.boot\spring-boot-starter-logging\1.5.6.RELEASE\74a50fb623c47d76c71402d8c6cc4ac4ba71d39e">
+				<filename name="spring-boot-starter-logging-1.5.6.RELEASE.jar"/>
+			</fileset>
+		</copy>
+		<copy todir="externalLibs">
+			<fileset dir="C:\Users\Chris\Development\Projects\Java\neon\WingGcodeBuilder\lib">
+				<filename name="toxiclibscore.jar"/>
+			</fileset>
+		</copy>
+		<copy todir="externalLibs">
+			<fileset dir="C:\Users\Chris\.gradle\caches\modules-2\files-2.1\ch.qos.logback\logback-core\1.1.11\88b8df40340eed549fb07e2613879bf6b006704d">
+				<filename name="logback-core-1.1.11.jar"/>
+			</fileset>
+		</copy>
+		<copy todir="externalLibs">
+			<fileset dir="C:\Users\Chris\.gradle\caches\modules-2\files-2.1\org.springframework\spring-core\4.3.10.RELEASE\db1462df62dbedad7244da30ec471390660271c0">
+				<filename name="spring-core-4.3.10.RELEASE.jar"/>
+			</fileset>
+		</copy>
+		<copy todir="externalLibs">
+			<fileset dir="C:\Users\Chris\.gradle\caches\modules-2\files-2.1\org.springframework\spring-test\4.3.10.RELEASE\e82664ba39497626cd29298cb16c161d901bfbee">
+				<filename name="spring-test-4.3.10.RELEASE.jar"/>
+			</fileset>
+		</copy>
+		<copy todir="externalLibs">
+			<fileset dir="C:\Users\Chris\.gradle\caches\modules-2\files-2.1\org.yaml\snakeyaml\1.17\7a27ea250c5130b2922b86dea63cbb1cc10a660c">
+				<filename name="snakeyaml-1.17.jar"/>
+			</fileset>
+		</copy>
+		<copy todir="externalLibs">
+			<fileset dir="C:\Users\Chris\.gradle\caches\modules-2\files-2.1\net.minidev\json-smart\2.2.1\5b9e5df7a62d1279b70dc882b041d249c4f0b002">
+				<filename name="json-smart-2.2.1.jar"/>
+			</fileset>
+		</copy>
+		<copy todir="externalLibs">
+			<fileset dir="C:\Users\Chris\.gradle\caches\modules-2\files-2.1\org.springframework\spring-aop\4.3.10.RELEASE\3a8c23246045e5e1dbd7d91354741b165e997a88">
+				<filename name="spring-aop-4.3.10.RELEASE.jar"/>
+			</fileset>
+		</copy>
+		<copy todir="externalLibs">
+			<fileset dir="C:\Users\Chris\.gradle\caches\modules-2\files-2.1\org.springframework.boot\spring-boot\1.5.6.RELEASE\a6e13da038c6eb8b8793795b3189d5ff3f39caa0">
+				<filename name="spring-boot-1.5.6.RELEASE.jar"/>
+			</fileset>
+		</copy>
+		<copy todir="externalLibs">
+			<fileset dir="C:\Users\Chris\.gradle\caches\modules-2\files-2.1\com.jayway.jsonpath\json-path\2.2.0\22290d17944bd239fabf5ac69005a60a7ecbbbcb">
+				<filename name="json-path-2.2.0.jar"/>
+			</fileset>
+		</copy>
+		<copy todir="externalLibs">
+			<fileset dir="C:\Users\Chris\.gradle\caches\modules-2\files-2.1\org.assertj\assertj-core\2.6.0\b532c3fc4f66bcfee4989a3514f1cd56203a33ad">
+				<filename name="assertj-core-2.6.0.jar"/>
+			</fileset>
+		</copy>
+		<copy todir="externalLibs">
+			<fileset dir="C:\Users\Chris\.gradle\caches\modules-2\files-2.1\net.minidev\accessors-smart\1.1\a527213f2fea112a04c9bdf0ec0264e34104cd08">
+				<filename name="accessors-smart-1.1.jar"/>
+			</fileset>
+		</copy>
+		<copy todir="externalLibs">
+			<fileset dir="C:\Users\Chris\.gradle\caches\modules-2\files-2.1\javax.json\javax.json-api\1.1\e708aaf715872f220cc932fd4350189559628c66">
+				<filename name="javax.json-api-1.1.jar"/>
+			</fileset>
+		</copy>
+		<copy todir="externalLibs">
+			<fileset dir="C:\Users\Chris\.gradle\caches\modules-2\files-2.1\org.springframework.boot\spring-boot-autoconfigure\1.5.6.RELEASE\436d14480a4ebeaca7cd223ab97790d515f46ad2">
+				<filename name="spring-boot-autoconfigure-1.5.6.RELEASE.jar"/>
+			</fileset>
+		</copy>
+		<copy todir="externalLibs">
+			<fileset dir="C:\Users\Chris\.gradle\caches\modules-2\files-2.1\org.hamcrest\hamcrest-library\1.3\4785a3c21320980282f9f33d0d1264a69040538f">
+				<filename name="hamcrest-library-1.3.jar"/>
+			</fileset>
+		</copy>
+		<copy todir="externalLibs">
+			<fileset dir="C:\Users\Chris\.gradle\caches\modules-2\files-2.1\org.springframework.boot\spring-boot-test\1.5.6.RELEASE\7bf97882d08b0ae5f61e5a6ced99451663a02a5d">
+				<filename name="spring-boot-test-1.5.6.RELEASE.jar"/>
+			</fileset>
+		</copy>
+		<copy todir="externalLibs">
+			<fileset dir="C:\Users\Chris\.gradle\caches\modules-2\files-2.1\org.apache.logging.log4j\log4j-core\2.9.0\52f6548ae1688e126c29b5dc400929dc0128615">
+				<filename name="log4j-core-2.9.0.jar"/>
+			</fileset>
+		</copy>
+		<copy todir="externalLibs">
+			<fileset dir="C:\Users\Chris\.gradle\caches\modules-2\files-2.1\org.springframework\spring-context\4.3.10.RELEASE\645ce6fdba38448d183a1374506fc24036009869">
+				<filename name="spring-context-4.3.10.RELEASE.jar"/>
+			</fileset>
+		</copy>
+		<copy todir="externalLibs">
+			<fileset dir="C:\Users\Chris\.gradle\caches\modules-2\files-2.1\org.springframework.boot\spring-boot-test-autoconfigure\1.5.6.RELEASE\d4fdc79a4a1331718465ba4564a0a3555f1e0faa">
+				<filename name="spring-boot-test-autoconfigure-1.5.6.RELEASE.jar"/>
+			</fileset>
+		</copy>
+		<copy todir="externalLibs">
+			<fileset dir="C:\Users\Chris\.gradle\caches\modules-2\files-2.1\org.springframework.boot\spring-boot-starter-test\1.5.6.RELEASE\a0e9b338bf492ddc68051e7d4ed62f2cbad067ef">
+				<filename name="spring-boot-starter-test-1.5.6.RELEASE.jar"/>
+			</fileset>
+		</copy>
+		<copy todir="externalLibs">
+			<fileset dir="C:\Users\Chris\.gradle\caches\modules-2\files-2.1\org.slf4j\jul-to-slf4j\1.7.25\af5364cd6679bfffb114f0dec8a157aaa283b76">
+				<filename name="jul-to-slf4j-1.7.25.jar"/>
+			</fileset>
+		</copy>
+		<copy todir="externalLibs">
+			<fileset dir="C:\Users\Chris\.gradle\caches\modules-2\files-2.1\com.vaadin.external.google\android-json\0.0.20131108.vaadin1\fa26d351fe62a6a17f5cda1287c1c6110dec413f">
+				<filename name="android-json-0.0.20131108.vaadin1.jar"/>
+			</fileset>
+		</copy>
+		<copy todir="externalLibs">
+			<fileset dir="C:\Users\Chris\.gradle\caches\modules-2\files-2.1\org.mockito\mockito-core\1.10.19\e8546f5bef4e061d8dd73895b4e8f40e3fe6effe">
+				<filename name="mockito-core-1.10.19.jar"/>
+			</fileset>
+		</copy>
+		<copy todir="externalLibs">
+			<fileset dir="C:\Users\Chris\.gradle\caches\modules-2\files-2.1\org.ow2.asm\asm\5.0.3\dcc2193db20e19e1feca8b1240dbbc4e190824fa">
+				<filename name="asm-5.0.3.jar"/>
+			</fileset>
+		</copy>
+		<copy todir="externalLibs">
+			<fileset dir="C:\Users\Chris\.gradle\caches\modules-2\files-2.1\org.springframework\spring-expression\4.3.10.RELEASE\4975ab542028945ab98fefba772472a40495d7ca">
+				<filename name="spring-expression-4.3.10.RELEASE.jar"/>
+			</fileset>
+		</copy>
+		<copy todir="externalLibs">
+			<fileset dir="C:\Users\Chris\.gradle\caches\modules-2\files-2.1\ch.qos.logback\logback-classic\1.1.11\ccedfbacef4a6515d2983e3f89ed753d5d4fb665">
+				<filename name="logback-classic-1.1.11.jar"/>
+			</fileset>
+		</copy>
+		<copy todir="externalLibs">
+			<fileset dir="C:\Users\Chris\.gradle\caches\modules-2\files-2.1\org.springframework.boot\spring-boot-starter\1.5.6.RELEASE\58c72d105fdf41f605c15c243b72300fa78cccd1">
+				<filename name="spring-boot-starter-1.5.6.RELEASE.jar"/>
+			</fileset>
+		</copy>
+		<copy todir="externalLibs">
+			<fileset dir="C:\Users\Chris\.gradle\caches\modules-2\files-2.1\org.slf4j\jcl-over-slf4j\1.7.25\f8c32b13ff142a513eeb5b6330b1588dcb2c0461">
+				<filename name="jcl-over-slf4j-1.7.25.jar"/>
+			</fileset>
+		</copy>
+		<copy todir="externalLibs">
+			<fileset dir="C:\Users\Chris\.gradle\caches\modules-2\files-2.1\org.apache.logging.log4j\log4j-api\2.9.0\e0dcd508dfc4864a2f5a1963d6ffad170d970375">
+				<filename name="log4j-api-2.9.0.jar"/>
+			</fileset>
+		</copy>
+		<copy todir="externalLibs">
+			<fileset dir="C:\Users\Chris\.gradle\caches\modules-2\files-2.1\org.slf4j\log4j-over-slf4j\1.7.25\a87bb47468f47ee7aabbd54f93e133d4215769c3">
+				<filename name="log4j-over-slf4j-1.7.25.jar"/>
+			</fileset>
+		</copy>
+		<copy todir="externalLibs">
+			<fileset dir="C:\Users\Chris\.gradle\caches\modules-2\files-2.1\org.slf4j\slf4j-api\1.7.25\da76ca59f6a57ee3102f8f9bd9cee742973efa8a">
+				<filename name="slf4j-api-1.7.25.jar"/>
+			</fileset>
+		</copy>
+		<copy todir="externalLibs">
+			<fileset dir="C:\Users\Chris\.gradle\caches\modules-2\files-2.1\org.springframework\spring-beans\4.3.10.RELEASE\9d89b786f755f9b1da344f10f6f045f927679a72">
+				<filename name="spring-beans-4.3.10.RELEASE.jar"/>
+			</fileset>
+		</copy>
+		<copy todir="externalLibs">
+			<fileset dir="C:\Users\Chris\.gradle\caches\modules-2\files-2.1\junit\junit\4.12\2973d150c0dc1fefe998f834810d68f278ea58ec">
+				<filename name="junit-4.12.jar"/>
+			</fileset>
+		</copy>
+		<copy todir="externalLibs">
+			<fileset dir="C:\Users\Chris\.gradle\caches\modules-2\files-2.1\org.objenesis\objenesis\2.1\87c0ea803b69252868d09308b4618f766f135a96">
+				<filename name="objenesis-2.1.jar"/>
+			</fileset>
+		</copy>
+		<copy todir="externalLibs">
+			<fileset dir="C:\Users\Chris\.gradle\caches\modules-2\files-2.1\org.skyscreamer\jsonassert\1.4.0\9cdbb373a06f6513e51e8c545ee6a5e981463edb">
+				<filename name="jsonassert-1.4.0.jar"/>
+			</fileset>
+		</copy>
+		<copy todir="externalLibs">
+			<fileset dir="C:\Users\Chris\.gradle\caches\modules-2\files-2.1\org.hamcrest\hamcrest-core\1.3\42a25dc3219429f0e5d060061f71acb49bf010a0">
+				<filename name="hamcrest-core-1.3.jar"/>
+			</fileset>
+		</copy>
+
+		<mkdir dir="project" />
+		<copy todir="project">
+			<fileset dir="C:\Users\Chris\Development\Projects\Java\neon\WingGcodeBuilder">
+				<include name="src\main\resources/**" />
+			</fileset>
+		</copy>
+		<copy todir="project">
+			<fileset dir="C:\Users\Chris\Development\Projects\Java\neon\WingGcodeBuilder">
+				<include name="src\main\java/**" />
+			</fileset>
+		</copy>
+		<copy todir="project">
+			<fileset dir="C:\Users\Chris\Development\Projects\Java\neon\WingGcodeBuilder">
+				<include name="src\test\java/**" />
+			</fileset>
+		</copy>
+
+		<mkdir dir="projectRefs" />
+	</target>
+	<target name='do-compile'>
+		<delete dir="build" />
+		<mkdir dir="build/src" />
+		<mkdir dir="build/libs" />
+		<mkdir dir="build/classes" />
+
+		<!-- Copy project-libs references -->
+		<copy todir="build/libs">
+			<fileset dir="externalLibs">
+				<include name="snakeyaml-1.17.jar"/>
+				<include name="spring-boot-1.5.6.RELEASE.jar"/>
+				<include name="spring-expression-4.3.10.RELEASE.jar"/>
+				<include name="log4j-core-2.9.0.jar"/>
+				<include name="spring-boot-autoconfigure-1.5.6.RELEASE.jar"/>
+				<include name="spring-aop-4.3.10.RELEASE.jar"/>
+				<include name="spring-boot-test-1.5.6.RELEASE.jar"/>
+				<include name="hamcrest-core-1.3.jar"/>
+				<include name="mockito-core-1.10.19.jar"/>
+				<include name="spring-context-4.3.10.RELEASE.jar"/>
+				<include name="logback-classic-1.1.11.jar"/>
+				<include name="javax.json-1.0.4.jar"/>
+				<include name="accessors-smart-1.1.jar"/>
+				<include name="spring-boot-test-autoconfigure-1.5.6.RELEASE.jar"/>
+				<include name="hamcrest-library-1.3.jar"/>
+				<include name="android-json-0.0.20131108.vaadin1.jar"/>
+				<include name="jsonassert-1.4.0.jar"/>
+				<include name="jul-to-slf4j-1.7.25.jar"/>
+				<include name="assertj-core-2.6.0.jar"/>
+				<include name="objenesis-2.1.jar"/>
+				<include name="slf4j-api-1.7.25.jar"/>
+				<include name="log4j-over-slf4j-1.7.25.jar"/>
+				<include name="spring-beans-4.3.10.RELEASE.jar"/>
+				<include name="spring-core-4.3.10.RELEASE.jar"/>
+				<include name="jcl-over-slf4j-1.7.25.jar"/>
+				<include name="log4j-api-2.9.0.jar"/>
+				<include name="json-smart-2.2.1.jar"/>
+				<include name="toxiclibscore.jar"/>
+				<include name="javax.json-api-1.1.jar"/>
+				<include name="logback-core-1.1.11.jar"/>
+				<include name="spring-boot-starter-test-1.5.6.RELEASE.jar"/>
+				<include name="spring-boot-starter-logging-1.5.6.RELEASE.jar"/>
+				<include name="spring-boot-starter-1.5.6.RELEASE.jar"/>
+				<include name="asm-5.0.3.jar"/>
+				<include name="json-path-2.2.0.jar"/>
+				<include name="spring-test-4.3.10.RELEASE.jar"/>
+				<include name="junit-4.12.jar"/>
+			</fileset>
+		</copy>
+
+		<!-- Copy project references -->
+
+		<!-- Copy project sources itself -->
+		<copy todir="build/src">
+			<fileset dir="project/src/test/java">
+				<include name="**/*"/>
+			</fileset>
+		</copy>
+		<copy todir="build/src">
+			<fileset dir="project/src/main/resources">
+				<include name="**/*"/>
+			</fileset>
+		</copy>
+		<copy todir="build/src">
+			<fileset dir="project/src/main/java">
+				<include name="**/*"/>
+			</fileset>
+		</copy>
+
+		<javac includeantruntime="false" source="1.8" target="1.8" srcdir="build/src" destdir="build/classes" encoding="Cp1252">
+			<classpath>
+				<fileset dir="build/libs">
+					<include name="*"/>
+				</fileset>
+			</classpath>
+		</javac>
+
+		<!-- Copy over none Java-Files -->
+		<copy todir="build/classes">
+		<fileset dir="project/src/test/java">
+			<exclude name="**/*.java"/>
+		</fileset>
+		<fileset dir="project/src/main/resources">
+			<exclude name="**/*.java"/>
+		</fileset>
+		<fileset dir="project/src/main/java">
+			<exclude name="**/*.java"/>
+		</fileset>
+		</copy>
+
+
+	</target>
+	<target name="do-deploy" depends="setup-staging-area, do-compile, init-fx-tasks">
+		<delete file="dist"/>
+		<delete file="deploy" />
+
+		<mkdir dir="dist" />
+		<mkdir dir="dist/libs" />
+
+		<copy todir="dist/libs">
+			<fileset dir="externalLibs">
+				<include name="*" />
+			</fileset>
+		</copy>
+
+		<!--<mkdir dir="dist/resources" />
+		<copy todir="dist/resources" >
+			<fileset dir="resources">
+				<include name="*" />
+			</fileset>
+		</copy>
+		-->
+
+		<fx:resources id="appRes">
+			<fx:fileset dir="dist" includes="WingGcodeBuilder.jar"/>
+			<fx:fileset dir="dist" includes="libs/*"/>
+		</fx:resources>
+
+		<fx:application id="fxApplication"
+			name="Wing Gcode Builder"
+			mainClass="wgb.Main"
+			toolkit="fx"
+		/>
+
+		<mkdir dir="build/classes/META-INF" />
+
+
+
+		<fx:jar destfile="dist/WingGcodeBuilder.jar">
+			<fx:application refid="fxApplication"/>
+			<fileset dir="build/classes">
+			</fileset>
+			<fx:resources refid="appRes"/>
+
+			<manifest>
+				<attribute name="Implementation-Vendor" value="cdevine"/>
+				<attribute name="Implementation-Title" value="Wing Gcode Builder"/>
+				<attribute name="Implementation-Version" value="1.0"/>
+				<attribute name="JavaFX-Feature-Proxy" value="None"/>
+			</manifest>
+		</fx:jar>
+
+
+		<mkdir dir="deploy" />
+		<!-- Need to use ${basedir} because somehow the ant task is calculating the directory differently -->
+		<fx:deploy
+			embedJNLP="false"
+			extension="false"
+			includeDT="false"
+			offlineAllowed="true"
+			outdir="${basedir}/deploy"
+			outfile="WingGcodeBuilder" nativeBundles="exe"
+			updatemode="background" >
+
+			<fx:platform basedir="${java.home}"/>
+			<fx:info title="WingGcodeBuilder" vendor="cdevine"/>
+
+			<fx:application refId="fxApplication"/>
+			<fx:resources refid="appRes"/>
+		</fx:deploy>
+
+
+	</target>
+</project>
