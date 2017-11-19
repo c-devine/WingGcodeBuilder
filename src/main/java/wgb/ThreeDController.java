@@ -71,7 +71,7 @@ public class ThreeDController implements Initializable {
 			double dx = (mousePosX - me.getSceneX());
 			double dy = (mousePosY - me.getSceneY());
 
-			if (me.isPrimaryButtonDown() && me.isShiftDown()) {
+			if (me.isMiddleButtonDown()) {
 				root.setTranslateX(root.getTranslateX() - dx);
 				root.setTranslateY(root.getTranslateY() - dy);
 			}
