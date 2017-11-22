@@ -8,4 +8,5 @@ externalLibs/
 gradle/
 project/
 projectRefs/
+sampleData/*.gcode
 build.xml
