@@ -5,7 +5,6 @@ build/
 deploy/
 dist/
 externalLibs/
-gradle/
 project/
 projectRefs/
 sampleData/*.gcode
