@@ -43,6 +43,21 @@ public class FoilUtil {
 		return points.stream().mapToDouble(p -> p.getX()).max().orElse(0.0);
 	}
 
+	public static double findMinX(List<Point2D> points) {
+
+		return points.stream().mapToDouble(p -> p.getX()).min().orElse(0.0);
+	}
+
+	public static double findMaxY(List<Point2D> points) {
+
+		return points.stream().mapToDouble(p -> p.getY()).max().orElse(0.0);
+	}
+
+	public static double findMinY(List<Point2D> points) {
+
+		return points.stream().mapToDouble(p -> p.getX()).min().orElse(0.0);
+	}
+
 	public static double findRawLength(List<Point2D> points) {
 
 		return IntStream.range(1, points.size()).mapToDouble(i -> points.get(i).distance(points.get(i - 1))).sum();
