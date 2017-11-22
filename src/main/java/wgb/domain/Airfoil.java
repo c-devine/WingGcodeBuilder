@@ -7,6 +7,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import javafx.geometry.Point2D;
+import wgb.util.FoilUtil;
 
 public class Airfoil {
 
@@ -29,15 +30,6 @@ public class Airfoil {
 
 	public Airfoil(Length yPos) {
 		this.yPos = yPos;
-	}
-
-	// returns the raw length
-	public double getRawLength() {
-
-		double len = 0;
-		for (int i = 1; i < xy.size(); i++)
-			len += xy.get(i).distance(xy.get(i - 1));
-		return len;
 	}
 
 	public String getName() {
@@ -78,6 +70,10 @@ public class Airfoil {
 
 	public void setyPos(Length y) {
 		this.yPos = y;
+	}
+
+	public Length getThickness() {
+		return new Length(chord.asMM() * FoilUtil.findMaxY(xy) - FoilUtil.findMinY(xy), Unit.MM);
 	}
 
 }
