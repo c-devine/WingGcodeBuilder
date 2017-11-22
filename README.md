@@ -11,6 +11,7 @@ cutter.
 * Download airfoils for root and tip (if different)
 * Select airfoils in the 2D view
 * Modify wing section parameters (chord, Y (span), offset)
+* View in 3D view
 * Modify G-code settings (feed rate, kerf, etc)
 * Export G-code
 
@@ -61,6 +62,7 @@ Requires Java 8 to build and deploy.
 
 * [Spring Boot](https://projects.spring.io/spring-boot/) - Application framework
 * [Gradle](https://gradle.org/) - Dependency Management
+* [e\(fx\)clipse](http://www.eclipse.org/efxclipse/index.html) - IDE
 
 ## Contributing
 
