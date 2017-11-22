@@ -144,8 +144,14 @@ public class MainController implements Initializable, ProjectAware {
 			redrawAirfoil3D();
 		});
 
+		TableColumn<Airfoil, String> thicknessCol = new TableColumn<Airfoil, String>("Thickness");
+		thicknessCol.setMinWidth(100);
+		thicknessCol
+				.setCellValueFactory((TableColumn.CellDataFeatures<Airfoil, String> param) -> new ReadOnlyStringWrapper(
+						String.valueOf(param.getValue().getThickness().getLength(MainController.unit))));
+
 		tvSections.setEditable(true);
-		tvSections.getColumns().addAll(posCol, nameCol, yCol, chordCol, offsetCol);
+		tvSections.getColumns().addAll(posCol, nameCol, yCol, chordCol, offsetCol, thicknessCol);
 		tvSections.setItems(airFoilList);
 	}
 
