@@ -27,9 +27,9 @@ public class Main extends AbstractJavaFxApplicationSupport {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			VBox root = (VBox) loader.load(getClass().getResource("Main.fxml").toURI());
+			VBox root = (VBox) loader.load(getClass().getResource("/fx/Main.fxml").toURI());
 			Scene scene = new Scene(root, 1200, 800);
-			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
+			scene.getStylesheets().add(getClass().getResource("/fx/application.css").toExternalForm());
 			primaryStage.setTitle(windowTitle);
 			primaryStage.setScene(scene);
 			primaryStage.show();
