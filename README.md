@@ -41,7 +41,7 @@ Execute the jar file:
 java -jar ./build/libs/WingGcodeBuilder.jar
 ```
 
-### Prerequisites
+## Prerequisites
 
 Requires Java 8 to build and deploy.
 
@@ -64,7 +64,7 @@ Requires Java 8 to build and deploy.
 
 ## Contributing
 
-Submit a pull request if intesested in contributing.
+Submit a pull request if interested in contributing.
 
 ## Versioning
 
