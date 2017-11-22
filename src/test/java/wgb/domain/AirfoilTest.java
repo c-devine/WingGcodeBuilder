@@ -19,7 +19,6 @@ public class AirfoilTest {
 		Airfoil af = afr.read(new File("sampledata/test.dat"));
 		assertTrue(af.getXy().size() > 0);
 		logger.debug("xy size = " + af.getXy().size());
-		logger.debug("length = " + af.getRawLength());
 	}
 
 }

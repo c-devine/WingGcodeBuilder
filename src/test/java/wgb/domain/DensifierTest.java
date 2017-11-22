@@ -20,7 +20,7 @@ public class DensifierTest {
 
 		Airfoil af = afr.read(new File("sampledata/mh45.dat"));
 		List<Point2D> points = sut.densify(af.getXy(), 0.004);
-		points.forEach(p -> logger.debug(p.getX() + "," + p.getY()));
+		// points.forEach(p -> logger.debug(p.getX() + "," + p.getY()));
 	}
 
 }
