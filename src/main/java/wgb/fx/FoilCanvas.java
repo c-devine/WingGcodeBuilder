@@ -1,5 +1,7 @@
 package wgb.fx;
 
+import java.util.List;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +11,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import wgb.domain.Airfoil;
 import wgb.domain.Densifier;
+import wgb.util.FoilUtil;
 
 public class FoilCanvas extends ResizableCanvas {
 
@@ -54,9 +57,12 @@ public class FoilCanvas extends ResizableCanvas {
 		gc.setLineWidth(1);
 		gc.beginPath();
 
+		// apply twist
+		List<Point2D> foil = FoilUtil.rotate(airFoil.getXy(), new Point2D(1.0, 0), airFoil.getTwist());
+
 		boolean firstCoord = true;
 
-		for (Point2D xyz : airFoil.getXy()) {
+		for (Point2D xyz : foil) {
 			double x = (xyz.getX() * width) + PADDING_LEFT;
 			// use the width to keep the same scale
 			double y = (this.getHeight() / 2) - (xyz.getY() * width);

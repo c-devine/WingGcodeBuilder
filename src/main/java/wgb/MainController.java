@@ -144,6 +144,19 @@ public class MainController implements Initializable, ProjectAware {
 			redrawAirfoil3D();
 		});
 
+		TableColumn<Airfoil, String> twistCol = new TableColumn<Airfoil, String>("Twist");
+		twistCol.setMinWidth(100);
+		twistCol.setCellValueFactory((TableColumn.CellDataFeatures<Airfoil, String> param) -> new ReadOnlyStringWrapper(
+				String.valueOf(param.getValue().getTwist())));
+
+		twistCol.setCellFactory(TextFieldTableCell.<Airfoil>forTableColumn());
+		twistCol.setOnEditCommit((CellEditEvent<Airfoil, String> t) -> {
+			((Airfoil) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+					.setTwist(Double.valueOf(t.getNewValue()));
+			twoDController.refresh();
+			redrawAirfoil3D();
+		});
+
 		TableColumn<Airfoil, String> thicknessCol = new TableColumn<Airfoil, String>("Thickness");
 		thicknessCol.setMinWidth(100);
 		thicknessCol
@@ -151,7 +164,7 @@ public class MainController implements Initializable, ProjectAware {
 						String.valueOf(param.getValue().getThickness().getLength(MainController.unit))));
 
 		tvSections.setEditable(true);
-		tvSections.getColumns().addAll(posCol, nameCol, yCol, chordCol, offsetCol, thicknessCol);
+		tvSections.getColumns().addAll(posCol, nameCol, yCol, chordCol, offsetCol, twistCol, thicknessCol);
 		tvSections.setItems(airFoilList);
 	}
 
@@ -308,7 +321,7 @@ public class MainController implements Initializable, ProjectAware {
 		af.setChord(new Length(job.getJsonNumber("Chord").doubleValue(), Unit.MM));
 		af.setOffset(new Length(job.getJsonNumber("Offset").doubleValue(), Unit.MM));
 		af.setyPos(new Length(job.getJsonNumber("Ypos").doubleValue(), Unit.MM));
-
+		af.setTwist(job.getJsonNumber("Twist").doubleValue());
 		JsonArray jarr = job.getJsonArray("XY");
 		List<Point2D> pList = new ArrayList<Point2D>();
 
@@ -346,6 +359,7 @@ public class MainController implements Initializable, ProjectAware {
 		job.add("Chord", af.getChord().asMM());
 		job.add("Offset", af.getOffset().asMM());
 		job.add("Ypos", af.getyPos().asMM());
+		job.add("Twist", af.getTwist());
 
 		JsonArrayBuilder jarr = Json.createArrayBuilder();
 		for (Point2D p : af.getXy()) {

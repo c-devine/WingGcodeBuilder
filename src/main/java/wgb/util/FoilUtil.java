@@ -120,4 +120,20 @@ public class FoilUtil {
 		return new Point2D(x, y);
 	}
 
+	public static List<Point2D> rotate(List<Point2D> points, Point2D axis, double deg) {
+
+		return points.stream().map(p -> rotate(p, axis, deg)).collect(Collectors.toList());
+	}
+
+	public static Point2D rotate(Point2D point, Point2D axis, double deg) {
+
+		double rad = Math.toRadians(deg);
+		double co = Math.cos(rad);
+		double si = Math.sin(rad);
+
+		Point2D pt = point.subtract(axis);
+
+		return new Point2D(co * pt.getX() - si * pt.getY(), si * pt.getX() + co * pt.getY()).add(axis);
+	}
+
 }

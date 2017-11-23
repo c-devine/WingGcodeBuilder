@@ -31,8 +31,11 @@ public class FoilMeshHelper {
 	public TriangleMesh createMesh(Airfoil left, Airfoil right, boolean mirror) {
 
 		// slice the foil profile
+		Point2D rotateAxis = new Point2D(1.0, 0.0);
 		lInterpolated = densifier.densify(left.getXy(), NUM_POINTS);
+		lInterpolated = FoilUtil.rotate(lInterpolated, rotateAxis, left.getTwist());
 		rInterpolated = densifier.densify(right.getXy(), NUM_POINTS);
+		rInterpolated = FoilUtil.rotate(rInterpolated, rotateAxis, right.getTwist());
 
 		List<Triangle> leftFace = getFaces(left, lInterpolated);
 		List<Triangle> rightFace = getFaces(right, rInterpolated);
@@ -93,7 +96,9 @@ public class FoilMeshHelper {
 
 	public List<Triangle> getFaces(Airfoil foil, List<Point2D> interpolated) {
 
-		Point3D centroid = new Point3D(foil.getChord().asMM() / 2 + foil.getOffset().asMM(), 0, -foil.getyPos().asMM());
+		Point2D centroid2D = FoilUtil.calcCentroid(interpolated);
+		Point3D centroid = new Point3D((centroid2D.getX() * foil.getChord().asMM()) + foil.getOffset().asMM(),
+				centroid2D.getY() * foil.getChord().asMM(), -foil.getyPos().asMM());
 		return IntStream.range(1, interpolated.size()).mapToObj(
 				i -> new Triangle(getPoint3D(foil, interpolated, i - 1), centroid, getPoint3D(foil, interpolated, i)))
 				.collect(Collectors.toList());

@@ -17,11 +17,14 @@ public class Airfoil {
 	private final static int DEFAULT_CHORD = 100;
 	private final static int DEFAULT_OFFSET = 0;
 	private final static int DEFAULT_YPOS = 0;
+	private final static double DEFAULT_TWIST = 0;
 
 	private String name = DEFAULT_NAME;
 	private Length chord = new Length(DEFAULT_CHORD, DEFAULT_UNIT);
 	private Length offset = new Length(DEFAULT_OFFSET, DEFAULT_UNIT);
 	private Length yPos = new Length(DEFAULT_YPOS, DEFAULT_UNIT);
+	private double twist = DEFAULT_TWIST;
+
 	private List<Point2D> xy = new ArrayList<Point2D>();
 
 	public Airfoil() {
@@ -70,6 +73,14 @@ public class Airfoil {
 
 	public void setyPos(Length y) {
 		this.yPos = y;
+	}
+
+	public double getTwist() {
+		return twist;
+	}
+
+	public void setTwist(double twist) {
+		this.twist = twist;
 	}
 
 	public Length getThickness() {
