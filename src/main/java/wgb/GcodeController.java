@@ -175,7 +175,7 @@ public class GcodeController implements Initializable, ProjectAware {
 	public void onProjectSave(Project project, JsonObjectBuilder builder) {
 
 		JsonObjectBuilder job = Json.createObjectBuilder();
-		oList.forEach(p -> job.add(p.getKey().replaceAll("\\s+", ""), p.getValue() instanceof Length
+		oList.forEach(p -> job.add(p.getKey(), p.getValue() instanceof Length
 				? ((Length) p.getValue()).toFormattedString() : String.valueOf(p.getValue())));
 		builder.add("GCODE", job.build());
 

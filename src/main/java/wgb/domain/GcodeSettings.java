@@ -36,9 +36,13 @@ public class GcodeSettings {
 
 	public void setEntries(List<MapEntry<String, Object>> entries) {
 		BeanWrapperImpl bWrapper = new BeanWrapperImpl(this);
-		entries.forEach(
-				e -> bWrapper.setPropertyValue(e.getKey(), bWrapper.getPropertyType(e.getKey()).equals(Length.class)
-						? new Length((String) e.getValue()) : e.getValue()));
+		entries.forEach(e -> {
+			String key = e.getKey().replaceAll("\\s+", "");
+			if (bWrapper.getPropertyType(key).equals(Length.class) && !(e.getValue() instanceof Length))
+				bWrapper.setPropertyValue(key, new Length((String) e.getValue()));
+			else
+				bWrapper.setPropertyValue(key, e.getValue());
+		});
 	}
 
 	public String getX1() {
