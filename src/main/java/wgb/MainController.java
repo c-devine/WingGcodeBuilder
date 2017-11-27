@@ -384,14 +384,6 @@ public class MainController implements Initializable, ProjectAware {
 		}
 	}
 
-	public Unit getUnit() {
-		return unit;
-	}
-
-	public void setUnit(Unit unit) {
-		this.unit = unit;
-	}
-
 	public RadioMenuItem getMenuMirror() {
 		return menuMirror;
 	}
