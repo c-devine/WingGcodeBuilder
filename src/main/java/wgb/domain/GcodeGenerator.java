@@ -89,9 +89,9 @@ public class GcodeGenerator {
 		List<String> prefix = new ArrayList<String>();
 		prefix.add("G21 ; set units to millimeters");
 		prefix.add("G90 ; use absolute coordinates");
-		prefix.add("M204 S" + settings.getAcc() + " ; set default acceleration");
+		prefix.add("M204 S" + settings.getAcc().asMM() + " ; set default acceleration");
 		prefix.add(getGcodeString("G92", new Point2D(0, 0), new Point2D(0, 0), settings) + " ; reset axis");
-		prefix.add("G1 F" + settings.getF() + " ; feed rate");
+		prefix.add("G1 F" + settings.getF().asMM() + " ; feed rate");
 		return prefix;
 
 	}
