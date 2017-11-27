@@ -16,6 +16,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
@@ -44,6 +45,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.util.Callback;
+import wgb.app.AppEventType;
 import wgb.app.FileChooserHelper;
 import wgb.app.Project;
 import wgb.app.ProjectAware;
@@ -51,7 +53,6 @@ import wgb.domain.Airfoil;
 import wgb.domain.Length;
 import wgb.domain.Side;
 import wgb.domain.Unit;
-import wgb.fx.AfterLoadedEvent;
 
 @Component
 public class MainController implements Initializable, ProjectAware {
@@ -87,6 +88,9 @@ public class MainController implements Initializable, ProjectAware {
 	@Autowired
 	FileChooserHelper fcHelper;
 
+	@Autowired
+	private ApplicationEventPublisher publisher;
+
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		TableColumn<Airfoil, String> posCol = new TableColumn<Airfoil, String>("Position");
@@ -110,38 +114,38 @@ public class MainController implements Initializable, ProjectAware {
 		TableColumn<Airfoil, String> chordCol = new TableColumn<Airfoil, String>("Chord");
 		chordCol.setMinWidth(100);
 		chordCol.setCellValueFactory((TableColumn.CellDataFeatures<Airfoil, String> param) -> new ReadOnlyStringWrapper(
-				String.valueOf(param.getValue().getChord().getLength(MainController.unit))));
+				String.valueOf(param.getValue().getChord().getLength(unit))));
 
 		chordCol.setCellFactory(TextFieldTableCell.<Airfoil>forTableColumn());
 		chordCol.setOnEditCommit((CellEditEvent<Airfoil, String> t) -> {
 			((Airfoil) t.getTableView().getItems().get(t.getTablePosition().getRow()))
-					.setChord(new Length(Double.parseDouble((t.getNewValue())), MainController.unit));
-			redrawAirfoil3D();
+					.setChord(new Length(Double.parseDouble((t.getNewValue())), unit));
+			publisher.publishEvent(AppEventType.REFRESH);
 		});
 
 		TableColumn<Airfoil, String> offsetCol = new TableColumn<Airfoil, String>("Offset");
 		offsetCol.setMinWidth(100);
 		offsetCol
 				.setCellValueFactory((TableColumn.CellDataFeatures<Airfoil, String> param) -> new ReadOnlyStringWrapper(
-						String.valueOf(param.getValue().getOffset().getLength(MainController.unit))));
+						String.valueOf(param.getValue().getOffset().getLength(unit))));
 
 		offsetCol.setCellFactory(TextFieldTableCell.<Airfoil>forTableColumn());
 		offsetCol.setOnEditCommit((CellEditEvent<Airfoil, String> t) -> {
 			((Airfoil) t.getTableView().getItems().get(t.getTablePosition().getRow()))
-					.setOffset(new Length(Double.parseDouble(t.getNewValue()), MainController.unit));
-			redrawAirfoil3D();
+					.setOffset(new Length(Double.parseDouble(t.getNewValue()), unit));
+			publisher.publishEvent(AppEventType.REFRESH);
 		});
 
 		TableColumn<Airfoil, String> yCol = new TableColumn<Airfoil, String>("Y");
 		yCol.setMinWidth(100);
 		yCol.setCellValueFactory((TableColumn.CellDataFeatures<Airfoil, String> param) -> new ReadOnlyStringWrapper(
-				String.valueOf(param.getValue().getyPos().getLength(MainController.unit))));
+				String.valueOf(param.getValue().getyPos().getLength(unit))));
 
 		yCol.setCellFactory(TextFieldTableCell.<Airfoil>forTableColumn());
 		yCol.setOnEditCommit((CellEditEvent<Airfoil, String> t) -> {
 			((Airfoil) t.getTableView().getItems().get(t.getTablePosition().getRow()))
-					.setyPos(new Length(Double.parseDouble(t.getNewValue()), MainController.unit));
-			redrawAirfoil3D();
+					.setyPos(new Length(Double.parseDouble(t.getNewValue()), unit));
+			publisher.publishEvent(AppEventType.REFRESH);
 		});
 
 		TableColumn<Airfoil, String> twistCol = new TableColumn<Airfoil, String>("Twist");
@@ -153,15 +157,14 @@ public class MainController implements Initializable, ProjectAware {
 		twistCol.setOnEditCommit((CellEditEvent<Airfoil, String> t) -> {
 			((Airfoil) t.getTableView().getItems().get(t.getTablePosition().getRow()))
 					.setTwist(Double.valueOf(t.getNewValue()));
-			twoDController.refresh();
-			redrawAirfoil3D();
+			publisher.publishEvent(AppEventType.REFRESH);
 		});
 
 		TableColumn<Airfoil, String> thicknessCol = new TableColumn<Airfoil, String>("Thickness");
 		thicknessCol.setMinWidth(100);
 		thicknessCol
 				.setCellValueFactory((TableColumn.CellDataFeatures<Airfoil, String> param) -> new ReadOnlyStringWrapper(
-						String.valueOf(param.getValue().getThickness().getLength(MainController.unit))));
+						String.valueOf(param.getValue().getThickness().getLength(unit))));
 
 		tvSections.setEditable(true);
 		tvSections.getColumns().addAll(posCol, nameCol, yCol, chordCol, offsetCol, twistCol, thicknessCol);
@@ -193,15 +196,8 @@ public class MainController implements Initializable, ProjectAware {
 		twoDController.setAirfoil(af, side);
 		airFoilList.set(side.getIndex(), af);
 		tvSections.refresh();
-		twoDController.refresh();
-		if (!airFoilList.get(0).getName().equals(Airfoil.DEFAULT_NAME)
-				&& !airFoilList.get(1).getName().equals(Airfoil.DEFAULT_NAME))
-			redrawAirfoil3D();
+		publisher.publishEvent(AppEventType.REFRESH);
 
-	}
-
-	private void redrawAirfoil3D() {
-		threeDController.createWing(airFoilList.get(0), airFoilList.get(1), menuMirror.isSelected());
 	}
 
 	@FXML
@@ -218,12 +214,14 @@ public class MainController implements Initializable, ProjectAware {
 	protected void processSetMillimeters(ActionEvent event) {
 		unit = Unit.MM;
 		tvSections.refresh();
+		publisher.publishEvent(AppEventType.REFRESH);
 	}
 
 	@FXML
 	protected void processSetInches(ActionEvent event) {
 		unit = Unit.INCH;
 		tvSections.refresh();
+		publisher.publishEvent(AppEventType.REFRESH);
 	}
 
 	@FXML
@@ -241,8 +239,8 @@ public class MainController implements Initializable, ProjectAware {
 	protected void processNew(ActionEvent event) {
 		addAirfoil(new Airfoil(), Side.ROOT);
 		addAirfoil(new Airfoil(new Length(200, Unit.MM)), Side.TIP);
-		twoDController.refresh();
-		threeDController.refresh();
+		publisher.publishEvent(AppEventType.REFRESH);
+		threeDController.clear();
 	}
 
 	@FXML
@@ -289,14 +287,13 @@ public class MainController implements Initializable, ProjectAware {
 			try {
 				project.load(f);
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logger.error("Error loading project.", e);
 			}
 	}
 
 	@FXML
 	protected void processMirrorWing(ActionEvent event) {
-		redrawAirfoil3D();
+		publisher.publishEvent(AppEventType.REFRESH);
 	}
 
 	@FXML
@@ -318,9 +315,9 @@ public class MainController implements Initializable, ProjectAware {
 		JsonObject job = properties.getJsonObject(name);
 
 		af.setName(job.getString("Name"));
-		af.setChord(new Length(job.getJsonNumber("Chord").doubleValue(), Unit.MM));
-		af.setOffset(new Length(job.getJsonNumber("Offset").doubleValue(), Unit.MM));
-		af.setyPos(new Length(job.getJsonNumber("Ypos").doubleValue(), Unit.MM));
+		af.setChord(new Length(job.getString("Chord")));
+		af.setOffset(new Length(job.getString("Offset")));
+		af.setyPos(new Length(job.getString("Ypos")));
 		af.setTwist(job.getJsonNumber("Twist").doubleValue());
 		JsonArray jarr = job.getJsonArray("XY");
 		List<Point2D> pList = new ArrayList<Point2D>();
@@ -340,7 +337,7 @@ public class MainController implements Initializable, ProjectAware {
 
 		addAirfoil(getAirfoilFromJson(properties, "ROOT"), Side.ROOT);
 		addAirfoil(getAirfoilFromJson(properties, "TIP"), Side.TIP);
-		twoDController.refresh();
+		publisher.publishEvent(AppEventType.REFRESH);
 	}
 
 	@Override
@@ -356,9 +353,9 @@ public class MainController implements Initializable, ProjectAware {
 
 		JsonObjectBuilder job = Json.createObjectBuilder();
 		job.add("Name", af.getName());
-		job.add("Chord", af.getChord().asMM());
-		job.add("Offset", af.getOffset().asMM());
-		job.add("Ypos", af.getyPos().asMM());
+		job.add("Chord", af.getChord().toFormattedString());
+		job.add("Offset", af.getOffset().toFormattedString());
+		job.add("Ypos", af.getyPos().toFormattedString());
 		job.add("Twist", af.getTwist());
 
 		JsonArrayBuilder jarr = Json.createArrayBuilder();
@@ -371,17 +368,35 @@ public class MainController implements Initializable, ProjectAware {
 	}
 
 	@EventListener
-	private void onAfterLoadApplication(AfterLoadedEvent event) {
+	private void onAppEvent(AppEventType type) {
 
-		if (DEBUG) {
-			File dbg = null;
-			try {
-				dbg = new File("sampledata/project.json");
-				project.load(dbg);
-			} catch (Exception e) {
-				logger.error("Error loading sample data file: " + dbg.getAbsolutePath());
-				e.printStackTrace();
+		if (type.equals(AppEventType.AFTER_LOADED_EVENT)) {
+			if (DEBUG) {
+				File dbg = null;
+				try {
+					dbg = new File("sampledata/project.json");
+					project.load(dbg);
+				} catch (Exception e) {
+					logger.error("Error loading sample data file: " + dbg.getAbsolutePath());
+					e.printStackTrace();
+				}
 			}
 		}
+	}
+
+	public Unit getUnit() {
+		return unit;
+	}
+
+	public void setUnit(Unit unit) {
+		this.unit = unit;
+	}
+
+	public RadioMenuItem getMenuMirror() {
+		return menuMirror;
+	}
+
+	public void setMenuMirror(RadioMenuItem menuMirror) {
+		this.menuMirror = menuMirror;
 	}
 }

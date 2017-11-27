@@ -16,6 +16,7 @@ import javax.json.JsonObjectBuilder;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 import javafx.beans.property.ReadOnlyStringWrapper;
@@ -34,11 +35,13 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
+import wgb.app.AppEventType;
 import wgb.app.FileChooserHelper;
 import wgb.app.Project;
 import wgb.app.ProjectAware;
 import wgb.domain.GcodeGenerator;
 import wgb.domain.GcodeSettings;
+import wgb.domain.Length;
 import wgb.domain.Side;
 import wgb.fx.MapEntry;
 
@@ -78,14 +81,16 @@ public class GcodeController implements Initializable, ProjectAware {
 		TableColumn<MapEntry<String, Object>, String> valueColumn = new TableColumn<>("Value");
 		valueColumn.setCellValueFactory(
 				(TableColumn.CellDataFeatures<MapEntry<String, Object>, String> param) -> new ReadOnlyStringWrapper(
-						String.valueOf(param.getValue().getValue())));
+						param.getValue().getValue() instanceof Length
+								? String.valueOf(((Length) param.getValue().getValue()).getLength(MainController.unit))
+								: String.valueOf(param.getValue().getValue())));
 
 		valueColumn.setCellFactory(TextFieldTableCell.<MapEntry<String, Object>>forTableColumn());
 		valueColumn.setOnEditCommit((CellEditEvent<MapEntry<String, Object>, String> t) -> {
 			MapEntry<String, Object> me = ((MapEntry<String, Object>) t.getTableView().getItems()
 					.get(t.getTablePosition().getRow()));
-			if (me.getValue() instanceof Double)
-				me.setValue(Double.valueOf(t.getNewValue()).doubleValue());
+			if (me.getValue() instanceof Length)
+				me.setValue(new Length(Double.valueOf(t.getNewValue()), MainController.unit));
 			else
 				me.setValue(t.getNewValue());
 		});
@@ -94,6 +99,13 @@ public class GcodeController implements Initializable, ProjectAware {
 		gcodePropTable.getColumns().addAll(keyColumn, valueColumn);
 		gcodePropTable.setItems(oList);
 
+	}
+
+	@EventListener
+	private void onAppEvent(AppEventType type) {
+
+		if (type.equals(AppEventType.REFRESH))
+			gcodePropTable.refresh();
 	}
 
 	@FXML
@@ -152,8 +164,9 @@ public class GcodeController implements Initializable, ProjectAware {
 
 		jo.entrySet().forEach(es -> pList
 				.add(new MapEntry<String, Object>(es.getKey(), es.getValue().toString().replaceAll("\"", ""))));
-		oList.addAll(pList);
+
 		gcSettings.setEntries(pList);
+		oList.addAll(gcSettings.getEntries());
 		gcodePropTable.refresh();
 
 	}
@@ -162,7 +175,8 @@ public class GcodeController implements Initializable, ProjectAware {
 	public void onProjectSave(Project project, JsonObjectBuilder builder) {
 
 		JsonObjectBuilder job = Json.createObjectBuilder();
-		oList.forEach(p -> job.add(p.getKey(), String.valueOf(p.getValue())));
+		oList.forEach(p -> job.add(p.getKey().replaceAll("\\s+", ""), p.getValue() instanceof Length
+				? ((Length) p.getValue()).toFormattedString() : String.valueOf(p.getValue())));
 		builder.add("GCODE", job.build());
 
 	}

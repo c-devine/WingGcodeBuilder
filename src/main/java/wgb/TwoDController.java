@@ -7,6 +7,7 @@ import java.util.ResourceBundle;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 import javafx.fxml.FXML;
@@ -16,6 +17,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
+import wgb.app.AppEventType;
 import wgb.app.FileChooserHelper;
 import wgb.domain.Airfoil;
 import wgb.domain.AirfoilManager;
@@ -52,10 +54,13 @@ public class TwoDController implements Initializable {
 			canvasTip.setAirFoil(af);
 	}
 
-	public void refresh() {
+	@EventListener
+	private void onAppEvent(AppEventType type) {
 
-		canvasRoot.autosize();
-		canvasTip.autosize();
+		if (type.equals(AppEventType.REFRESH)) {
+			canvasRoot.autosize();
+			canvasTip.autosize();
+		}
 	}
 
 	private Airfoil getAirfoil() {

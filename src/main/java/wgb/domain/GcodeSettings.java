@@ -1,7 +1,9 @@
 package wgb.domain;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.springframework.beans.BeanWrapperImpl;
 
@@ -13,21 +15,30 @@ public class GcodeSettings {
 	private String y1 = "Y";
 	private String x2 = "Z";
 	private String y2 = "E";
-	private double f = 1000;
-	private double acc = 100;
-	private double leadin = 10.0;
-	private double kerf = 0.0;
+	private Length f = new Length(1000, Unit.MM);
+	private Length acc = new Length(100, Unit.MM);
+	private Length towerWidth = new Length(1000, Unit.MM);
+	private Length blockWidth = new Length(500, Unit.MM);
+	private Length towerOffset = new Length(250, Unit.MM);
+	private Length leadin = new Length(10.0, Unit.MM);
+	private Length kerf = new Length(0.0, Unit.MM);
 
-	private List<MapEntry<String, Object>> entries = new ArrayList<MapEntry<String, Object>>();
-	{
-		entries.add(new MapEntry<String, Object>("X1", x1));
-		entries.add(new MapEntry<String, Object>("Y1", y1));
-		entries.add(new MapEntry<String, Object>("X2", x2));
-		entries.add(new MapEntry<String, Object>("Y2", y2));
-		entries.add(new MapEntry<String, Object>("F", f));
-		entries.add(new MapEntry<String, Object>("Acc", acc));
-		entries.add(new MapEntry<String, Object>("Leadin", leadin));
-		entries.add(new MapEntry<String, Object>("Kerf", kerf));
+	public List<MapEntry<String, Object>> getEntries() {
+
+		List<String> keys = Arrays.asList("X1", "Y1", "X2", "Y2", "F", "Acc", "Tower Width", "Block Width",
+				"Tower Offset", "Leadin", "Kerf");
+		List<Object> values = Arrays.asList(x1, y1, x2, y2, f, acc, towerWidth, blockWidth, towerOffset, leadin, kerf);
+
+		return IntStream.range(0, keys.size() - 1)
+				.mapToObj(i -> new MapEntry<String, Object>(keys.get(i), values.get(i))).collect(Collectors.toList());
+
+	}
+
+	public void setEntries(List<MapEntry<String, Object>> entries) {
+		BeanWrapperImpl bWrapper = new BeanWrapperImpl(this);
+		entries.forEach(
+				e -> bWrapper.setPropertyValue(e.getKey(), bWrapper.getPropertyType(e.getKey()).equals(Length.class)
+						? new Length((String) e.getValue()) : e.getValue()));
 	}
 
 	public String getX1() {
@@ -62,46 +73,60 @@ public class GcodeSettings {
 		this.y2 = y2;
 	}
 
-	public double getAcc() {
-		return acc;
-	}
-
-	public void setAcc(double acc) {
-		this.acc = acc;
-	}
-
-	public double getF() {
+	public Length getF() {
 		return f;
 	}
 
-	public void setF(double f) {
+	public void setF(Length f) {
 		this.f = f;
 	}
 
-	public double getLeadin() {
+	public Length getAcc() {
+		return acc;
+	}
+
+	public void setAcc(Length acc) {
+		this.acc = acc;
+	}
+
+	public Length getTowerWidth() {
+		return towerWidth;
+	}
+
+	public void setTowerWidth(Length towerWidth) {
+		this.towerWidth = towerWidth;
+	}
+
+	public Length getBlockWidth() {
+		return blockWidth;
+	}
+
+	public void setBlockWidth(Length blockWidth) {
+		this.blockWidth = blockWidth;
+	}
+
+	public Length getTowerOffset() {
+		return towerOffset;
+	}
+
+	public void setTowerOffset(Length towerOffset) {
+		this.towerOffset = towerOffset;
+	}
+
+	public Length getLeadin() {
 		return leadin;
 	}
 
-	public void setLeadin(double leadin) {
+	public void setLeadin(Length leadin) {
 		this.leadin = leadin;
 	}
 
-	public double getKerf() {
+	public Length getKerf() {
 		return kerf;
 	}
 
-	public void setKerf(double kerf) {
+	public void setKerf(Length kerf) {
 		this.kerf = kerf;
-	}
-
-	public List<MapEntry<String, Object>> getEntries() {
-		return entries;
-	}
-
-	public void setEntries(List<MapEntry<String, Object>> entries) {
-		this.entries = entries;
-		BeanWrapperImpl bWrapper = new BeanWrapperImpl(this);
-		entries.forEach(e -> bWrapper.setPropertyValue(e.getKey(), e.getValue()));
 	}
 
 }

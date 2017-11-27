@@ -29,7 +29,7 @@ public class GcodeGenerator {
 		rPts = FoilUtil.rotate(rPts, rotateAxis, right.getTwist());
 
 		// scale + kerf
-		double kerf = settings.getKerf();
+		double kerf = settings.getKerf().asMM();
 		lPts = FoilUtil.scale(lPts, new Point2D(0.0, 0.0), left.getChord().asMM() + kerf,
 				left.getChord().asMM() + kerf);
 		rPts = FoilUtil.scale(rPts, new Point2D(0.0, 0.0), right.getChord().asMM() + kerf,
@@ -43,11 +43,17 @@ public class GcodeGenerator {
 		double maxX = Math.max(FoilUtil.findMaxX(lPts), FoilUtil.findMaxX(rPts));
 		lPts = FoilUtil.flipX(lPts, maxX);
 		rPts = FoilUtil.flipX(rPts, maxX);
-		// add leadin
-		lPts = FoilUtil.offset(lPts, settings.getLeadin(), 0);
-		rPts = FoilUtil.offset(rPts, settings.getLeadin(), 0);
 
-		List<String> retList = new ArrayList<String>(getMainPrefix(settings));
+		// get the summary info before adding in the leadin
+		List<String> summaryInfo = getSummaryInfo(left, lPts, right, rPts);
+
+		// add leadin
+		lPts = FoilUtil.offset(lPts, settings.getLeadin().asMM(), 0);
+		rPts = FoilUtil.offset(rPts, settings.getLeadin().asMM(), 0);
+
+		List<String> retList = new ArrayList<String>();
+		retList.addAll(summaryInfo);
+		retList.addAll(getMainPrefix(settings));
 
 		for (int i = 0; i < Math.min(lPts.size(), rPts.size()); i++) {
 
@@ -88,6 +94,33 @@ public class GcodeGenerator {
 		prefix.add("G1 F" + settings.getF() + " ; feed rate");
 		return prefix;
 
+	}
+
+	private List<String> getSummaryInfo(Airfoil left, List<Point2D> leftPoints, Airfoil right,
+			List<Point2D> rightPoints) {
+
+		List<String> summary = new ArrayList<String>();
+		double lminX = FoilUtil.findMinX(leftPoints);
+		double lmaxX = FoilUtil.findMaxX(leftPoints);
+		double lminY = FoilUtil.findMinY(leftPoints);
+		double lmaxY = FoilUtil.findMaxY(leftPoints);
+		double rminX = FoilUtil.findMinX(rightPoints);
+		double rmaxX = FoilUtil.findMaxX(rightPoints);
+		double rminY = FoilUtil.findMinY(rightPoints);
+		double rmaxY = FoilUtil.findMaxY(rightPoints);
+
+		summary.add("; Left: airfoil: " + left.getName() + " chord: " + left.getChord().asMM() + " mm / "
+				+ left.getChord().asInch() + " inch(es)");
+		summary.add("; Right: airfoil: " + right.getName() + " chord: " + right.getChord().asMM() + " mm / "
+				+ right.getChord().asInch() + " inch(es)");
+		double width = Math.max(lmaxX, rmaxX) - Math.min(lminX, rminX);
+		summary.add("; Estimated block width required : " + width + "mm / " + new Length(width, Unit.MM).asInch()
+				+ " inch(es)");
+		double height = Math.max(lmaxY, rmaxY) - Math.min(lminY, rminY);
+		summary.add("; Estimated block height required : " + height + "mm / " + new Length(height, Unit.MM).asInch()
+				+ " inch(es)");
+
+		return summary;
 	}
 
 }

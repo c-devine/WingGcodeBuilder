@@ -11,6 +11,16 @@ public class Length {
 		setLength(length, unit);
 	}
 
+	// recreate the length from the string passed in
+	public Length(String sLength) {
+		String[] split = sLength.split("\\s+");
+		this.len = new Length(Double.parseDouble(split[0]), Unit.getEnum(split[1])).asMM();
+	}
+
+	public String toFormattedString() {
+		return String.valueOf(len) + " " + Unit.MM.getShortName();
+	}
+
 	// only support mm and inch
 	public double getLength(Unit unit) {
 		if (unit.getName().equals(Unit.MM.getName()))

@@ -8,8 +8,8 @@ import org.springframework.context.ApplicationEventPublisher;
 import javafx.scene.Scene;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import wgb.app.AppEventType;
 import wgb.fx.AbstractJavaFxApplicationSupport;
-import wgb.fx.AfterLoadedEvent;
 import wgb.fx.SpringFxmlLoader;
 
 @SpringBootApplication
@@ -33,7 +33,7 @@ public class Main extends AbstractJavaFxApplicationSupport {
 			primaryStage.setTitle(windowTitle);
 			primaryStage.setScene(scene);
 			primaryStage.show();
-			publisher.publishEvent(new AfterLoadedEvent());
+			publisher.publishEvent(AppEventType.AFTER_LOADED_EVENT);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
