@@ -29,8 +29,8 @@ public class GcodeSettings {
 				"Tower Offset", "Leadin", "Kerf");
 		List<Object> values = Arrays.asList(x1, y1, x2, y2, f, acc, towerWidth, blockWidth, towerOffset, leadin, kerf);
 
-		return IntStream.range(0, keys.size() - 1)
-				.mapToObj(i -> new MapEntry<String, Object>(keys.get(i), values.get(i))).collect(Collectors.toList());
+		return IntStream.range(0, keys.size()).mapToObj(i -> new MapEntry<String, Object>(keys.get(i), values.get(i)))
+				.collect(Collectors.toList());
 
 	}
 
