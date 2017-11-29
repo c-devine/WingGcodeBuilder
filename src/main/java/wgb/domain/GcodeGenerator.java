@@ -39,6 +39,12 @@ public class GcodeGenerator {
 		lPts = FoilUtil.offset(lPts, left.getOffset().asMM(), 0);
 		rPts = FoilUtil.offset(rPts, right.getOffset().asMM(), 0);
 
+		// project foil coordinates to the axis of the machine
+		List<List<Point2D>> projected = FoilUtil.projectPoints(lPts, rPts, settings.getTowerWidth(),
+				settings.getTowerOffset(), settings.getBlockWidth());
+		lPts = projected.get(0);
+		rPts = projected.get(1);
+
 		// flip x axis
 		double maxX = Math.max(FoilUtil.findMaxX(lPts), FoilUtil.findMaxX(rPts));
 		lPts = FoilUtil.flipX(lPts, maxX);
@@ -53,6 +59,7 @@ public class GcodeGenerator {
 
 		List<String> retList = new ArrayList<String>();
 		retList.addAll(summaryInfo);
+		retList.addAll(getMachineInfo(lPts, rPts));
 		retList.addAll(getMainPrefix(settings));
 
 		for (int i = 0; i < Math.min(lPts.size(), rPts.size()); i++) {
@@ -121,6 +128,15 @@ public class GcodeGenerator {
 				+ " inch(es)");
 
 		return summary;
+	}
+
+	public List<String> getMachineInfo(List<Point2D> left, List<Point2D> right) {
+		List<String> info = new ArrayList<String>();
+		info.add(String.format("; Left minX: %f Left maxX: %f", FoilUtil.findMinX(left), FoilUtil.findMaxX(left)));
+		info.add(String.format("; Left minY: %f Left maxY: %f", FoilUtil.findMinY(left), FoilUtil.findMaxY(left)));
+		info.add(String.format("; Right minX: %f Right maxX: %f", FoilUtil.findMinX(right), FoilUtil.findMaxX(right)));
+		info.add(String.format("; Right minY: %f Right maxY: %f", FoilUtil.findMinY(right), FoilUtil.findMaxY(right)));
+		return info;
 	}
 
 }

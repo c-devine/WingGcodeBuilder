@@ -1,11 +1,18 @@
 package wgb.util;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import javafx.geometry.Point2D;
 import javafx.geometry.Point3D;
+import toxi.geom.Plane;
+import toxi.geom.Ray3D;
+import toxi.geom.ReadonlyVec3D;
+import toxi.geom.Vec3D;
+import wgb.domain.Length;
 import wgb.domain.Triangle;
 
 public class FoilUtil {
@@ -55,7 +62,7 @@ public class FoilUtil {
 
 	public static double findMinY(List<Point2D> points) {
 
-		return points.stream().mapToDouble(p -> p.getX()).min().orElse(0.0);
+		return points.stream().mapToDouble(p -> p.getY()).min().orElse(0.0);
 	}
 
 	public static double findRawLength(List<Point2D> points) {
@@ -134,6 +141,39 @@ public class FoilUtil {
 		Point2D pt = point.subtract(axis);
 
 		return new Point2D(co * pt.getX() - si * pt.getY(), si * pt.getX() + co * pt.getY()).add(axis);
+	}
+
+	/**
+	 * Projects the coordinates from the block onto the plane of the tower axis.
+	 *
+	 */
+	public static List<List<Point2D>> projectPoints(List<Point2D> leftPoints, List<Point2D> rightPoints,
+			Length towerWidth, Length towerOffset, Length blockWidth) {
+
+		// define the planes where the coordinates will be projected
+		Plane leftPlane = Plane.XY;
+		Plane rightPlane = new Plane(new Vec3D(0.0f, 0.0f, (float) towerWidth.asMM()), Vec3D.Z_AXIS);
+
+		List<Point2D> projectedLeft = new ArrayList<Point2D>();
+		List<Point2D> projectedRight = new ArrayList<Point2D>();
+
+		for (int i = 0; i < leftPoints.size(); i++) {
+
+			Vec3D vL = new Vec3D((float) leftPoints.get(i).getX(), (float) leftPoints.get(i).getY(),
+					(float) towerOffset.asMM());
+			Vec3D vR = new Vec3D((float) rightPoints.get(i).getX(), (float) rightPoints.get(i).getY(),
+					(float) (towerOffset.asMM() + blockWidth.asMM()));
+			Ray3D ray = new Ray3D(vL, vR.sub(vL).normalize());
+
+			ReadonlyVec3D pL = leftPlane.getIntersectionWithRay(ray);
+			ReadonlyVec3D pR = rightPlane.getIntersectionWithRay(ray);
+
+			projectedLeft.add(new Point2D(pL.x(), pL.y()));
+			projectedRight.add(new Point2D(pR.x(), pR.y()));
+		}
+
+		return Arrays.asList(projectedLeft, projectedRight);
+
 	}
 
 }
