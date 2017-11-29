@@ -116,26 +116,30 @@ public class GcodeGenerator {
 		double rminY = FoilUtil.findMinY(rightPoints);
 		double rmaxY = FoilUtil.findMaxY(rightPoints);
 
-		summary.add("; Left: airfoil: " + left.getName() + " chord: " + left.getChord().asMM() + " mm / "
-				+ left.getChord().asInch() + " inch(es)");
-		summary.add("; Right: airfoil: " + right.getName() + " chord: " + right.getChord().asMM() + " mm / "
-				+ right.getChord().asInch() + " inch(es)");
-		double width = Math.max(lmaxX, rmaxX) - Math.min(lminX, rminX);
-		summary.add("; Estimated block width required : " + width + "mm / " + new Length(width, Unit.MM).asInch()
-				+ " inch(es)");
+		summary.add(String.format("; Left: airfoil: %s chord: %s", left.getName(), getMI(left.getChord())));
+		summary.add(String.format("; Right: airfoil: %s chord: %s", right.getName(), getMI(right.getChord())));
+		double depth = Math.max(lmaxX, rmaxX) - Math.min(lminX, rminX);
+		summary.add(String.format("; Estimated block depth required : %s", getMI(new Length(depth, Unit.MM))));
 		double height = Math.max(lmaxY, rmaxY) - Math.min(lminY, rminY);
-		summary.add("; Estimated block height required : " + height + "mm / " + new Length(height, Unit.MM).asInch()
-				+ " inch(es)");
+		summary.add(String.format("; Estimated block height required : %s", getMI(new Length(height, Unit.MM))));
 
 		return summary;
 	}
 
+	private String getMI(Length len) {
+		return String.format("%.2f mm / %.2f inch(es)", len.asMM(), len.asInch());
+	}
+
 	public List<String> getMachineInfo(List<Point2D> left, List<Point2D> right) {
 		List<String> info = new ArrayList<String>();
-		info.add(String.format("; Left minX: %f Left maxX: %f", FoilUtil.findMinX(left), FoilUtil.findMaxX(left)));
-		info.add(String.format("; Left minY: %f Left maxY: %f", FoilUtil.findMinY(left), FoilUtil.findMaxY(left)));
-		info.add(String.format("; Right minX: %f Right maxX: %f", FoilUtil.findMinX(right), FoilUtil.findMaxX(right)));
-		info.add(String.format("; Right minY: %f Right maxY: %f", FoilUtil.findMinY(right), FoilUtil.findMaxY(right)));
+		info.add(String.format("; Left minX: %s Left maxX: %s", getMI(new Length(FoilUtil.findMinX(left), Unit.MM)),
+				getMI(new Length(FoilUtil.findMaxX(left), Unit.MM))));
+		info.add(String.format("; Left minY: %s Left maxY: %s", getMI(new Length(FoilUtil.findMinY(left), Unit.MM)),
+				getMI(new Length(FoilUtil.findMaxY(left), Unit.MM))));
+		info.add(String.format("; Right minX: %s Right maxX: %s", getMI(new Length(FoilUtil.findMinX(right), Unit.MM)),
+				getMI(new Length(FoilUtil.findMaxX(right), Unit.MM))));
+		info.add(String.format("; Right minY: %s Right maxY: %s", getMI(new Length(FoilUtil.findMinY(right), Unit.MM)),
+				getMI(new Length(FoilUtil.findMaxY(right), Unit.MM))));
 		return info;
 	}
 
