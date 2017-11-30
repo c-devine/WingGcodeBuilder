@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -91,14 +92,21 @@ public class OctoPrintController implements Initializable {
 		headers.set("X-Api-Key", sApiKey);
 
 		RestTemplate restTemplate = new RestTemplate();
+		((SimpleClientHttpRequestFactory) restTemplate.getRequestFactory()).setConnectTimeout(5000);
 
 		Task<Void> task = new Task<Void>() {
 
 			@Override
-			protected Void call() throws Exception {
+			protected Void call() {
 
-				String result = restTemplate.postForObject(sHost + "/api/files/local",
-						new HttpEntity<MultiValueMap<String, Object>>(parameters, headers), String.class);
+				String result = "";
+				try {
+					result = restTemplate.postForObject(sHost + "/api/files/local",
+							new HttpEntity<MultiValueMap<String, Object>>(parameters, headers), String.class);
+				} catch (Exception e) {
+					logger.error("Error sending gcode data to OctoPrint.", e);
+				}
+
 				logger.info(result);
 				return null;
 			}
