@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+
+<VBox fx:controller="wgb.OctoPrintController" maxHeight="-Infinity"
+	maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+	prefHeight="250.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/8"
+	xmlns:fx="http://javafx.com/fxml/1">
+	<children>
+		<Label text="OctoPrint Upload Settings:" textFill="#445566">
+			<font>
+				<Font size="24.0" />
+			</font>
+			<VBox.margin>
+				<Insets left="10.0" />
+			</VBox.margin>
+		</Label>
+		<GridPane alignment="CENTER">
+			<columnConstraints>
+				<ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
+					percentWidth="30.0" prefWidth="100.0" />
+				<ColumnConstraints hgrow="SOMETIMES" minWidth="10.0"
+					prefWidth="100.0" />
+			</columnConstraints>
+			<rowConstraints>
+				<RowConstraints minHeight="10.0" prefHeight="30.0"
+					vgrow="SOMETIMES" />
+				<RowConstraints minHeight="10.0" prefHeight="30.0"
+					vgrow="SOMETIMES" />
+				<RowConstraints minHeight="10.0" prefHeight="30.0"
+					vgrow="SOMETIMES" />
+			</rowConstraints>
+			<children>
+				<Label text="OctoPrint Host:" GridPane.halignment="RIGHT">
+					<GridPane.margin>
+						<Insets right="10.0" />
+					</GridPane.margin>
+				</Label>
+				<Label text="API Key:" GridPane.halignment="RIGHT"
+					GridPane.rowIndex="1">
+					<GridPane.margin>
+						<Insets right="10.0" />
+					</GridPane.margin>
+				</Label>
+				<Label text="File Name:" GridPane.halignment="RIGHT"
+					GridPane.rowIndex="2">
+					<GridPane.margin>
+						<Insets right="10.0" />
+					</GridPane.margin>
+				</Label>
+				<TextField fx:id="host" GridPane.columnIndex="1">
+					<GridPane.margin>
+						<Insets />
+					</GridPane.margin>
+				</TextField>
+				<TextField fx:id="apikey" GridPane.columnIndex="1"
+					GridPane.rowIndex="1">
+					<GridPane.margin>
+						<Insets />
+					</GridPane.margin>
+				</TextField>
+				<TextField fx:id="filename" GridPane.columnIndex="1"
+					GridPane.rowIndex="2"   />
+			</children>
+			<padding>
+				<Insets bottom="10.0" left="10.0" right="10.0" top="20.0" />
+			</padding>
+			<VBox.margin>
+				<Insets bottom="10.0" right="10.0" top="10.0" />
+			</VBox.margin>
+		</GridPane>
+		<HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+			<children>
+				<Button onMouseClicked="#onUpload" mnemonicParsing="false"
+					text="Upload" textAlignment="CENTER">
+					<HBox.margin>
+						<Insets bottom="10.0" left="20.0" right="40.0" />
+					</HBox.margin>
+				</Button>
+				<Button onMouseClicked="#onCancel" cancelButton="true"
+					alignment="CENTER" mnemonicParsing="false" text="Cancel"
+					textAlignment="CENTER">
+					<HBox.margin>
+						<Insets bottom="10.0" left="40.0" right="20.0" />
+					</HBox.margin>
+				</Button>
+			</children>
+		</HBox>
+	</children>
+</VBox>

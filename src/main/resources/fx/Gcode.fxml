@@ -39,8 +39,7 @@
 						</TextArea>
 					</VBox>
 					<HBox alignment="CENTER" VBox.vgrow="NEVER">
-						<children> <!-- <Button mnemonicParsing="false" text="Button"> <HBox.margin> <Insets
-								left="20.0" right="20.0" /> </HBox.margin> </Button> -->
+						<children>
 							<CheckBox fx:id="cbMirrored" mnemonicParsing="false"
 								text="Mirrored">
 								<tooltip>
@@ -55,6 +54,12 @@
 							</Button>
 							<Button mnemonicParsing="false" text="Export GCODE"
 								onMouseClicked="#onExportGcode">
+								<HBox.margin>
+									<Insets left="20.0" right="20.0" />
+								</HBox.margin>
+							</Button>
+							<Button mnemonicParsing="false" text="Upload GCODE"
+								onMouseClicked="#onUploadGcode">
 								<HBox.margin>
 									<Insets left="20.0" right="20.0" />
 								</HBox.margin>

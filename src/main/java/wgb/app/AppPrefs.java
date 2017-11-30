@@ -26,12 +26,17 @@ public class AppPrefs {
 
 	private static String LAST_DIR = "lastDirectory";
 	private static String PREFS_FILE = "prefs.json";
+	private static String OP_HOST = "OctoPrintHost";
+	private static String OP_API_KEY = "OctoPrintApiKey";
+	private static String OP_FILENAME = "OctoPrintFilename";
 
 	@Value("#{systemProperties['user.home'] ?: '.'}")
 	private String userHome;
 	@Value("${app.folderName:.wgb}")
 	private String folderName;
-
+	private String octoPrintHost = "";
+	private String octoPrintApiKey = "";
+	private String octoPrintFilename = "";
 	private String lastDirectory = ".";
 
 	@EventListener
@@ -42,7 +47,10 @@ public class AppPrefs {
 			if (file.exists()) {
 				JsonReader jsonReader = Json.createReader(new FileInputStream(file));
 				JsonObject obj = jsonReader.readObject();
-				this.setLastDirectory(obj.getString(AppPrefs.LAST_DIR, "."));
+				this.setLastDirectory(obj.getString(LAST_DIR, "."));
+				this.setOctoPrintHost(obj.getString(OP_HOST, ""));
+				this.setOctoPrintApiKey(obj.getString(OP_API_KEY, ""));
+				this.setOctoPrintFilename(obj.getString(OP_FILENAME, ""));
 			}
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -54,7 +62,10 @@ public class AppPrefs {
 	public void savePrefs() throws Exception {
 
 		JsonObjectBuilder builder = Json.createObjectBuilder();
-		builder.add(AppPrefs.LAST_DIR, this.getLastDirectory());
+		builder.add(LAST_DIR, this.getLastDirectory());
+		builder.add(OP_HOST, this.getOctoPrintHost());
+		builder.add(OP_API_KEY, this.getOctoPrintApiKey());
+		builder.add(OP_FILENAME, this.getOctoPrintFilename());
 
 		Map<String, Boolean> config = new HashMap<>();
 		config.put(JsonGenerator.PRETTY_PRINTING, true);
@@ -72,7 +83,8 @@ public class AppPrefs {
 	private File getPrefsFile() {
 
 		File dir = new File(userHome + System.getProperty("file.separator") + folderName);
-		dir.mkdirs();
+		if (!dir.exists())
+			dir.mkdirs();
 		return new File(dir, PREFS_FILE);
 	}
 
@@ -82,6 +94,30 @@ public class AppPrefs {
 
 	public void setLastDirectory(String lastDirectory) {
 		this.lastDirectory = lastDirectory;
+	}
+
+	public String getOctoPrintHost() {
+		return octoPrintHost;
+	}
+
+	public void setOctoPrintHost(String octoPrintHost) {
+		this.octoPrintHost = octoPrintHost;
+	}
+
+	public String getOctoPrintApiKey() {
+		return octoPrintApiKey;
+	}
+
+	public void setOctoPrintApiKey(String octoPrintApiKey) {
+		this.octoPrintApiKey = octoPrintApiKey;
+	}
+
+	public String getOctoPrintFilename() {
+		return octoPrintFilename;
+	}
+
+	public void setOctoPrintFilename(String octoPrintFilename) {
+		this.octoPrintFilename = octoPrintFilename;
 	}
 
 }

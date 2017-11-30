@@ -25,6 +25,8 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellEditEvent;
@@ -35,6 +37,8 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import wgb.app.AppEventType;
 import wgb.app.FileChooserHelper;
 import wgb.app.Project;
@@ -44,6 +48,7 @@ import wgb.domain.GcodeSettings;
 import wgb.domain.Length;
 import wgb.domain.Side;
 import wgb.fx.MapEntry;
+import wgb.fx.SpringFxmlLoader;
 
 @Component
 public class GcodeController implements Initializable, ProjectAware {
@@ -68,6 +73,9 @@ public class GcodeController implements Initializable, ProjectAware {
 	TextArea preGcodeTextArea;
 	@FXML
 	CheckBox cbMirrored;
+
+	@Autowired
+	private SpringFxmlLoader loader;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -138,6 +146,18 @@ public class GcodeController implements Initializable, ProjectAware {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	@FXML
+	protected void onUploadGcode(MouseEvent event) throws Exception {
+
+		Stage stage = new Stage();
+		Parent root = (Parent) loader.load(getClass().getResource("/fx/OctoPrint.fxml").toURI());
+		stage.setScene(new Scene(root));
+		stage.setTitle("OctoPrint Settings");
+		stage.initModality(Modality.WINDOW_MODAL);
+		stage.initOwner(((Node) event.getSource()).getScene().getWindow());
+		stage.show();
 	}
 
 	private List<String> getPreGcode() {
