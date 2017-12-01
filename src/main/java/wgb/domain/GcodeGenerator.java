@@ -119,9 +119,9 @@ public class GcodeGenerator {
 		summary.add(String.format("; Left: airfoil: %s chord: %s", left.getName(), getMI(left.getChord())));
 		summary.add(String.format("; Right: airfoil: %s chord: %s", right.getName(), getMI(right.getChord())));
 		double depth = Math.max(lmaxX, rmaxX) - Math.min(lminX, rminX);
-		summary.add(String.format("; Estimated block depth required : %s", getMI(new Length(depth, Unit.MM))));
+		summary.add(String.format("; Estimated axis depth required : %s", getMI(new Length(depth, Unit.MM))));
 		double height = Math.max(lmaxY, rmaxY) - Math.min(lminY, rminY);
-		summary.add(String.format("; Estimated block height required : %s", getMI(new Length(height, Unit.MM))));
+		summary.add(String.format("; Estimated axis height required : %s", getMI(new Length(height, Unit.MM))));
 
 		return summary;
 	}
