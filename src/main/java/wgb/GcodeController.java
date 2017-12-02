@@ -9,10 +9,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import javax.json.Json;
-import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,6 +68,8 @@ public class GcodeController implements Initializable, ProjectAware {
 	@FXML
 	TextArea preGcodeTextArea;
 	@FXML
+	TextArea postGcodeTextArea;
+	@FXML
 	CheckBox cbMirrored;
 
 	@Autowired
@@ -123,7 +121,8 @@ public class GcodeController implements Initializable, ProjectAware {
 		List<String> gcodeList = generator.generateGcode(mainController.getAirfoil(Side.ROOT),
 				mainController.getAirfoil(Side.TIP), gcSettings, cbMirrored.isSelected());
 
-		gcodeList.addAll(0, getPreGcode());
+		gcodeList.addAll(0, getPrePostGcode(preGcodeTextArea));
+		gcodeList.addAll(getPrePostGcode(postGcodeTextArea));
 		gcodeTextArea.clear();
 		gcodeList.forEach(s -> gcodeTextArea.appendText(s + System.lineSeparator()));
 
@@ -160,12 +159,12 @@ public class GcodeController implements Initializable, ProjectAware {
 		stage.show();
 	}
 
-	private List<String> getPreGcode() {
+	private List<String> getPrePostGcode(TextArea area) {
 
-		if (preGcodeTextArea.getText().equals(""))
+		if (area.getText().equals(""))
 			return new ArrayList<String>();
 
-		return Arrays.asList(preGcodeTextArea.getText().trim().split(System.lineSeparator()));
+		return Arrays.asList(area.getText().trim().split(System.lineSeparator()));
 	}
 
 	private void exportGcode(File file, String text) throws Exception {
@@ -176,28 +175,20 @@ public class GcodeController implements Initializable, ProjectAware {
 	}
 
 	@Override
-	public void onProjectLoad(Project project, JsonObject properties) {
+	public void onProjectLoad(Project project) {
 
 		oList.clear();
-		JsonObject jo = properties.getJsonObject("GCODE");
-		List<MapEntry<String, Object>> pList = new ArrayList<MapEntry<String, Object>>();
-
-		jo.entrySet().forEach(es -> pList
-				.add(new MapEntry<String, Object>(es.getKey(), es.getValue().toString().replaceAll("\"", ""))));
-
-		gcSettings.setEntries(pList);
+		gcSettings = project.getGcodeSettings();
 		oList.addAll(gcSettings.getEntries());
 		gcodePropTable.refresh();
 
 	}
 
 	@Override
-	public void onProjectSave(Project project, JsonObjectBuilder builder) {
+	public void onProjectSave(Project project) {
 
-		JsonObjectBuilder job = Json.createObjectBuilder();
-		oList.forEach(p -> job.add(p.getKey(), p.getValue() instanceof Length
-				? ((Length) p.getValue()).toFormattedString() : String.valueOf(p.getValue())));
-		builder.add("GCODE", job.build());
+		gcSettings.setEntries(oList);
+		project.setGcodeSettings(gcSettings);
 
 	}
 

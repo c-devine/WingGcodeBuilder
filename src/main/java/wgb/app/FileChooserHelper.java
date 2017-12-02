@@ -2,6 +2,8 @@ package wgb.app;
 
 import java.io.File;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -10,8 +12,10 @@ import javafx.stage.FileChooser;
 @Component
 public class FileChooserHelper {
 
+	private final static Logger logger = LogManager.getLogger();
+
 	@Autowired
-	AppPrefs prefs;
+	private AppPrefs prefs;
 
 	public FileChooser getFileChooser() {
 
@@ -23,12 +27,8 @@ public class FileChooserHelper {
 	public void saveLastFileLocation(File f) {
 		if (f != null) {
 			prefs.setLastDirectory(f.getParent());
-			try {
-				prefs.savePrefs();
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			if (!prefs.save())
+				logger.error("Error saving app prefs.");
 		}
 
 	}

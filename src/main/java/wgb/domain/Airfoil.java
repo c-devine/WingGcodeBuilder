@@ -6,6 +6,9 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+
 import javafx.geometry.Point2D;
 import wgb.util.FoilUtil;
 
@@ -25,6 +28,7 @@ public class Airfoil {
 	private Length yPos = new Length(DEFAULT_YPOS, DEFAULT_UNIT);
 	private double twist = DEFAULT_TWIST;
 
+	@JsonDeserialize(using = Point2DDeserializer.class)
 	private List<Point2D> xy = new ArrayList<Point2D>();
 
 	public Airfoil() {
@@ -83,6 +87,7 @@ public class Airfoil {
 		this.twist = twist;
 	}
 
+	@JsonIgnore
 	public Length getThickness() {
 		return new Length(chord.asMM() * FoilUtil.findMaxY(xy) - FoilUtil.findMinY(xy), Unit.MM);
 	}

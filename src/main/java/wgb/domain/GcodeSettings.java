@@ -7,6 +7,8 @@ import java.util.stream.IntStream;
 
 import org.springframework.beans.BeanWrapperImpl;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import wgb.fx.MapEntry;
 
 public class GcodeSettings {
@@ -23,6 +25,7 @@ public class GcodeSettings {
 	private Length leadin = new Length(10.0, Unit.MM);
 	private Length kerf = new Length(0.0, Unit.MM);
 
+	@JsonIgnore
 	public List<MapEntry<String, Object>> getEntries() {
 
 		List<String> keys = Arrays.asList("X1", "Y1", "X2", "Y2", "F", "Acc", "Tower Width", "Block Width",
@@ -34,6 +37,7 @@ public class GcodeSettings {
 
 	}
 
+	@JsonIgnore
 	public void setEntries(List<MapEntry<String, Object>> entries) {
 		BeanWrapperImpl bWrapper = new BeanWrapperImpl(this);
 		entries.forEach(e -> {

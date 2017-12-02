@@ -68,11 +68,8 @@ public class OctoPrintController implements Initializable {
 		appPrefs.setOctoPrintApiKey(sApiKey);
 		appPrefs.setOctoPrintFilename(sFilename);
 
-		try {
-			appPrefs.savePrefs();
-		} catch (Exception e) {
-			logger.error("Error saving OctoPrint settings.", e);
-		}
+		if (!appPrefs.save())
+			logger.error("Error saving OctoPrint settings.");
 
 		MultiValueMap<String, Object> parameters = new LinkedMultiValueMap<String, Object>();
 

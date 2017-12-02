@@ -37,6 +37,12 @@
 								<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
 							</padding>
 						</TextArea>
+						<Label text="End Gcode" />
+						<TextArea fx:id="postGcodeTextArea" text="" prefHeight="100.0">
+							<padding>
+								<Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+							</padding>
+						</TextArea>
 					</VBox>
 					<HBox alignment="CENTER" VBox.vgrow="NEVER">
 						<children>

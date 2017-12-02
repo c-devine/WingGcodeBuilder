@@ -2,15 +2,7 @@ package wgb;
 
 import java.io.File;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
-
-import javax.json.Json;
-import javax.json.JsonArray;
-import javax.json.JsonArrayBuilder;
-import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -29,7 +21,6 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -254,7 +245,7 @@ public class MainController implements Initializable, ProjectAware {
 				e.printStackTrace();
 			}
 		} else {
-			processSaveAs(null);
+			processSaveAs(event);
 		}
 	}
 
@@ -309,62 +300,20 @@ public class MainController implements Initializable, ProjectAware {
 
 	}
 
-	private Airfoil getAirfoilFromJson(JsonObject properties, String name) {
-
-		Airfoil af = new Airfoil();
-		JsonObject job = properties.getJsonObject(name);
-
-		af.setName(job.getString("Name"));
-		af.setChord(new Length(job.getString("Chord")));
-		af.setOffset(new Length(job.getString("Offset")));
-		af.setyPos(new Length(job.getString("Ypos")));
-		af.setTwist(job.getJsonNumber("Twist").doubleValue());
-		JsonArray jarr = job.getJsonArray("XY");
-		List<Point2D> pList = new ArrayList<Point2D>();
-
-		for (int i = 0; i < jarr.size(); i++) {
-			JsonObject jo = jarr.getJsonObject(i);
-			pList.add(new Point2D(jo.getJsonNumber("x").doubleValue(), jo.getJsonNumber("y").doubleValue()));
-		}
-
-		af.setXy(pList);
-
-		return af;
-	}
-
 	@Override
-	public void onProjectLoad(Project project, JsonObject properties) {
+	public void onProjectLoad(Project project) {
 
-		addAirfoil(getAirfoilFromJson(properties, "ROOT"), Side.ROOT);
-		addAirfoil(getAirfoilFromJson(properties, "TIP"), Side.TIP);
+		addAirfoil(project.getRoot(), Side.ROOT);
+		addAirfoil(project.getTip(), Side.TIP);
 		publisher.publishEvent(AppEventType.REFRESH);
 	}
 
 	@Override
-	public void onProjectSave(Project project, JsonObjectBuilder builder) {
+	public void onProjectSave(Project project) {
 
-		Airfoil root = airFoilList.get(0);
-		addAirFoil(builder, root, "ROOT");
-		Airfoil tip = airFoilList.get(1);
-		addAirFoil(builder, tip, "TIP");
-	}
+		project.setRoot(getAirfoil(Side.ROOT));
+		project.setTip(getAirfoil(Side.TIP));
 
-	private void addAirFoil(JsonObjectBuilder builder, Airfoil af, String name) {
-
-		JsonObjectBuilder job = Json.createObjectBuilder();
-		job.add("Name", af.getName());
-		job.add("Chord", af.getChord().toFormattedString());
-		job.add("Offset", af.getOffset().toFormattedString());
-		job.add("Ypos", af.getyPos().toFormattedString());
-		job.add("Twist", af.getTwist());
-
-		JsonArrayBuilder jarr = Json.createArrayBuilder();
-		for (Point2D p : af.getXy()) {
-			jarr.add(Json.createObjectBuilder().add("x", p.getX()).add("y", p.getY()));
-		}
-
-		job.add("XY", jarr.build());
-		builder.add(name, job.build());
 	}
 
 	@EventListener

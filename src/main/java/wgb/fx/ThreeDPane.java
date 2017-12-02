@@ -14,7 +14,6 @@ import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
-import javafx.scene.shape.Box;
 import javafx.scene.shape.DrawMode;
 import javafx.scene.shape.MeshView;
 import javafx.scene.shape.TriangleMesh;
@@ -115,43 +114,13 @@ public class ThreeDPane {
 		meshView.getTransforms().addAll(rotateZ, rotateY, rotateX);
 		root.getChildren().add(meshView);
 
-		// rotateY.setAngle(-40);
-
 	}
 
 	private SubScene createScene3D(Group group) {
 		SubScene scene3d = new SubScene(group, 100, 100, true, SceneAntialiasing.BALANCED);
 		scene3d.setFill(Color.rgb(10, 10, 40));
-		// scene3d.setFill(Color.WHITESMOKE);
 
 		return scene3d;
-	}
-
-	private void buildAxes() {
-
-		final PhongMaterial redMaterial = new PhongMaterial();
-		redMaterial.setDiffuseColor(Color.DARKRED);
-		redMaterial.setSpecularColor(Color.RED);
-
-		final PhongMaterial greenMaterial = new PhongMaterial();
-		greenMaterial.setDiffuseColor(Color.DARKGREEN);
-		greenMaterial.setSpecularColor(Color.GREEN);
-
-		final PhongMaterial blueMaterial = new PhongMaterial();
-		blueMaterial.setDiffuseColor(Color.DARKBLUE);
-		blueMaterial.setSpecularColor(Color.BLUE);
-
-		final Box xAxis = new Box(240.0, 1, 1);
-		final Box yAxis = new Box(1, 240.0, 1);
-		final Box zAxis = new Box(1, 1, 240.0);
-
-		xAxis.setMaterial(redMaterial);
-		yAxis.setMaterial(greenMaterial);
-		zAxis.setMaterial(blueMaterial);
-
-		Group axisGroup = new Group();
-		axisGroup.getChildren().addAll(xAxis, yAxis, zAxis);
-		root.getChildren().addAll(axisGroup);
 	}
 
 	public Pane getPane() {

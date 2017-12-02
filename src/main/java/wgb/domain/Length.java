@@ -1,5 +1,10 @@
 package wgb.domain;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+@JsonSerialize(using = LengthSerializer.class)
+@JsonDeserialize(using = LengthDeserializer.class)
 public class Length {
 
 	private static double MM_PER_INCH = 25.4;
