@@ -32,9 +32,10 @@ public class FoilMeshHelper {
 
 		// slice the foil profile
 		Point2D rotateAxis = new Point2D(1.0, 0.0);
-		lInterpolated = densifier.densify(left.getXy(), NUM_POINTS);
+		lInterpolated = densifier.densify(FoilUtil.scale(left.getXy(), rotateAxis, 1.0, left.getyScale()), NUM_POINTS);
 		lInterpolated = FoilUtil.rotate(lInterpolated, rotateAxis, left.getTwist());
-		rInterpolated = densifier.densify(right.getXy(), NUM_POINTS);
+		rInterpolated = densifier.densify(FoilUtil.scale(right.getXy(), rotateAxis, 1.0, right.getyScale()),
+				NUM_POINTS);
 		rInterpolated = FoilUtil.rotate(rInterpolated, rotateAxis, right.getTwist());
 
 		List<Triangle> leftFace = getFaces(left, lInterpolated);
