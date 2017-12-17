@@ -17,15 +17,17 @@ public class Airfoil {
 	private final static Logger logger = LogManager.getLogger();
 	public final static String DEFAULT_NAME = "Empty";
 	private final static Unit DEFAULT_UNIT = Unit.MM;
-	private final static int DEFAULT_CHORD = 100;
+	private final static int DEFAULT_CHORD = 250;
 	private final static int DEFAULT_OFFSET = 0;
-	private final static int DEFAULT_YPOS = 0;
+	public final static int DEFAULT_SPAN = 500;
 	private final static double DEFAULT_TWIST = 0;
+	private final static double DEFAULT_YSCALE = 1.0;
 
 	private String name = DEFAULT_NAME;
 	private Length chord = new Length(DEFAULT_CHORD, DEFAULT_UNIT);
 	private Length offset = new Length(DEFAULT_OFFSET, DEFAULT_UNIT);
-	private Length yPos = new Length(DEFAULT_YPOS, DEFAULT_UNIT);
+	private Length span = new Length(0, DEFAULT_UNIT);
+	private double yScale = DEFAULT_YSCALE;
 	private double twist = DEFAULT_TWIST;
 
 	@JsonDeserialize(using = Point2DDeserializer.class)
@@ -35,8 +37,8 @@ public class Airfoil {
 
 	}
 
-	public Airfoil(Length yPos) {
-		this.yPos = yPos;
+	public Airfoil(Length span) {
+		this.span = span;
 	}
 
 	public String getName() {
@@ -71,12 +73,12 @@ public class Airfoil {
 		this.chord = chord;
 	}
 
-	public Length getyPos() {
-		return yPos;
+	public Length getSpan() {
+		return span;
 	}
 
-	public void setyPos(Length y) {
-		this.yPos = y;
+	public void setSpan(Length y) {
+		this.span = y;
 	}
 
 	public double getTwist() {
@@ -87,9 +89,20 @@ public class Airfoil {
 		this.twist = twist;
 	}
 
+	public double getyScale() {
+		return yScale;
+	}
+
+	public void setyScale(double yScale) {
+		this.yScale = yScale;
+	}
+
 	@JsonIgnore
 	public Length getThickness() {
-		return new Length(chord.asMM() * FoilUtil.findMaxY(xy) - FoilUtil.findMinY(xy), Unit.MM);
+
+		List<Point2D> points = FoilUtil.scale(this.getXy(), new Point2D(0.0, 0.0), 1.0, this.getyScale());
+		points = FoilUtil.scale(points, new Point2D(0.0, 0.0), this.getChord().asMM(), this.getChord().asMM());
+		return new Length(FoilUtil.findMaxY(points) - FoilUtil.findMinY(points), Unit.MM);
 	}
 
 }

@@ -57,8 +57,10 @@ public class FoilCanvas extends ResizableCanvas {
 		gc.setLineWidth(1);
 		gc.beginPath();
 
+		// apply yScale
+		List<Point2D> foil = FoilUtil.scale(airFoil.getXy(), new Point2D(1.0, 0), 1, airFoil.getyScale());
 		// apply twist
-		List<Point2D> foil = FoilUtil.rotate(airFoil.getXy(), new Point2D(1.0, 0), airFoil.getTwist());
+		foil = FoilUtil.rotate(foil, new Point2D(1.0, 0), airFoil.getTwist());
 
 		boolean firstCoord = true;
 

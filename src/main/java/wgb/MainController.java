@@ -51,7 +51,7 @@ public class MainController implements Initializable, ProjectAware {
 	public static Unit unit = Unit.MM;
 	private final static Logger logger = LogManager.getLogger();
 	private ObservableList<Airfoil> airFoilList = FXCollections.observableArrayList(new Airfoil(),
-			new Airfoil(new Length(200, Unit.MM)));
+			new Airfoil(new Length(Airfoil.DEFAULT_SPAN, Unit.MM)));
 
 	@Value("${app.debug}")
 	private boolean DEBUG;
@@ -127,15 +127,15 @@ public class MainController implements Initializable, ProjectAware {
 			publisher.publishEvent(AppEventType.REFRESH);
 		});
 
-		TableColumn<Airfoil, String> yCol = new TableColumn<Airfoil, String>("Y");
-		yCol.setMinWidth(100);
-		yCol.setCellValueFactory((TableColumn.CellDataFeatures<Airfoil, String> param) -> new ReadOnlyStringWrapper(
-				String.valueOf(param.getValue().getyPos().getLength(unit))));
+		TableColumn<Airfoil, String> spanCol = new TableColumn<Airfoil, String>("Span");
+		spanCol.setMinWidth(100);
+		spanCol.setCellValueFactory((TableColumn.CellDataFeatures<Airfoil, String> param) -> new ReadOnlyStringWrapper(
+				String.valueOf(param.getValue().getSpan().getLength(unit))));
 
-		yCol.setCellFactory(TextFieldTableCell.<Airfoil>forTableColumn());
-		yCol.setOnEditCommit((CellEditEvent<Airfoil, String> t) -> {
+		spanCol.setCellFactory(TextFieldTableCell.<Airfoil>forTableColumn());
+		spanCol.setOnEditCommit((CellEditEvent<Airfoil, String> t) -> {
 			((Airfoil) t.getTableView().getItems().get(t.getTablePosition().getRow()))
-					.setyPos(new Length(Double.parseDouble(t.getNewValue()), unit));
+					.setSpan(new Length(Double.parseDouble(t.getNewValue()), unit));
 			publisher.publishEvent(AppEventType.REFRESH);
 		});
 
@@ -151,6 +151,20 @@ public class MainController implements Initializable, ProjectAware {
 			publisher.publishEvent(AppEventType.REFRESH);
 		});
 
+		TableColumn<Airfoil, String> yScaleCol = new TableColumn<Airfoil, String>("Y Scale");
+		yScaleCol.setMinWidth(100);
+		yScaleCol
+				.setCellValueFactory((TableColumn.CellDataFeatures<Airfoil, String> param) -> new ReadOnlyStringWrapper(
+						String.valueOf(param.getValue().getyScale())));
+
+		yScaleCol.setCellFactory(TextFieldTableCell.<Airfoil>forTableColumn());
+		yScaleCol.setOnEditCommit((CellEditEvent<Airfoil, String> t) -> {
+			((Airfoil) t.getTableView().getItems().get(t.getTablePosition().getRow()))
+					.setyScale(Double.valueOf(t.getNewValue()));
+			tvSections.refresh();
+			publisher.publishEvent(AppEventType.REFRESH);
+		});
+
 		TableColumn<Airfoil, String> thicknessCol = new TableColumn<Airfoil, String>("Thickness");
 		thicknessCol.setMinWidth(100);
 		thicknessCol
@@ -158,7 +172,8 @@ public class MainController implements Initializable, ProjectAware {
 						String.valueOf(param.getValue().getThickness().getLength(unit))));
 
 		tvSections.setEditable(true);
-		tvSections.getColumns().addAll(posCol, nameCol, yCol, chordCol, offsetCol, twistCol, thicknessCol);
+		tvSections.getColumns().addAll(posCol, nameCol, spanCol, chordCol, offsetCol, twistCol, yScaleCol,
+				thicknessCol);
 		tvSections.setItems(airFoilList);
 	}
 
@@ -176,12 +191,12 @@ public class MainController implements Initializable, ProjectAware {
 		if (!existing.getName().equals(Airfoil.DEFAULT_NAME)) {
 			af.setChord(existing.getChord());
 			af.setOffset(existing.getOffset());
-			af.setyPos(existing.getyPos());
+			af.setSpan(existing.getSpan());
 		}
 
 		if (Side.TIP.equals(side)) {
-			if (af.getyPos().asMM() == 0)
-				af.setyPos(new Length(200, Unit.MM));
+			if (af.getSpan().asMM() == 0)
+				af.setSpan(new Length(Airfoil.DEFAULT_SPAN, Unit.MM));
 		}
 
 		twoDController.setAirfoil(af, side);
@@ -229,7 +244,7 @@ public class MainController implements Initializable, ProjectAware {
 	@FXML
 	protected void processNew(ActionEvent event) {
 		addAirfoil(new Airfoil(), Side.ROOT);
-		addAirfoil(new Airfoil(new Length(200, Unit.MM)), Side.TIP);
+		addAirfoil(new Airfoil(new Length(Airfoil.DEFAULT_SPAN, Unit.MM)), Side.TIP);
 		publisher.publishEvent(AppEventType.REFRESH);
 		threeDController.clear();
 	}

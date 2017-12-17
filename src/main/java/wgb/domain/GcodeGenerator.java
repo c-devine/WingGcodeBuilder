@@ -23,8 +23,12 @@ public class GcodeGenerator {
 		List<Point2D> lPts = densifier.densify(left.getXy(), numSegments);
 		List<Point2D> rPts = densifier.densify(right.getXy(), numSegments);
 
-		// apply twist
+		// apply yScale
 		Point2D rotateAxis = new Point2D(1.0, 0.0);
+		lPts = FoilUtil.scale(lPts, new Point2D(0.0, 0.0), 1.0, left.getyScale());
+		rPts = FoilUtil.scale(rPts, new Point2D(0.0, 0.0), 1.0, right.getyScale());
+
+		// apply twist
 		lPts = FoilUtil.rotate(lPts, rotateAxis, left.getTwist());
 		rPts = FoilUtil.rotate(rPts, rotateAxis, right.getTwist());
 
@@ -50,16 +54,13 @@ public class GcodeGenerator {
 		lPts = FoilUtil.flipX(lPts, maxX);
 		rPts = FoilUtil.flipX(rPts, maxX);
 
-		// get the summary info before adding in the leadin
-		List<String> summaryInfo = getSummaryInfo(left, lPts, right, rPts);
-
 		// add leadin
 		lPts = FoilUtil.offset(lPts, settings.getLeadin().asMM(), 0);
 		rPts = FoilUtil.offset(rPts, settings.getLeadin().asMM(), 0);
 
 		List<String> retList = new ArrayList<String>();
-		retList.addAll(summaryInfo);
-		retList.addAll(getMachineInfo(lPts, rPts));
+		// add the summary info
+		retList.addAll(getSummaryInfo(left, lPts, right, rPts));
 		retList.addAll(getMainPrefix(settings));
 
 		for (int i = 0; i < Math.min(lPts.size(), rPts.size()); i++) {
@@ -107,40 +108,27 @@ public class GcodeGenerator {
 			List<Point2D> rightPoints) {
 
 		List<String> summary = new ArrayList<String>();
-		double lminX = FoilUtil.findMinX(leftPoints);
-		double lmaxX = FoilUtil.findMaxX(leftPoints);
-		double lminY = FoilUtil.findMinY(leftPoints);
-		double lmaxY = FoilUtil.findMaxY(leftPoints);
-		double rminX = FoilUtil.findMinX(rightPoints);
-		double rmaxX = FoilUtil.findMaxX(rightPoints);
-		double rminY = FoilUtil.findMinY(rightPoints);
-		double rmaxY = FoilUtil.findMaxY(rightPoints);
 
 		summary.add(String.format("; Left: airfoil: %s chord: %s", left.getName(), getMI(left.getChord())));
 		summary.add(String.format("; Right: airfoil: %s chord: %s", right.getName(), getMI(right.getChord())));
-		double depth = Math.max(lmaxX, rmaxX) - Math.min(lminX, rminX);
-		summary.add(String.format("; Estimated axis depth required : %s", getMI(new Length(depth, Unit.MM))));
-		double height = Math.max(lmaxY, rmaxY) - Math.min(lminY, rminY);
-		summary.add(String.format("; Estimated axis height required : %s", getMI(new Length(height, Unit.MM))));
+		summary.add(String.format("; Left minX: %s Left maxX: %s",
+				getMI(new Length(FoilUtil.findMinX(leftPoints), Unit.MM)),
+				getMI(new Length(FoilUtil.findMaxX(leftPoints), Unit.MM))));
+		summary.add(String.format("; Left minY: %s Left maxY: %s",
+				getMI(new Length(FoilUtil.findMinY(leftPoints), Unit.MM)),
+				getMI(new Length(FoilUtil.findMaxY(leftPoints), Unit.MM))));
+		summary.add(String.format("; Right minX: %s Right maxX: %s",
+				getMI(new Length(FoilUtil.findMinX(rightPoints), Unit.MM)),
+				getMI(new Length(FoilUtil.findMaxX(rightPoints), Unit.MM))));
+		summary.add(String.format("; Right minY: %s Right maxY: %s",
+				getMI(new Length(FoilUtil.findMinY(rightPoints), Unit.MM)),
+				getMI(new Length(FoilUtil.findMaxY(rightPoints), Unit.MM))));
 
 		return summary;
 	}
 
 	private String getMI(Length len) {
 		return String.format("%.2f mm / %.2f inch(es)", len.asMM(), len.asInch());
-	}
-
-	public List<String> getMachineInfo(List<Point2D> left, List<Point2D> right) {
-		List<String> info = new ArrayList<String>();
-		info.add(String.format("; Left minX: %s Left maxX: %s", getMI(new Length(FoilUtil.findMinX(left), Unit.MM)),
-				getMI(new Length(FoilUtil.findMaxX(left), Unit.MM))));
-		info.add(String.format("; Left minY: %s Left maxY: %s", getMI(new Length(FoilUtil.findMinY(left), Unit.MM)),
-				getMI(new Length(FoilUtil.findMaxY(left), Unit.MM))));
-		info.add(String.format("; Right minX: %s Right maxX: %s", getMI(new Length(FoilUtil.findMinX(right), Unit.MM)),
-				getMI(new Length(FoilUtil.findMaxX(right), Unit.MM))));
-		info.add(String.format("; Right minY: %s Right maxY: %s", getMI(new Length(FoilUtil.findMinY(right), Unit.MM)),
-				getMI(new Length(FoilUtil.findMaxY(right), Unit.MM))));
-		return info;
 	}
 
 }

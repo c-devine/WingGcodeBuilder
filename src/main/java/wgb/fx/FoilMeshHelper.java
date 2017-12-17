@@ -98,7 +98,7 @@ public class FoilMeshHelper {
 
 		Point2D centroid2D = FoilUtil.calcCentroid(interpolated);
 		Point3D centroid = new Point3D((centroid2D.getX() * foil.getChord().asMM()) + foil.getOffset().asMM(),
-				centroid2D.getY() * foil.getChord().asMM(), -foil.getyPos().asMM());
+				centroid2D.getY() * foil.getChord().asMM(), -foil.getSpan().asMM());
 		return IntStream.range(1, interpolated.size()).mapToObj(
 				i -> new Triangle(getPoint3D(foil, interpolated, i - 1), centroid, getPoint3D(foil, interpolated, i)))
 				.collect(Collectors.toList());
@@ -124,7 +124,7 @@ public class FoilMeshHelper {
 
 		Point2D pt = interpolated.get(pos);
 		return new Point3D((pt.getX() * foil.getChord().asMM()) + foil.getOffset().asMM(),
-				pt.getY() * foil.getChord().asMM(), -foil.getyPos().asMM());
+				pt.getY() * foil.getChord().asMM(), -foil.getSpan().asMM());
 	}
 
 	private List<Triangle> mirror(List<Triangle> triangles) {
