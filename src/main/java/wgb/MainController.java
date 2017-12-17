@@ -185,10 +185,10 @@ public class MainController implements Initializable, ProjectAware {
 		return airFoilList.get(1);
 	}
 
-	public void addAirfoil(Airfoil af, Side side) {
+	public void addAirfoil(Airfoil af, Side side, boolean replace) {
 
 		Airfoil existing = airFoilList.get(side.getIndex());
-		if (!existing.getName().equals(Airfoil.DEFAULT_NAME)) {
+		if (!existing.getName().equals(Airfoil.DEFAULT_NAME) && !replace) {
 			af.setChord(existing.getChord());
 			af.setOffset(existing.getOffset());
 			af.setSpan(existing.getSpan());
@@ -243,8 +243,8 @@ public class MainController implements Initializable, ProjectAware {
 
 	@FXML
 	protected void processNew(ActionEvent event) {
-		addAirfoil(new Airfoil(), Side.ROOT);
-		addAirfoil(new Airfoil(new Length(Airfoil.DEFAULT_SPAN, Unit.MM)), Side.TIP);
+		addAirfoil(new Airfoil(), Side.ROOT, true);
+		addAirfoil(new Airfoil(new Length(Airfoil.DEFAULT_SPAN, Unit.MM)), Side.TIP, true);
 		publisher.publishEvent(AppEventType.REFRESH);
 		threeDController.clear();
 	}
@@ -318,8 +318,8 @@ public class MainController implements Initializable, ProjectAware {
 	@Override
 	public void onProjectLoad(Project project) {
 
-		addAirfoil(project.getRoot(), Side.ROOT);
-		addAirfoil(project.getTip(), Side.TIP);
+		addAirfoil(project.getRoot(), Side.ROOT, true);
+		addAirfoil(project.getTip(), Side.TIP, true);
 		publisher.publishEvent(AppEventType.REFRESH);
 	}
 

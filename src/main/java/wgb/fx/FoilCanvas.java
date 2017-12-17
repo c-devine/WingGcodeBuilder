@@ -11,6 +11,8 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import wgb.domain.Airfoil;
 import wgb.domain.Densifier;
+import wgb.domain.Transform;
+import wgb.domain.Unit;
 import wgb.util.FoilUtil;
 
 public class FoilCanvas extends ResizableCanvas {
@@ -50,6 +52,9 @@ public class FoilCanvas extends ResizableCanvas {
 
 	private void drawFoil() {
 
+		if (this.getWidth() == 0)
+			return;
+
 		double width = this.getWidth() - (PADDING_LEFT + PADDING_RIGHT);
 		// double height = this.getHeight() - (PADDING_TOP + PADDING_BOTTOM);
 		GraphicsContext gc = this.getGraphicsContext2D();
@@ -57,17 +62,17 @@ public class FoilCanvas extends ResizableCanvas {
 		gc.setLineWidth(1);
 		gc.beginPath();
 
-		// apply yScale
-		List<Point2D> foil = FoilUtil.scale(airFoil.getXy(), new Point2D(1.0, 0), 1, airFoil.getyScale());
-		// apply twist
-		foil = FoilUtil.rotate(foil, new Point2D(1.0, 0), airFoil.getTwist());
-
+		// get scaled points
+		List<Point2D> foil = airFoil.getScaled(Transform.calcMask(Transform.YSCALE, Transform.XSCALE, Transform.TWIST),
+				Unit.MM);
+		double maxX = FoilUtil.findMaxX(foil);
+		double scale = width / maxX;
 		boolean firstCoord = true;
 
-		for (Point2D xyz : foil) {
-			double x = (xyz.getX() * width) + PADDING_LEFT;
+		for (Point2D pt : foil) {
+			double x = (pt.getX() * scale) + PADDING_LEFT;
 			// use the width to keep the same scale
-			double y = (this.getHeight() / 2) - (xyz.getY() * width);
+			double y = ((this.getHeight() / 2) - (pt.getY() * scale));
 
 			if (firstCoord) {
 				gc.moveTo(x, y);

@@ -4,6 +4,7 @@
     "chord" : 250.0,
     "offset" : 0.0,
     "span" : 0.0,
+    "yScale" : 1.0,
     "twist" : 0.0,
     "xy" : [ {
       "x" : 1.0,
@@ -211,8 +212,9 @@
   "tip" : {
     "name" : "NACA-0009 9.0% smoothed",
     "chord" : 150.0,
-    "offset" : 0.0,
+    "offset" : 100.0,
     "span" : 500.0,
+    "yScale" : 1.0,
     "twist" : 0.0,
     "xy" : [ {
       "x" : 1.0,

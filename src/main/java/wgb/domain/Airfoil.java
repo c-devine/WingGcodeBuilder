@@ -105,4 +105,40 @@ public class Airfoil {
 		return new Length(FoilUtil.findMaxY(points) - FoilUtil.findMinY(points), Unit.MM);
 	}
 
+	@JsonIgnore
+	public List<Point2D> getScaled(int transforms, Unit unit) {
+
+		return getScaled(transforms, unit, new Length(0.0, Unit.MM));
+	}
+
+	@JsonIgnore
+	public List<Point2D> getScaled(int transforms, Unit unit, Length kerf) {
+
+		List<Point2D> pts = this.getXy();
+		Point2D origin = new Point2D(0.0, 0.0);
+
+		if (Transform.YSCALE.isSet(transforms)) {
+			pts = FoilUtil.scale(pts, origin, 1.0, this.getyScale());
+		}
+
+		if (Transform.XSCALE.isSet(transforms)) {
+			pts = FoilUtil.scale(pts, origin,
+					unit.equals(Unit.MM) ? this.getChord().asMM() + kerf.asMM()
+							: this.getChord().asInch() + kerf.asInch(),
+					unit.equals(Unit.MM) ? this.getChord().asMM() + kerf.asMM()
+							: this.getChord().asInch() + kerf.asInch());
+		}
+
+		if (Transform.TWIST.isSet(transforms)) {
+			pts = FoilUtil.rotate(pts, origin, this.twist);
+		}
+
+		if (Transform.OFFSET.isSet(transforms)) {
+			pts = FoilUtil.offset(pts, unit.equals(Unit.MM) ? this.getOffset().asMM() : this.offset.asInch(), 0.0);
+		}
+
+		return pts;
+
+	}
+
 }

@@ -23,21 +23,17 @@ public class GcodeGenerator {
 		List<Point2D> lPts = densifier.densify(left.getXy(), numSegments);
 		List<Point2D> rPts = densifier.densify(right.getXy(), numSegments);
 
-		// apply yScale
-		Point2D rotateAxis = new Point2D(1.0, 0.0);
-		lPts = FoilUtil.scale(lPts, new Point2D(0.0, 0.0), 1.0, left.getyScale());
-		rPts = FoilUtil.scale(rPts, new Point2D(0.0, 0.0), 1.0, right.getyScale());
-
-		// apply twist
-		lPts = FoilUtil.rotate(lPts, rotateAxis, left.getTwist());
-		rPts = FoilUtil.rotate(rPts, rotateAxis, right.getTwist());
-
 		// scale + kerf
 		double kerf = settings.getKerf().asMM();
 		lPts = FoilUtil.scale(lPts, new Point2D(0.0, 0.0), left.getChord().asMM() + kerf,
 				left.getChord().asMM() + kerf);
 		rPts = FoilUtil.scale(rPts, new Point2D(0.0, 0.0), right.getChord().asMM() + kerf,
 				right.getChord().asMM() + kerf);
+
+		// apply twist
+		Point2D rotateAxis = new Point2D(1.0, 0.0);
+		lPts = FoilUtil.rotate(lPts, rotateAxis, left.getTwist());
+		rPts = FoilUtil.rotate(rPts, rotateAxis, right.getTwist());
 
 		// offset
 		lPts = FoilUtil.offset(lPts, left.getOffset().asMM(), 0);

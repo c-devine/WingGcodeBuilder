@@ -15,7 +15,9 @@ import javafx.geometry.Point3D;
 import javafx.scene.shape.TriangleMesh;
 import wgb.domain.Airfoil;
 import wgb.domain.Densifier;
+import wgb.domain.Transform;
 import wgb.domain.Triangle;
+import wgb.domain.Unit;
 import wgb.util.FoilUtil;
 
 @Component
@@ -31,12 +33,8 @@ public class FoilMeshHelper {
 	public TriangleMesh createMesh(Airfoil left, Airfoil right, boolean mirror) {
 
 		// slice the foil profile
-		Point2D rotateAxis = new Point2D(1.0, 0.0);
-		lInterpolated = densifier.densify(FoilUtil.scale(left.getXy(), rotateAxis, 1.0, left.getyScale()), NUM_POINTS);
-		lInterpolated = FoilUtil.rotate(lInterpolated, rotateAxis, left.getTwist());
-		rInterpolated = densifier.densify(FoilUtil.scale(right.getXy(), rotateAxis, 1.0, right.getyScale()),
-				NUM_POINTS);
-		rInterpolated = FoilUtil.rotate(rInterpolated, rotateAxis, right.getTwist());
+		lInterpolated = densifier.densify(left.getScaled(Transform.ALL.getMask(), Unit.MM), NUM_POINTS);
+		rInterpolated = densifier.densify(right.getScaled(Transform.ALL.getMask(), Unit.MM), NUM_POINTS);
 
 		List<Triangle> leftFace = getFaces(left, lInterpolated);
 		List<Triangle> rightFace = getFaces(right, rInterpolated);
@@ -98,8 +96,7 @@ public class FoilMeshHelper {
 	public List<Triangle> getFaces(Airfoil foil, List<Point2D> interpolated) {
 
 		Point2D centroid2D = FoilUtil.calcCentroid(interpolated);
-		Point3D centroid = new Point3D((centroid2D.getX() * foil.getChord().asMM()) + foil.getOffset().asMM(),
-				centroid2D.getY() * foil.getChord().asMM(), -foil.getSpan().asMM());
+		Point3D centroid = new Point3D(centroid2D.getX(), centroid2D.getY(), -foil.getSpan().asMM());
 		return IntStream.range(1, interpolated.size()).mapToObj(
 				i -> new Triangle(getPoint3D(foil, interpolated, i - 1), centroid, getPoint3D(foil, interpolated, i)))
 				.collect(Collectors.toList());
@@ -124,8 +121,7 @@ public class FoilMeshHelper {
 	private Point3D getPoint3D(Airfoil foil, List<Point2D> interpolated, int pos) {
 
 		Point2D pt = interpolated.get(pos);
-		return new Point3D((pt.getX() * foil.getChord().asMM()) + foil.getOffset().asMM(),
-				pt.getY() * foil.getChord().asMM(), -foil.getSpan().asMM());
+		return new Point3D(pt.getX(), pt.getY(), -foil.getSpan().asMM());
 	}
 
 	private List<Triangle> mirror(List<Triangle> triangles) {

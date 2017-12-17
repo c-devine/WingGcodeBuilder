@@ -90,7 +90,7 @@ public class TwoDController implements Initializable {
 	public void onSelectFoilRoot(MouseEvent event) {
 		Airfoil af = getAirfoil();
 		if (af != null) {
-			mainController.addAirfoil(af, Side.ROOT);
+			mainController.addAirfoil(af, Side.ROOT, false);
 		}
 	}
 
@@ -98,7 +98,7 @@ public class TwoDController implements Initializable {
 	public void onSelectFoilTip(MouseEvent event) {
 		Airfoil af = getAirfoil();
 		if (af != null) {
-			mainController.addAirfoil(af, Side.TIP);
+			mainController.addAirfoil(af, Side.TIP, false);
 		}
 	}
 

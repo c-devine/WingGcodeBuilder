@@ -2,7 +2,7 @@ package wgb.domain;
 
 public enum Side {
 
-	ROOT(0), TIP(1), ;
+	ROOT(0), TIP(1);
 
 	private final int index;
 
