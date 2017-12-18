@@ -122,11 +122,8 @@ public class Airfoil {
 		}
 
 		if (Transform.XYSCALE.isSet(transforms)) {
-			pts = FoilUtil.scale(pts, origin,
-					unit.equals(Unit.MM) ? this.getChord().asMM() + kerf.asMM()
-							: this.getChord().asInch() + kerf.asInch(),
-					unit.equals(Unit.MM) ? this.getChord().asMM() + kerf.asMM()
-							: this.getChord().asInch() + kerf.asInch());
+			pts = FoilUtil.scale(pts, origin, this.getChord().getLength(unit) + kerf.getLength(unit),
+					this.getChord().getLength(unit) + kerf.getLength(unit));
 		}
 
 		if (Transform.TWIST.isSet(transforms)) {
@@ -134,7 +131,7 @@ public class Airfoil {
 		}
 
 		if (Transform.OFFSET.isSet(transforms)) {
-			pts = FoilUtil.offset(pts, unit.equals(Unit.MM) ? this.getOffset().asMM() : this.offset.asInch(), 0.0);
+			pts = FoilUtil.offset(pts, this.getOffset().getLength(unit), 0.0);
 		}
 
 		return pts;
