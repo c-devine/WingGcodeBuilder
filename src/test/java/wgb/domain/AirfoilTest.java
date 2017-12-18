@@ -39,10 +39,10 @@ public class AirfoilTest {
 		Airfoil af = new Airfoil();
 		af.setXy(pts);
 		af.setChord(new Length(10, Unit.MM));
-		assertEquals(10.0, FoilUtil.findMaxX(af.getScaled(Transform.XSCALE.getMask(), Unit.MM)), 0.00001);
+		assertEquals(10.0, FoilUtil.findMaxX(af.getScaled(Transform.XYSCALE.getMask(), Unit.MM)), 0.00001);
 		af.setyScale(2.0);
 		assertEquals(20.0,
-				FoilUtil.findMaxY(af.getScaled(Transform.calcMask(Transform.XSCALE, Transform.YSCALE), Unit.MM)),
+				FoilUtil.findMaxY(af.getScaled(Transform.calcMask(Transform.XYSCALE, Transform.YSCALE), Unit.MM)),
 				0.00001);
 
 	}

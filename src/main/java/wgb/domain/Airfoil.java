@@ -121,7 +121,7 @@ public class Airfoil {
 			pts = FoilUtil.scale(pts, origin, 1.0, this.getyScale());
 		}
 
-		if (Transform.XSCALE.isSet(transforms)) {
+		if (Transform.XYSCALE.isSet(transforms)) {
 			pts = FoilUtil.scale(pts, origin,
 					unit.equals(Unit.MM) ? this.getChord().asMM() + kerf.asMM()
 							: this.getChord().asInch() + kerf.asInch(),

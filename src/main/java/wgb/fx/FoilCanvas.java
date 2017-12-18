@@ -63,7 +63,7 @@ public class FoilCanvas extends ResizableCanvas {
 		gc.beginPath();
 
 		// get scaled points
-		List<Point2D> foil = airFoil.getScaled(Transform.calcMask(Transform.YSCALE, Transform.XSCALE, Transform.TWIST),
+		List<Point2D> foil = airFoil.getScaled(Transform.calcMask(Transform.YSCALE, Transform.XYSCALE, Transform.TWIST),
 				Unit.MM);
 		double maxX = FoilUtil.findMaxX(foil);
 		double scale = width / maxX;
