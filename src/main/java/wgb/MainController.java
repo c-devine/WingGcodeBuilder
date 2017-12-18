@@ -346,6 +346,10 @@ public class MainController implements Initializable, ProjectAware {
 				}
 			}
 		}
+
+		if (type.equals(AppEventType.REFRESH)) {
+			tvSections.refresh();
+		}
 	}
 
 	public RadioMenuItem getMenuMirror() {
