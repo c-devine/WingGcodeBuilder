@@ -119,7 +119,7 @@ public class GcodeController implements Initializable, ProjectAware {
 
 		gcSettings.setEntries(oList);
 		List<String> gcodeList = generator.generateGcode(mainController.getAirfoil(Side.ROOT),
-				mainController.getAirfoil(Side.TIP), gcSettings, cbMirrored.isSelected());
+				mainController.getAirfoil(Side.TIP), gcSettings, MainController.unit, cbMirrored.isSelected());
 
 		gcodeList.addAll(0, getPrePostGcode(preGcodeTextArea));
 		gcodeList.addAll(getPrePostGcode(postGcodeTextArea));
