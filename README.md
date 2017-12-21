@@ -1,6 +1,6 @@
 # WingGcodeBuilder
 
-JavaFX / Spring Boot application used to create G-code files for 4 axis hotwire cutting machine. The application can import Selig format (for now) airfoil .dat
+JavaFX / Spring Boot application used to create G-code files for 4 axis hotwire cutting machine. The application can import Selig and Lednicer format airfoil .dat
 files from the University of Illinois [UIUC Airfoil Database]( http://m-selig.ae.illinois.edu/ads/coord_database.html). Airfoil, chord length, twist,
 and offset are editable for both the tip and root.  There is a 2D view of the airfoils, as well as a 3D view of the wing half or whole
 wing. G-code can be generated for both the right and left (mirrored) wings. Created to generate G-code for low cost (?) hotwire foam
@@ -10,10 +10,11 @@ cutter.  See [wiki](https://github.com/c-devine/WingGcodeBuilder/wiki).
 
 * Download airfoils for root and tip (if different)
 * Select airfoils in the 2D view
-* Modify wing section parameters (chord, Y (span), offset, twist)
+* Modify wing section parameters (chord, span, offset, y scale, twist)
 * View in 3D view
 * Modify G-code settings (feed rate, kerf, etc)
 * Export G-code
+* Save the project for future use
 
 
 ## Snapshots
@@ -56,7 +57,16 @@ Requires Java 8 to build and deploy.
 
 ## Deployment
 
-*Not yet implemented.*
+Build the jar files:
+```
+gradlew build
+```
+
+Create the native executable install file:
+
+```
+gradlew javafxNative
+```
 
 ## Built With
 
