@@ -3,6 +3,8 @@ package wgb.domain;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -11,6 +13,8 @@ import wgb.util.FoilUtil;
 
 @Component
 public class GcodeGenerator {
+
+	private final static Logger logger = LogManager.getLogger();
 
 	@Autowired
 	Densifier densifier;
@@ -23,6 +27,11 @@ public class GcodeGenerator {
 
 		List<Point2D> lPts = densifier.densify(left.getXy(), numSegments);
 		List<Point2D> rPts = densifier.densify(right.getXy(), numSegments);
+
+		if (lPts.size() != rPts.size())
+			logger.warn(String.format(
+					"Number of coodinates do not match, unknown behavior may result.  Left = %d, Right = %d",
+					lPts.size(), rPts.size()));
 
 		// scale + kerf
 		double kerf = settings.getKerf().getLength(unit);
