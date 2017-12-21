@@ -88,7 +88,8 @@ public class GcodeController implements Initializable, ProjectAware {
 		valueColumn.setCellValueFactory(
 				(TableColumn.CellDataFeatures<MapEntry<String, Object>, String> param) -> new ReadOnlyStringWrapper(
 						param.getValue().getValue() instanceof Length
-								? String.valueOf(((Length) param.getValue().getValue()).getLength(MainController.unit))
+								? String.format("%.2f",
+										((Length) param.getValue().getValue()).getLength(MainController.unit))
 								: String.valueOf(param.getValue().getValue())));
 
 		valueColumn.setCellFactory(TextFieldTableCell.<MapEntry<String, Object>>forTableColumn());

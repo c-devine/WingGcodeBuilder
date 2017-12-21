@@ -105,7 +105,7 @@ public class MainController implements Initializable, ProjectAware {
 		TableColumn<Airfoil, String> chordCol = new TableColumn<Airfoil, String>("Chord");
 		chordCol.setMinWidth(100);
 		chordCol.setCellValueFactory((TableColumn.CellDataFeatures<Airfoil, String> param) -> new ReadOnlyStringWrapper(
-				String.valueOf(param.getValue().getChord().getLength(unit))));
+				String.format("%.2f", param.getValue().getChord().getLength(unit))));
 
 		chordCol.setCellFactory(TextFieldTableCell.<Airfoil>forTableColumn());
 		chordCol.setOnEditCommit((CellEditEvent<Airfoil, String> t) -> {
@@ -118,7 +118,7 @@ public class MainController implements Initializable, ProjectAware {
 		offsetCol.setMinWidth(100);
 		offsetCol
 				.setCellValueFactory((TableColumn.CellDataFeatures<Airfoil, String> param) -> new ReadOnlyStringWrapper(
-						String.valueOf(param.getValue().getOffset().getLength(unit))));
+						String.format("%.2f", param.getValue().getOffset().getLength(unit))));
 
 		offsetCol.setCellFactory(TextFieldTableCell.<Airfoil>forTableColumn());
 		offsetCol.setOnEditCommit((CellEditEvent<Airfoil, String> t) -> {
@@ -130,7 +130,7 @@ public class MainController implements Initializable, ProjectAware {
 		TableColumn<Airfoil, String> spanCol = new TableColumn<Airfoil, String>("Span");
 		spanCol.setMinWidth(100);
 		spanCol.setCellValueFactory((TableColumn.CellDataFeatures<Airfoil, String> param) -> new ReadOnlyStringWrapper(
-				String.valueOf(param.getValue().getSpan().getLength(unit))));
+				String.format("%.2f", param.getValue().getSpan().getLength(unit))));
 
 		spanCol.setCellFactory(TextFieldTableCell.<Airfoil>forTableColumn());
 		spanCol.setOnEditCommit((CellEditEvent<Airfoil, String> t) -> {
@@ -142,7 +142,7 @@ public class MainController implements Initializable, ProjectAware {
 		TableColumn<Airfoil, String> twistCol = new TableColumn<Airfoil, String>("Twist");
 		twistCol.setMinWidth(100);
 		twistCol.setCellValueFactory((TableColumn.CellDataFeatures<Airfoil, String> param) -> new ReadOnlyStringWrapper(
-				String.valueOf(param.getValue().getTwist())));
+				String.format("%.2f", param.getValue().getTwist())));
 
 		twistCol.setCellFactory(TextFieldTableCell.<Airfoil>forTableColumn());
 		twistCol.setOnEditCommit((CellEditEvent<Airfoil, String> t) -> {
@@ -155,7 +155,7 @@ public class MainController implements Initializable, ProjectAware {
 		yScaleCol.setMinWidth(100);
 		yScaleCol
 				.setCellValueFactory((TableColumn.CellDataFeatures<Airfoil, String> param) -> new ReadOnlyStringWrapper(
-						String.valueOf(param.getValue().getyScale())));
+						String.format("%.2f", param.getValue().getyScale())));
 
 		yScaleCol.setCellFactory(TextFieldTableCell.<Airfoil>forTableColumn());
 		yScaleCol.setOnEditCommit((CellEditEvent<Airfoil, String> t) -> {
@@ -169,7 +169,7 @@ public class MainController implements Initializable, ProjectAware {
 		thicknessCol.setMinWidth(100);
 		thicknessCol
 				.setCellValueFactory((TableColumn.CellDataFeatures<Airfoil, String> param) -> new ReadOnlyStringWrapper(
-						String.valueOf(param.getValue().getThickness().getLength(unit))));
+						String.format("%.2f", param.getValue().getThickness().getLength(unit))));
 
 		tvSections.setEditable(true);
 		tvSections.getColumns().addAll(posCol, nameCol, spanCol, chordCol, offsetCol, twistCol, yScaleCol,
