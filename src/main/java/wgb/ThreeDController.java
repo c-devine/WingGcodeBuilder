@@ -197,7 +197,7 @@ public class ThreeDController implements Initializable {
 
 		vBox.getChildren().add(createTxtHbox("Wing Area: ", calc.getWingArea().toFormattedString(MainController.unit)));
 		vBox.getChildren()
-				.add(createTxtHbox("MAC Distance : ", calc.getMacDistance().toFormattedString(mainController.unit)));
+				.add(createTxtHbox("MAC Distance : ", calc.getMacDistance().toFormattedString(MainController.unit)));
 		vBox.getChildren()
 				.add(createTxtHbox("MAC Length : ", calc.getMacLength().toFormattedString(MainController.unit)));
 		vBox.getChildren()
