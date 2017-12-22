@@ -41,10 +41,6 @@ public class SeligAirfoilReader implements AirfoilReader {
 				firstLine = false;
 				continue;
 			}
-			if (line == null)
-				break;
-
-			line.trim();
 
 			if (line.isEmpty())
 				continue;
