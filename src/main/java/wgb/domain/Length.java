@@ -22,8 +22,8 @@ public class Length {
 		this.len = new Length(Double.parseDouble(split[0]), Unit.getEnum(split[1])).asMM();
 	}
 
-	public String toFormattedString() {
-		return String.valueOf(len) + " " + Unit.MM.getShortName();
+	public String toFormattedString(Unit unit) {
+		return String.format("%.2f %s", getLength(unit), unit.equals(Unit.MM) ? " mm(s)" : " inch(es)");
 	}
 
 	// only support mm and inch

@@ -11,14 +11,18 @@ import org.springframework.stereotype.Component;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.AmbientLight;
 import javafx.scene.Group;
 import javafx.scene.PointLight;
 import javafx.scene.SceneAntialiasing;
 import javafx.scene.SubScene;
+import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.DrawMode;
@@ -28,6 +32,7 @@ import javafx.scene.transform.Rotate;
 import wgb.app.AppEventType;
 import wgb.domain.Airfoil;
 import wgb.domain.Side;
+import wgb.domain.WingCalculator;
 import wgb.fx.FoilMeshHelper;
 
 @Component
@@ -54,7 +59,7 @@ public class ThreeDController implements Initializable {
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		// TODO Auto-generated method stub
+
 		rotateX = new Rotate(0, Rotate.X_AXIS);
 		rotateY = new Rotate(0, Rotate.Y_AXIS);
 		rotateZ = new Rotate(180, Rotate.Z_AXIS);
@@ -94,6 +99,7 @@ public class ThreeDController implements Initializable {
 		});
 
 		subScene.setOnScroll((ScrollEvent event) -> {
+
 			event.consume();
 
 			if (event.getDeltaY() == 0) {
@@ -110,9 +116,11 @@ public class ThreeDController implements Initializable {
 		// ToDo add text to the display with things like center of gravity, etc.
 		txtGroup = new Group();
 		txtScene = new SubScene(txtGroup, 100, 100);
+
 		txtScene.widthProperty().bind(threeDPane.widthProperty());
 		txtScene.heightProperty().bind(threeDPane.heightProperty());
 		threeDPane.getChildren().add(txtScene);
+		threeDPane.widthProperty().addListener(c -> redrawText());
 
 	}
 
@@ -171,17 +179,53 @@ public class ThreeDController implements Initializable {
 		meshView.getTransforms().addAll(rotateZ, rotateY, rotateX);
 		root.getChildren().add(meshView);
 
-		// txtGroup.getChildren().clear();
-		// Label lbl = new Label("TEST");
-		// lbl.setTextFill(Color.WHITE);
-		// lbl.setAlignment(Pos.TOP_LEFT);
-		//
-		// txtGroup.getChildren().add(lbl);
-		// txtGroup.setTranslateX(threeDPane.getWidth() - 200);
+		redrawText();
+	}
 
+	private void redrawText() {
+
+		if (mainController.getAirfoil(Side.ROOT).getName().equals(Airfoil.DEFAULT_NAME)
+				|| mainController.getAirfoil(Side.TIP).getName().equals(Airfoil.DEFAULT_NAME))
+			return;
+
+		Airfoil root = mainController.getAirfoil(Side.ROOT);
+		Airfoil tip = mainController.getAirfoil(Side.TIP);
+		WingCalculator calc = new WingCalculator(root, tip);
+
+		txtGroup.getChildren().clear();
+		VBox vBox = new VBox(1);
+
+		vBox.getChildren().add(createTxtHbox("Wing Area: ", calc.getWingArea().toFormattedString(MainController.unit)));
+		vBox.getChildren()
+				.add(createTxtHbox("MAC Distance : ", calc.getMacDistance().toFormattedString(mainController.unit)));
+		vBox.getChildren()
+				.add(createTxtHbox("MAC Length : ", calc.getMacLength().toFormattedString(MainController.unit)));
+		vBox.getChildren()
+				.add(createTxtHbox("CG 15% : ", calc.getCgDistance15().toFormattedString(MainController.unit)));
+		vBox.getChildren()
+				.add(createTxtHbox("CG 20% : ", calc.getCgDistance20().toFormattedString(MainController.unit)));
+		vBox.getChildren()
+				.add(createTxtHbox("CG 25% : ", calc.getCgDistance25().toFormattedString(MainController.unit)));
+
+		txtGroup.getChildren().add(vBox);
+		txtGroup.setTranslateX(threeDPane.getWidth() - 250);
+	}
+
+	private HBox createTxtHbox(String name, String value) {
+		HBox hBox = new HBox(10);
+		Label lbl1 = new Label(name);
+		lbl1.setTextFill(Color.WHITE);
+		lbl1.setAlignment(Pos.TOP_LEFT);
+
+		Label lbl2 = new Label(value);
+		lbl2.setTextFill(Color.WHITE);
+		lbl2.setAlignment(Pos.TOP_LEFT);
+		hBox.getChildren().addAll(lbl1, lbl2);
+		return hBox;
 	}
 
 	private SubScene createScene3D(Group group) {
+
 		SubScene scene3d = new SubScene(group, 100, 100, true, SceneAntialiasing.BALANCED);
 		scene3d.setFill(Color.rgb(10, 10, 40));
 		// scene3d.setFill(Color.WHITESMOKE);
