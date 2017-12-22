@@ -113,7 +113,6 @@ public class ThreeDController implements Initializable {
 
 		});
 
-		// ToDo add text to the display with things like center of gravity, etc.
 		txtGroup = new Group();
 		txtScene = new SubScene(txtGroup, 100, 100);
 

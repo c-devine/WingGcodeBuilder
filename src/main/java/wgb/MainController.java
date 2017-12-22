@@ -256,8 +256,7 @@ public class MainController implements Initializable, ProjectAware {
 			try {
 				project.save(project.getFile());
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				logger.error("Error saving project : " + project.getFile().getAbsolutePath(), e);
 			}
 		} else {
 			processSaveAs(event);
