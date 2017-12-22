@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -37,6 +38,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import wgb.app.AppEventType;
 import wgb.app.FileChooserHelper;
+import wgb.app.GcodeSettingsManager;
 import wgb.app.Project;
 import wgb.app.ProjectAware;
 import wgb.domain.GcodeGenerator;
@@ -51,8 +53,7 @@ public class GcodeController implements Initializable, ProjectAware {
 
 	private final static Logger logger = LogManager.getLogger();
 	private ObservableList<MapEntry<String, Object>> oList = FXCollections.observableArrayList();
-
-	private GcodeSettings gcSettings = new GcodeSettings();
+	private GcodeSettings gcSettings;
 
 	@Autowired
 	MainController mainController;
@@ -60,6 +61,10 @@ public class GcodeController implements Initializable, ProjectAware {
 	GcodeGenerator generator;
 	@Autowired
 	FileChooserHelper fcHelper;
+	@Autowired
+	GcodeSettingsManager gcManager;
+	@Autowired
+	private SpringFxmlLoader loader;
 
 	@FXML
 	private TableView<MapEntry<String, Object>> gcodePropTable;
@@ -72,11 +77,11 @@ public class GcodeController implements Initializable, ProjectAware {
 	@FXML
 	CheckBox cbMirrored;
 
-	@Autowired
-	private SpringFxmlLoader loader;
-
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+
+		// load the default gcode settings
+		gcSettings = gcManager.loadDefault();
 
 		gcodeTextArea.setWrapText(false);
 		oList.addAll(gcSettings.getEntries());
@@ -190,6 +195,63 @@ public class GcodeController implements Initializable, ProjectAware {
 
 		gcSettings.setEntries(oList);
 		project.setGcodeSettings(gcSettings);
+
+	}
+
+	protected void processSaveDefaultGCS(ActionEvent event) {
+
+		gcManager.saveAsDefault(gcSettings);
+	}
+
+	protected void processLoadDefaultGCS(ActionEvent event) {
+
+		GcodeSettings settings = gcManager.loadDefault();
+		if (settings != null) {
+			oList.clear();
+			gcSettings = settings;
+			oList.addAll(gcSettings.getEntries());
+			gcodePropTable.refresh();
+		}
+	}
+
+	protected void processSaveGCS(ActionEvent event) {
+
+		FileChooser fileChooser = fcHelper.getFileChooser();
+		ExtensionFilter extFilter = new FileChooser.ExtensionFilter("GcodeSettings files (*.json)", "*.json");
+		fileChooser.getExtensionFilters().add(extFilter);
+		File f = fileChooser.showSaveDialog(((Node) gcodePropTable).getScene().getWindow());
+		if (f != null) {
+			try {
+				if (!f.getName().endsWith(".json"))
+					f.getName().concat(".json");
+				gcSettings.setEntries(oList);
+				gcManager.save(gcSettings, f);
+			} catch (Exception e) {
+				logger.error("Error saving gcode settings: " + f.getAbsolutePath(), e);
+			}
+		}
+
+	}
+
+	protected void processLoadGCS(ActionEvent event) {
+
+		FileChooser fileChooser = fcHelper.getFileChooser();
+		ExtensionFilter extFilter = new FileChooser.ExtensionFilter("GcodeSettings files (*.json)", "*.json");
+		fileChooser.getExtensionFilters().add(extFilter);
+		File f = fileChooser.showOpenDialog(((Node) gcodePropTable).getScene().getWindow());
+		if (f != null)
+			try {
+				GcodeSettings settings = gcManager.load(f);
+				if (settings != null) {
+					oList.clear();
+					gcSettings = settings;
+					oList.addAll(gcSettings.getEntries());
+					gcodePropTable.refresh();
+				}
+
+			} catch (Exception e) {
+				logger.error("Error loading project.", e);
+			}
 
 	}
 

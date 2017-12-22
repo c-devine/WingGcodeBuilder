@@ -25,6 +25,14 @@
 						<MenuItem text="Exit" onAction="#processExit" />
 					</items>
 				</Menu>
+				<Menu text="Gcode Settings">
+					<items>
+						<MenuItem text="Save as Default" onAction="#processSaveDefaultGCS" />
+						<MenuItem text="Load Defalut" onAction="#processLoadDefaultGCS" />
+						<MenuItem text="Save" onAction="#processSaveGCS" />
+						<MenuItem text="Load" onAction="#processLoadGCS" />
+					</items>
+				</Menu>
 				<Menu text="View">
 					<items>
 						<RadioMenuItem fx:id="menuMirror" selected="false"

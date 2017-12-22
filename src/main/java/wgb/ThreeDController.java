@@ -37,10 +37,6 @@ import wgb.fx.FoilMeshHelper;
 public class ThreeDController implements Initializable {
 
 	private final static DrawMode DRAW_MODE = DrawMode.FILL;
-	@Autowired
-	MainController mainController;
-	@Autowired
-	FoilMeshHelper meshHelper;
 	private double mousePosX, mousePosY = 0;
 	private Rotate rotateX, rotateY, rotateZ;
 	final double TURN_FACTOR = 5;
@@ -50,6 +46,11 @@ public class ThreeDController implements Initializable {
 	private Group root;
 	private SubScene txtScene;
 	private Group txtGroup;
+
+	@Autowired
+	MainController mainController;
+	@Autowired
+	FoilMeshHelper meshHelper;
 
 	@FXML
 	private Pane threeDPane;

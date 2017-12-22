@@ -38,6 +38,7 @@ import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.util.Callback;
 import wgb.app.AppEventType;
 import wgb.app.FileChooserHelper;
+import wgb.app.GcodeSettingsManager;
 import wgb.app.Project;
 import wgb.app.ProjectAware;
 import wgb.domain.Airfoil;
@@ -62,25 +63,25 @@ public class MainController implements Initializable, ProjectAware {
 
 	@Autowired
 	Project project;
-
-	@FXML
-	private MenuBar menuBar;
-
-	@FXML
-	private RadioMenuItem menuMirror;
-
-	@FXML
-	private TableView<Airfoil> tvSections;
-
 	@Autowired
 	private ThreeDController threeDController;
 	@Autowired
 	private TwoDController twoDController;
 	@Autowired
+	private GcodeController gcController;
+	@Autowired
 	FileChooserHelper fcHelper;
-
+	@Autowired
+	GcodeSettingsManager gcManager;
 	@Autowired
 	private ApplicationEventPublisher publisher;
+
+	@FXML
+	private MenuBar menuBar;
+	@FXML
+	private RadioMenuItem menuMirror;
+	@FXML
+	private TableView<Airfoil> tvSections;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -313,6 +314,34 @@ public class MainController implements Initializable, ProjectAware {
 		}
 
 	}
+
+	/*
+	 * Start Gcode Settings Menu Items)
+	 */
+
+	@FXML
+	protected void processSaveDefaultGCS(ActionEvent event) {
+		gcController.processSaveDefaultGCS(event);
+	}
+
+	@FXML
+	protected void processLoadDefaultGCS(ActionEvent event) {
+		gcController.processLoadDefaultGCS(event);
+	}
+
+	@FXML
+	protected void processSaveGCS(ActionEvent event) {
+		gcController.processSaveGCS(event);
+	}
+
+	@FXML
+	protected void processLoadGCS(ActionEvent event) {
+		gcController.processLoadGCS(event);
+	}
+
+	/*
+	 * End Gcode Settings Menu Items)
+	 */
 
 	@Override
 	public void onProjectLoad(Project project) {
