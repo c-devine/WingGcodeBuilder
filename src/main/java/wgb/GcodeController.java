@@ -200,6 +200,7 @@ public class GcodeController implements Initializable, ProjectAware {
 
 	protected void processSaveDefaultGCS(ActionEvent event) {
 
+		gcSettings.setEntries(oList);
 		gcManager.saveAsDefault(gcSettings);
 	}
 
