@@ -1,5 +1,7 @@
 package wgb;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -14,6 +16,8 @@ import wgb.fx.SpringFxmlLoader;
 
 @SpringBootApplication
 public class Main extends AbstractJavaFxApplicationSupport {
+
+	private final static Logger logger = LogManager.getLogger();
 
 	@Autowired
 	private ApplicationEventPublisher publisher;
@@ -35,7 +39,7 @@ public class Main extends AbstractJavaFxApplicationSupport {
 			primaryStage.show();
 			publisher.publishEvent(AppEventType.AFTER_LOADED_EVENT);
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("Error starting application.", e);
 		}
 	}
 

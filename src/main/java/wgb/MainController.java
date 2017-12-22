@@ -276,7 +276,7 @@ public class MainController implements Initializable, ProjectAware {
 					f.getName().concat(".json");
 				project.save(f);
 			} catch (Exception e) {
-				e.printStackTrace();
+				logger.error("Error saving project: " + f.getAbsolutePath(), e);
 			}
 		}
 	}
@@ -340,8 +340,7 @@ public class MainController implements Initializable, ProjectAware {
 					dbg = new File("sampledata/project.json");
 					project.load(dbg);
 				} catch (Exception e) {
-					logger.error("Error loading sample data file: " + dbg.getAbsolutePath());
-					e.printStackTrace();
+					logger.error("Error loading sample data file: " + dbg.getAbsolutePath(), e);
 				}
 			}
 		}

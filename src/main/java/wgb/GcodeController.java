@@ -143,7 +143,7 @@ public class GcodeController implements Initializable, ProjectAware {
 					f.getName().concat(".gcode");
 				exportGcode(f, gcodeTextArea.getText());
 			} catch (Exception e) {
-				e.printStackTrace();
+				logger.error("Error exporting gcode: " + f.getAbsolutePath(), e);
 			}
 		}
 	}
