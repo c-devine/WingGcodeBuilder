@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Component;
 
 import javafx.geometry.Point2D;
@@ -17,7 +15,6 @@ import wgb.util.FoilUtil;
 @Component
 public class RadialInterpolator {
 
-	private final static Logger logger = LogManager.getLogger();
 	private final static int DEFAULT_SEGMENTS = 360;
 
 	public List<Point2D> interpolate(List<Point2D> points, int numSegments) {

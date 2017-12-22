@@ -3,15 +3,12 @@ package wgb.domain;
 import java.io.File;
 import java.util.List;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.junit.Test;
 
 import javafx.geometry.Point2D;
 
 public class DensifierTest {
 
-	private final static Logger logger = LogManager.getLogger();
 	private SeligAirfoilReader afr = new SeligAirfoilReader();
 	private Densifier sut = new Densifier();
 

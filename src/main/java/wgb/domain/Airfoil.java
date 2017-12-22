@@ -3,9 +3,6 @@ package wgb.domain;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
@@ -14,7 +11,6 @@ import wgb.util.FoilUtil;
 
 public class Airfoil {
 
-	private final static Logger logger = LogManager.getLogger();
 	public final static String DEFAULT_NAME = "Empty";
 	private final static Unit DEFAULT_UNIT = Unit.MM;
 	private final static int DEFAULT_CHORD = 250;

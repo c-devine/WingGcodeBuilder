@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Component;
 
 import javafx.geometry.Point2D;
@@ -16,8 +14,6 @@ import wgb.util.FoilUtil;
 
 @Component
 public class Densifier {
-
-	private final static Logger logger = LogManager.getLogger();
 
 	public List<Point2D> densify(List<Point2D> points, double segmentLength) {
 

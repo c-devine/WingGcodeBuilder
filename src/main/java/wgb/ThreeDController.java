@@ -3,8 +3,6 @@ package wgb;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
@@ -38,7 +36,6 @@ import wgb.fx.FoilMeshHelper;
 @Component
 public class ThreeDController implements Initializable {
 
-	private final static Logger logger = LogManager.getLogger();
 	private final static DrawMode DRAW_MODE = DrawMode.FILL;
 	@Autowired
 	MainController mainController;

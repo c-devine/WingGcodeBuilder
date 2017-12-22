@@ -2,8 +2,6 @@ package wgb.fx;
 
 import java.util.List;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javafx.geometry.Point2D;
@@ -17,10 +15,6 @@ import wgb.util.FoilUtil;
 
 public class FoilCanvas extends ResizableCanvas {
 
-	private final static Logger logger = LogManager.getLogger();
-
-	private final static int PADDING_TOP = 10;
-	private final static int PADDING_BOTTOM = 10;
 	private final static int PADDING_LEFT = 10;
 	private final static int PADDING_RIGHT = 10;
 

@@ -5,15 +5,11 @@ import static org.junit.Assert.assertEquals;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.junit.Test;
 
 import javafx.geometry.Point2D;
 
 public class FoilUtilTest {
-
-	private final static Logger logger = LogManager.getLogger();
 
 	private double delta = 0.00001;
 

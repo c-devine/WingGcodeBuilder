@@ -5,8 +5,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -24,7 +22,6 @@ import wgb.util.FoilUtil;
 public class FoilMeshHelper {
 
 	private final static int NUM_POINTS = 360;
-	private final static Logger logger = LogManager.getLogger();
 
 	@Autowired
 	Densifier densifier;

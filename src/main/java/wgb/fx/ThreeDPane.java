@@ -1,7 +1,5 @@
 package wgb.fx;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -23,7 +21,6 @@ import wgb.domain.Airfoil;
 @Component
 public class ThreeDPane {
 
-	private final static Logger logger = LogManager.getLogger();
 	private final static DrawMode DRAW_MODE = DrawMode.FILL;
 	@Autowired
 	FoilMeshHelper meshHelper;
