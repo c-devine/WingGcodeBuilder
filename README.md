@@ -20,7 +20,7 @@ cutter.  See [wiki](https://github.com/c-devine/WingGcodeBuilder/wiki).
 ## Snapshots
 
 <img src="https://raw.githubusercontent.com/c-devine/WingGcodeBuilder/snapshots/assets/img/2D.png?raw=true" width="320" height="240">
-<img src="https://raw.githubusercontent.com/c-devine/WingGcodeBuilder/snapshots/assets/img/3D.png?raw=true" width="320" height="240">
+<img src="https://raw.githubusercontent.com/c-devine/WingGcodeBuilder/snapshots/assets/img/3D-v101.png?raw=true" width="320" height="240">
 <img src="https://raw.githubusercontent.com/c-devine/WingGcodeBuilder/snapshots/assets/img/GCODE.png?raw=true" width="320" height="240">
 
 ## Hardware
