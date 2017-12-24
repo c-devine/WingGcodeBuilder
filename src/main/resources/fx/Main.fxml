@@ -103,6 +103,6 @@
 				</TabPane>
 			</children>
 		</VBox>
-		<Pane id="messageBar" prefHeight="50.0" VBox.vgrow="NEVER" />
+		<fx:include source="StatusBar.fxml" />
 	</children>
 </VBox>

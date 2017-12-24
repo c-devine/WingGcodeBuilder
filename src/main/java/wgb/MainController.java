@@ -70,6 +70,8 @@ public class MainController implements Initializable, ProjectAware {
 	@Autowired
 	private GcodeController gcController;
 	@Autowired
+	private StatusBarController sbController;
+	@Autowired
 	FileChooserHelper fcHelper;
 	@Autowired
 	GcodeSettingsManager gcManager;
@@ -377,6 +379,7 @@ public class MainController implements Initializable, ProjectAware {
 		if (type.equals(AppEventType.REFRESH)) {
 			tvSections.refresh();
 		}
+
 	}
 
 	public RadioMenuItem getMenuMirror() {

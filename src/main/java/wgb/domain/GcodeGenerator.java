@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javafx.geometry.Point2D;
+import wgb.StatusBarController;
 import wgb.util.FoilUtil;
 
 @Component
@@ -17,10 +18,17 @@ public class GcodeGenerator {
 	private final static Logger logger = LogManager.getLogger();
 
 	@Autowired
-	Densifier densifier;
+	private Densifier densifier;
+	@Autowired
+	private StatusBarController sbc;
+
+	private double progress = 0.0;
 
 	public List<String> generateGcode(Airfoil left, Airfoil right, GcodeSettings settings, Unit unit,
 			boolean mirrored) {
+
+		// start updating the progress bar
+		updateProgress("Starting G-code generation...");
 
 		// try to create a point list of equal size and ~1mm in length
 		int numSegments = (int) (FoilUtil.findRawLength(left.getXy()) * left.getChord().asMM());
@@ -32,6 +40,8 @@ public class GcodeGenerator {
 			logger.warn(String.format(
 					"Number of coodinates do not match, unknown behavior may result.  Left = %d, Right = %d",
 					lPts.size(), rPts.size()));
+
+		updateProgress("Calculating coordinates...");
 
 		// scale + kerf
 		double kerf = settings.getKerf().getLength(unit);
@@ -64,6 +74,8 @@ public class GcodeGenerator {
 		lPts = FoilUtil.offset(lPts, settings.getLeadin().getLength(unit), 0);
 		rPts = FoilUtil.offset(rPts, settings.getLeadin().getLength(unit), 0);
 
+		updateProgress("Creating G-code...");
+
 		List<String> retList = new ArrayList<String>();
 		// add the summary info
 		retList.addAll(getSummaryInfo(left, lPts, right, rPts, unit));
@@ -82,6 +94,8 @@ public class GcodeGenerator {
 
 		// turn off the motors
 		retList.add("M18 ; turn stepper motors off");
+
+		endProgress();
 
 		return retList;
 
@@ -135,6 +149,22 @@ public class GcodeGenerator {
 
 	private String getMI(Length len) {
 		return String.format("%.2f mm / %.2f inch(es)", len.asMM(), len.asInch());
+	}
+
+	private void updateProgress(String message) {
+
+		progress += 0.25;
+		sbc.setProgress(progress);
+		sbc.setMessage(message);
+
+	}
+
+	private void endProgress() {
+
+		progress = 1.0;
+		sbc.setMessage("G-code generation complete.");
+		sbc.setMessageDelay("", 1000);
+		sbc.setProgressDelay(0.0, 1000);
 	}
 
 }

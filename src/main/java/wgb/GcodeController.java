@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
+import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -123,15 +124,15 @@ public class GcodeController implements Initializable, ProjectAware {
 	@FXML
 	protected void onGenerateGcode(MouseEvent event) {
 
+		gcodeTextArea.clear();
 		gcSettings.setEntries(oList);
-		List<String> gcodeList = generator.generateGcode(mainController.getAirfoil(Side.ROOT),
+
+		List<String> gcList = generator.generateGcode(mainController.getAirfoil(Side.ROOT),
 				mainController.getAirfoil(Side.TIP), gcSettings, MainController.unit, cbMirrored.isSelected());
 
-		gcodeList.addAll(0, getPrePostGcode(preGcodeTextArea));
-		gcodeList.addAll(getPrePostGcode(postGcodeTextArea));
-		gcodeTextArea.clear();
-		gcodeList.forEach(s -> gcodeTextArea.appendText(s + System.lineSeparator()));
-
+		gcList.addAll(0, getPrePostGcode(preGcodeTextArea));
+		gcList.addAll(getPrePostGcode(postGcodeTextArea));
+		gcList.forEach(s -> Platform.runLater(() -> gcodeTextArea.appendText(s + System.lineSeparator())));
 	}
 
 	@FXML

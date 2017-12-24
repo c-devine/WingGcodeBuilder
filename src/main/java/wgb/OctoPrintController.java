@@ -34,6 +34,8 @@ public class OctoPrintController implements Initializable {
 	AppPrefs appPrefs;
 	@Autowired
 	GcodeController gcodeController;
+	@Autowired
+	StatusBarController sbc;
 
 	@FXML
 	TextField host;
@@ -100,8 +102,16 @@ public class OctoPrintController implements Initializable {
 				try {
 					result = restTemplate.postForObject(sHost + "/api/files/local",
 							new HttpEntity<MultiValueMap<String, Object>>(parameters, headers), String.class);
+					if (result != null) {
+						sbc.setMessage("Success uploading to OctoPrint.");
+						sbc.setProgress(1.0);
+						sbc.setMessageDelay("", 1000);
+						sbc.setProgressDelay(0.0, 1000);
+					}
 				} catch (Exception e) {
 					logger.error("Error sending gcode data to OctoPrint.", e);
+					sbc.setMessage("Error uploading to OctoPrint: " + e.getMessage());
+					sbc.setMessageDelay("", 5000);
 				}
 
 				logger.info(result);
