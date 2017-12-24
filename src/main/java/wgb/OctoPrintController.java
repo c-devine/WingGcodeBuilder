@@ -100,8 +100,10 @@ public class OctoPrintController implements Initializable {
 
 				String result = "";
 				try {
+					sbc.setProgress(-1.0);
 					result = restTemplate.postForObject(sHost + "/api/files/local",
 							new HttpEntity<MultiValueMap<String, Object>>(parameters, headers), String.class);
+
 					if (result != null) {
 						sbc.setMessage("Success uploading to OctoPrint.");
 						sbc.setProgress(1.0);
@@ -112,6 +114,7 @@ public class OctoPrintController implements Initializable {
 					logger.error("Error sending gcode data to OctoPrint.", e);
 					sbc.setMessage("Error uploading to OctoPrint: " + e.getMessage());
 					sbc.setMessageDelay("", 5000);
+					sbc.setProgress(0.0);
 				}
 
 				logger.info(result);
