@@ -127,12 +127,17 @@ public class GcodeController implements Initializable, ProjectAware {
 		gcodeTextArea.clear();
 		gcSettings.setEntries(oList);
 
-		List<String> gcList = generator.generateGcode(mainController.getAirfoil(Side.ROOT),
-				mainController.getAirfoil(Side.TIP), gcSettings, MainController.unit, cbMirrored.isSelected());
+		generator.setup(mainController.getAirfoil(Side.ROOT), mainController.getAirfoil(Side.TIP), gcSettings,
+				MainController.unit, cbMirrored.isSelected());
 
-		gcList.addAll(0, getPrePostGcode(preGcodeTextArea));
-		gcList.addAll(getPrePostGcode(postGcodeTextArea));
-		gcList.forEach(s -> Platform.runLater(() -> gcodeTextArea.appendText(s + System.lineSeparator())));
+		generator.setOnSucceeded(w -> {
+			List<String> gcList = generator.getValue();
+			gcList.addAll(0, getPrePostGcode(preGcodeTextArea));
+			gcList.addAll(getPrePostGcode(postGcodeTextArea));
+			gcList.forEach(s -> Platform.runLater(() -> gcodeTextArea.appendText(s + System.lineSeparator())));
+		});
+
+		generator.start();
 	}
 
 	@FXML

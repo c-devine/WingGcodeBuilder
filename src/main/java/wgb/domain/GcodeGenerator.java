@@ -8,21 +8,52 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import javafx.concurrent.Service;
+import javafx.concurrent.Task;
 import javafx.geometry.Point2D;
 import wgb.StatusBarController;
 import wgb.util.FoilUtil;
 
 @Component
-public class GcodeGenerator {
+public class GcodeGenerator extends Service<List<String>> {
 
 	private final static Logger logger = LogManager.getLogger();
+	private Airfoil left;
+	private Airfoil right;
+	private GcodeSettings settings;
+	private Unit unit;
+	private boolean mirrored;
 
 	@Autowired
 	private Densifier densifier;
 	@Autowired
 	private StatusBarController sbc;
 
-	public List<String> generateGcode(Airfoil left, Airfoil right, GcodeSettings settings, Unit unit,
+	public void setup(Airfoil left, Airfoil right, GcodeSettings settings, Unit unit, boolean mirrored) {
+		this.left = left;
+		this.right = right;
+		this.settings = settings;
+		this.unit = unit;
+	}
+
+	@Override
+	protected Task<List<String>> createTask() {
+
+		return new Task<List<String>>() {
+
+			@Override
+			protected List<String> call() {
+				return generateGcode(left, right, settings, unit, mirrored);
+			}
+		};
+	}
+
+	@Override
+	protected void succeeded() {
+		reset();
+	}
+
+	private List<String> generateGcode(Airfoil left, Airfoil right, GcodeSettings settings, Unit unit,
 			boolean mirrored) {
 
 		// start updating the progress bar
@@ -155,6 +186,7 @@ public class GcodeGenerator {
 
 	private void endProgress() {
 
+		sbc.setProgress(1.0);
 		sbc.setMessage("G-code generation complete.");
 		sbc.setMessageDelay("", 1000);
 		sbc.setProgressDelay(0.0, 1000);
