@@ -55,6 +55,8 @@
 						<!-- <MenuItem disable="true" text="Search" /> <MenuItem text="Online
 							Manual" visible="false" /> <SeparatorMenuItem /> -->
 						<MenuItem onAction="#processAbout" text="About" />
+						<SeparatorMenuItem />
+						<MenuItem onAction="#processCheckUpdate" text="Check for Updates" />
 					</items>
 				</Menu>
 			</menus>

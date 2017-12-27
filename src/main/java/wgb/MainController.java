@@ -72,6 +72,8 @@ public class MainController implements Initializable, ProjectAware {
 	@Autowired
 	private StatusBarController sbController;
 	@Autowired
+	private UpdateController updController;
+	@Autowired
 	FileChooserHelper fcHelper;
 	@Autowired
 	GcodeSettingsManager gcManager;
@@ -217,6 +219,11 @@ public class MainController implements Initializable, ProjectAware {
 		alert.setContentText(title + " version = " + version);
 
 		alert.showAndWait();
+	}
+
+	@FXML
+	protected void processCheckUpdate(ActionEvent event) {
+		updController.processCheckUpdate(event);
 	}
 
 	@FXML

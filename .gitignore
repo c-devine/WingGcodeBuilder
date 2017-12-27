@@ -5,6 +5,7 @@ build/
 deploy/
 dist/
 externalLibs/
+logs/
 project/
 projectRefs/
 sampleData/*.gcode
