@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <application xmlns="http://www.briksoftware.com/updatefx"
 	name="WingGcodeBuilder" changelog="https://github.com/c-devine/WingGcodeBuilder/releases">
-	<release id="010002" version="1.0.2" releaseDate="2017-12-26T00:00:00.000+02:00"
+	<release id="010003" version="1.0.3" releaseDate="2017-12-30T00:00:00.000+02:00"
 		licenseVersion="1">
 		<binary
-			href="https://github.com/c-devine/WingGcodeBuilder/releases/download/v1.0.2/WingGcodeBuilder-1.0.2.exe"
-			size="57913256" platform="win_x64" />
+			href="https://github.com/c-devine/WingGcodeBuilder/releases/download/v1.0.3/WingGcodeBuilder-1.0.3.exe"
+			size="57952477" platform="win_x64" />
 		<binary
-			href="https://github.com/c-devine/WingGcodeBuilder/releases/download/v1.0.2/WingGcodeBuilder-1.0.2.exe"
-			size="57913256" platform="win_x86" />
+			href="https://github.com/c-devine/WingGcodeBuilder/releases/download/v1.0.3/WingGcodeBuilder-1.0.3.exe"
+			size="57952477" platform="win_x86" />
 	</release>
 </application>
