@@ -18,7 +18,7 @@ public class Densifier {
 	public List<Point2D> densify(List<Point2D> points, double segmentLength) {
 
 		Spline2D spline = new Spline2D();
-		spline.setTightness(0.000001f);
+		spline.setTightness(Float.MIN_VALUE);
 		points.forEach(p -> spline.add((float) p.getX(), (float) p.getY()));
 		List<Vec2D> verts = spline.getDecimatedVertices((float) segmentLength);
 		return verts.stream().map(v -> new Point2D(v.x, v.y)).collect(Collectors.toList());
@@ -26,7 +26,7 @@ public class Densifier {
 
 	public List<Point2D> densify(List<Point2D> points, int numPoints) {
 		Spline2D spline = new Spline2D();
-		spline.setTightness(0.000001f);
+		spline.setTightness(Float.MIN_VALUE);
 		points.forEach(p -> spline.add((float) p.getX(), (float) p.getY()));
 		double segmentLength = FoilUtil.findRawLength(points) / numPoints;
 		List<Vec2D> verts = spline.getDecimatedVertices((float) segmentLength);
