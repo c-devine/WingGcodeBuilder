@@ -101,6 +101,17 @@ public class Airfoil {
 		return new Length(FoilUtil.findMaxY(points) - FoilUtil.findMinY(points), Unit.MM);
 	}
 
+	/**
+	 * From flying wing calculator - seems to be about right.
+	 *
+	 * @return
+	 */
+	@JsonIgnore
+	public double getSweep() {
+
+		return span.asMM() == 0 ? 0 : Math.atan(offset.asMM() / span.asMM()) * 180 / Math.PI;
+	}
+
 	@JsonIgnore
 	public List<Point2D> getScaled(int transforms, Unit unit) {
 

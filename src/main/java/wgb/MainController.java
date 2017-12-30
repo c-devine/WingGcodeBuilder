@@ -170,14 +170,19 @@ public class MainController implements Initializable, ProjectAware {
 			publisher.publishEvent(AppEventType.REFRESH);
 		});
 
-		TableColumn<Airfoil, String> thicknessCol = new TableColumn<Airfoil, String>("Thickness");
-		thicknessCol.setMinWidth(100);
+		TableColumn<Airfoil, String> sweepCol = new TableColumn<Airfoil, String>("Calc Sweep");
+		sweepCol.setMinWidth(125);
+		sweepCol.setCellValueFactory((TableColumn.CellDataFeatures<Airfoil, String> param) -> new ReadOnlyStringWrapper(
+				String.format("%.2f%%", param.getValue().getSweep())));
+
+		TableColumn<Airfoil, String> thicknessCol = new TableColumn<Airfoil, String>("Calc Thickness");
+		thicknessCol.setMinWidth(125);
 		thicknessCol
 				.setCellValueFactory((TableColumn.CellDataFeatures<Airfoil, String> param) -> new ReadOnlyStringWrapper(
 						String.format("%.2f", param.getValue().getThickness().getLength(unit))));
 
 		tvSections.setEditable(true);
-		tvSections.getColumns().addAll(posCol, nameCol, spanCol, chordCol, offsetCol, twistCol, yScaleCol,
+		tvSections.getColumns().addAll(posCol, nameCol, spanCol, chordCol, offsetCol, twistCol, yScaleCol, sweepCol,
 				thicknessCol);
 		tvSections.setItems(airFoilList);
 	}
