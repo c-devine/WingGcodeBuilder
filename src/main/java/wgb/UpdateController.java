@@ -52,7 +52,7 @@ public class UpdateController implements Initializable {
 			remoteApplication = xmlRetriever.getValue();
 			int remoteVersion = remoteApplication.getReleases().get(0).getId();
 			int currentVersion = Integer.parseInt(currentProperties.getProperty("app.release"));
-			logger.info(String.format("Current version = %d Remote version +  %d", currentVersion, remoteVersion));
+			logger.info(String.format("Current version = %d Remote version =  %d", currentVersion, remoteVersion));
 			if (remoteVersion > currentVersion) {
 				updater.checkUpdates();
 			} else {
