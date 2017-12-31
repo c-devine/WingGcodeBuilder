@@ -49,6 +49,9 @@ public class SeligAirfoilReader implements AirfoilReader {
 			af.getXy().add(new Point2D(Double.valueOf(sArray[0]), Double.valueOf(sArray[1])));
 		}
 
+		if (af.getXy().get(0) != af.getXy().get(af.getXy().size() - 1))
+			af.getXy().add(af.getXy().get(0));
+
 		reader.close();
 		return af;
 

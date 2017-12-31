@@ -8,7 +8,7 @@ import java.util.stream.IntStream;
 import org.springframework.stereotype.Component;
 
 import javafx.geometry.Point2D;
-import toxi.geom.Spline2D;
+import toxi.geom.LineStrip2D;
 import toxi.geom.Vec2D;
 import wgb.util.FoilUtil;
 
@@ -17,19 +17,18 @@ public class Densifier {
 
 	public List<Point2D> densify(List<Point2D> points, double segmentLength) {
 
-		Spline2D spline = new Spline2D();
-		spline.setTightness(0.00001f);
-		points.forEach(p -> spline.add((float) p.getX(), (float) p.getY()));
-		List<Vec2D> verts = spline.getDecimatedVertices((float) segmentLength);
+		LineStrip2D ls = new LineStrip2D();
+		points.forEach(p -> ls.add((float) p.getX(), (float) p.getY()));
+		List<Vec2D> verts = ls.getDecimatedVertices((float) segmentLength, true);
 		return verts.stream().map(v -> new Point2D(v.x, v.y)).collect(Collectors.toList());
 	}
 
 	public List<Point2D> densify(List<Point2D> points, int numPoints) {
-		Spline2D spline = new Spline2D();
-		spline.setTightness(0.00001f);
-		points.forEach(p -> spline.add((float) p.getX(), (float) p.getY()));
+
+		LineStrip2D ls = new LineStrip2D();
+		points.forEach(p -> ls.add((float) p.getX(), (float) p.getY()));
 		double segmentLength = FoilUtil.findRawLength(points) / (numPoints - 1);
-		List<Vec2D> verts = spline.getDecimatedVertices((float) segmentLength);
+		List<Vec2D> verts = ls.getDecimatedVertices((float) segmentLength, true);
 
 		// extra check to make sure number of points equals numPoints passed in
 		List<Point2D> dPoints = verts.stream().map(v -> new Point2D(v.x, v.y)).collect(Collectors.toList());
