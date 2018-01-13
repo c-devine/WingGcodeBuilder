@@ -28,6 +28,12 @@ cutter.  See [wiki](https://github.com/c-devine/WingGcodeBuilder/wiki).
 <img src="https://raw.githubusercontent.com/c-devine/WingGcodeBuilder/snapshots/assets/img/model.png?raw=true" width="320" height="240">
 <img src="https://raw.githubusercontent.com/c-devine/WingGcodeBuilder/snapshots/assets/img/4axis.jpg?raw=true" width="320" height="240">
 
+## Latest Updates
+
+* Updated 3D view to show more complex airfoil profiles
+* Created Sketchup [scripts](https://github.com/c-devine/SketchupUtilities) to import .dat files and export edited .dat files
+<img src="https://raw.githubusercontent.com/c-devine/WingGcodeBuilder/snapshots/assets/img/3d-complex.png?raw=true" width="320" height="240">
+
 ## Getting Started
 
 Clone the repository:
