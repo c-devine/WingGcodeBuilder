@@ -14,6 +14,25 @@ public class Triangle {
 		this.c = c;
 	}
 
+	public void setZ(Double z) {
+		this.a = new Point3D(a.getX(), a.getY(), z);
+		this.b = new Point3D(b.getX(), b.getY(), z);
+		this.c = new Point3D(c.getX(), c.getY(), z);
+	}
+
+	public boolean isOrientedCCW() {
+
+		double a11 = a.getX() - c.getX();
+		double a21 = b.getX() - c.getX();
+
+		double a12 = a.getY() - c.getY();
+		double a22 = b.getY() - c.getY();
+
+		double det = a11 * a22 - a12 * a21;
+
+		return det > 0.0d;
+	}
+
 	@Override
 	public String toString() {
 		return new ToStringCreator(this).append("a", getA()).append("b", getB()).append("c", getC()).toString();

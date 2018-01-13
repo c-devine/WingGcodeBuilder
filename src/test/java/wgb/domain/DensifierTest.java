@@ -1,5 +1,7 @@
 package wgb.domain;
 
+import static org.junit.Assert.assertNotNull;
+
 import java.io.File;
 import java.util.List;
 
@@ -17,7 +19,7 @@ public class DensifierTest {
 
 		Airfoil af = afr.read(new File("sampledata/mh45.dat"));
 		List<Point2D> points = sut.densify(af.getXy(), 0.004);
-		// points.forEach(p -> logger.debug(p.getX() + "," + p.getY()));
+		assertNotNull(points);
 	}
 
 }

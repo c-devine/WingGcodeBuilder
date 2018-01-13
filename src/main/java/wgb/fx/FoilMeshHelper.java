@@ -17,25 +17,25 @@ import wgb.domain.Transform;
 import wgb.domain.Triangle;
 import wgb.domain.Unit;
 import wgb.util.FoilUtil;
+import wgb.util.Triangulator;
 
 @Component
 public class FoilMeshHelper {
 
-	private final static int NUM_POINTS = 360;
+	private final static int NUM_POINTS = 3600;
 
 	@Autowired
 	Densifier densifier;
-	private List<Point2D> lInterpolated, rInterpolated;
 
 	public TriangleMesh createMesh(Airfoil left, Airfoil right, boolean mirror) {
 
 		// slice the foil profile
-		lInterpolated = densifier.densify(left.getScaled(Transform.ALL.getMask(), Unit.MM), NUM_POINTS);
-		rInterpolated = densifier.densify(right.getScaled(Transform.ALL.getMask(), Unit.MM), NUM_POINTS);
+		List<Point2D> lInterpolated = densifier.densify(left.getScaled(Transform.ALL.getMask(), Unit.MM), NUM_POINTS);
+		List<Point2D> rInterpolated = densifier.densify(right.getScaled(Transform.ALL.getMask(), Unit.MM), NUM_POINTS);
 
-		List<Triangle> leftFace = getFaces(left, lInterpolated);
-		List<Triangle> rightFace = getFaces(right, rInterpolated);
-		List<Triangle> surface = getSurface(left, right);
+		List<Triangle> leftFace = getFace(left, lInterpolated, false);
+		List<Triangle> rightFace = getFace(right, rInterpolated, true);
+		List<Triangle> surface = getSurface(left, lInterpolated, right, rInterpolated);
 
 		List<Triangle> combined = new ArrayList<Triangle>();
 		combined.addAll(leftFace);
@@ -90,16 +90,26 @@ public class FoilMeshHelper {
 		return new TriangleMeshInfo(points, faces, texCoords);
 	}
 
-	public List<Triangle> getFaces(Airfoil foil, List<Point2D> interpolated) {
+	public List<Triangle> getFace(Airfoil foil, List<Point2D> interpolated, boolean tip) {
 
-		Point2D centroid2D = FoilUtil.calcCentroid(interpolated);
-		Point3D centroid = new Point3D(centroid2D.getX(), centroid2D.getY(), -foil.getSpan().asMM());
-		return IntStream.range(1, interpolated.size()).mapToObj(
-				i -> new Triangle(getPoint3D(foil, interpolated, i - 1), centroid, getPoint3D(foil, interpolated, i)))
-				.collect(Collectors.toList());
+		List<Triangle> triangles = new ArrayList<Triangle>();
+		Triangulator tlator = new Triangulator(interpolated);
+
+		double z = -foil.getSpan().asMM();
+
+		for (Triangle t : tlator.triangulate()) {
+			t.setZ(z);
+			if (tip)
+				triangles.add(t.isOrientedCCW() ? FoilUtil.swap(t) : t);
+			else
+				triangles.add(t.isOrientedCCW() ? t : FoilUtil.swap(t));
+		}
+
+		return triangles;
 	}
 
-	public List<Triangle> getSurface(Airfoil left, Airfoil right) {
+	public List<Triangle> getSurface(Airfoil left, List<Point2D> lInterpolated, Airfoil right,
+			List<Point2D> rInterpolated) {
 
 		List<Triangle> firstPass = IntStream.range(1, lInterpolated.size())
 				.mapToObj(i -> new Triangle(getPoint3D(left, lInterpolated, i - 1),
