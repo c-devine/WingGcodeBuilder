@@ -11,3 +11,5 @@ projectRefs/
 sampleData/*.gcode
 build.xml
 .README.MD.html
+sampledata/*.dat
+sampledata/*.json
