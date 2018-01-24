@@ -99,4 +99,7 @@ This project is licensed under the GNU General Public License v3.0 - see the [LI
 
 ## Acknowledgments
 
-* tbd
+* [toxiclibs](http://toxiclibs.org/) - geometry manipulation routines
+* [Spring Boot / Java FX](https://github.com/thomasdarimont/spring-labs/tree/master/spring-boot-javafx) - Spring Boot / JavaFX integration
+* [updatefx](https://github.com/bitgamma/updatefx) - automatic version updates
+*
