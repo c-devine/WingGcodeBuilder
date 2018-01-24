@@ -34,6 +34,7 @@ public class GcodeGenerator extends Service<List<String>> {
 		this.right = right;
 		this.settings = settings;
 		this.unit = unit;
+		this.mirrored = mirrored;
 	}
 
 	@Override

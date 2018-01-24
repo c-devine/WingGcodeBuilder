@@ -424,18 +424,5 @@
       "x" : 1.0,
       "y" : 0.0
     } ]
-  },
-  "gcodeSettings" : {
-    "x1" : "X",
-    "y1" : "Y",
-    "x2" : "Z",
-    "y2" : "E",
-    "f" : 1000.0,
-    "acc" : 100.0,
-    "towerWidth" : 1000.0,
-    "blockWidth" : 500.0,
-    "towerOffset" : 250.0,
-    "leadin" : 10.0,
-    "kerf" : 0.0
   }
 }

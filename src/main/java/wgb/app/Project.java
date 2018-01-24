@@ -7,14 +7,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import wgb.domain.Airfoil;
-import wgb.domain.GcodeSettings;
 
 @Component
 public class Project extends JsonPropertiesFile {
 
 	private Airfoil root;
 	private Airfoil tip;
-	private GcodeSettings gcodeSettings;
 
 	@Autowired
 	private List<ProjectAware> listeners;
@@ -51,14 +49,6 @@ public class Project extends JsonPropertiesFile {
 
 	public void setTip(Airfoil tip) {
 		this.tip = tip;
-	}
-
-	public GcodeSettings getGcodeSettings() {
-		return gcodeSettings;
-	}
-
-	public void setGcodeSettings(GcodeSettings gcodeSettings) {
-		this.gcodeSettings = gcodeSettings;
 	}
 
 }

@@ -38,7 +38,6 @@ import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.util.Callback;
 import wgb.app.AppEventType;
 import wgb.app.FileChooserHelper;
-import wgb.app.GcodeSettingsManager;
 import wgb.app.Project;
 import wgb.app.ProjectAware;
 import wgb.domain.Airfoil;
@@ -70,13 +69,9 @@ public class MainController implements Initializable, ProjectAware {
 	@Autowired
 	private GcodeController gcController;
 	@Autowired
-	private StatusBarController sbController;
-	@Autowired
 	private UpdateController updController;
 	@Autowired
 	FileChooserHelper fcHelper;
-	@Autowired
-	GcodeSettingsManager gcManager;
 	@Autowired
 	private ApplicationEventPublisher publisher;
 

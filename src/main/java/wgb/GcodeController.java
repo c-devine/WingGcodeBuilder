@@ -190,7 +190,6 @@ public class GcodeController implements Initializable, ProjectAware {
 	public void onProjectLoad(Project project) {
 
 		oList.clear();
-		gcSettings = project.getGcodeSettings();
 		oList.addAll(gcSettings.getEntries());
 		gcodePropTable.refresh();
 
@@ -200,8 +199,6 @@ public class GcodeController implements Initializable, ProjectAware {
 	public void onProjectSave(Project project) {
 
 		gcSettings.setEntries(oList);
-		project.setGcodeSettings(gcSettings);
-
 	}
 
 	protected void processSaveDefaultGCS(ActionEvent event) {
