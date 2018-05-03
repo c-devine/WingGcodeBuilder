@@ -70,12 +70,16 @@ public class GcodeGenerator extends Service<List<String>> {
 			logger.warn(String.format(
 					"Number of coodinates do not match, unknown behavior may result.  Left = %d, Right = %d",
 					lPts.size(), rPts.size()));
+		// yscale
+		Point2D origin = new Point2D(0.0, 0.0);
+		lPts = FoilUtil.scale(lPts, origin, 1.0, left.getyScale());
+		rPts = FoilUtil.scale(rPts, origin, 1.0, right.getyScale());
 
 		// scale + kerf
 		double kerf = settings.getKerf().getLength(unit);
-		lPts = FoilUtil.scale(lPts, new Point2D(0.0, 0.0), left.getChord().getLength(unit) + kerf,
+		lPts = FoilUtil.scale(lPts, origin, left.getChord().getLength(unit) + kerf,
 				left.getChord().getLength(unit) + kerf);
-		rPts = FoilUtil.scale(rPts, new Point2D(0.0, 0.0), right.getChord().getLength(unit) + kerf,
+		rPts = FoilUtil.scale(rPts, origin, right.getChord().getLength(unit) + kerf,
 				right.getChord().getLength(unit) + kerf);
 
 		// apply twist
