@@ -48,8 +48,8 @@ jfx {
     mainClass = 'wgb.Main'
     appName = 'WingGcodeBuilder'
     vendor = 'c-devine'
-    identifier = "1.0.4"
-    nativeReleaseVersion = "1.0.4"
+    identifier = "1.0.5"
+    nativeReleaseVersion = "1.0.5"
     needShortcut = true
     needMenu = true
 }
