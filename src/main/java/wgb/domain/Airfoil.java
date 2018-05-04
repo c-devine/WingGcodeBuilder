@@ -134,7 +134,7 @@ public class Airfoil {
 		}
 
 		if (Transform.TWIST.isSet(transforms)) {
-			pts = FoilUtil.rotate(pts, origin, this.twist);
+			pts = FoilUtil.rotate(pts, new Point2D(FoilUtil.findMaxX(pts), 0.0), this.twist);
 		}
 
 		if (Transform.OFFSET.isSet(transforms)) {

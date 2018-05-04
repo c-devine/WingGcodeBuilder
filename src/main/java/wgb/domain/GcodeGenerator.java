@@ -83,9 +83,8 @@ public class GcodeGenerator extends Service<List<String>> {
 				right.getChord().getLength(unit) + kerf);
 
 		// apply twist
-		Point2D rotateAxis = new Point2D(1.0, 0.0);
-		lPts = FoilUtil.rotate(lPts, rotateAxis, left.getTwist());
-		rPts = FoilUtil.rotate(rPts, rotateAxis, right.getTwist());
+		lPts = FoilUtil.rotate(lPts, new Point2D(FoilUtil.findMaxX(lPts), 0.0), left.getTwist());
+		rPts = FoilUtil.rotate(rPts, new Point2D(FoilUtil.findMaxX(rPts), 0.0), right.getTwist());
 
 		// offset
 		lPts = FoilUtil.offset(lPts, left.getOffset().getLength(unit), 0);
