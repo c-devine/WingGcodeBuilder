@@ -22,6 +22,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.MenuBar;
@@ -35,15 +37,18 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 import wgb.app.AppEventType;
 import wgb.app.FileChooserHelper;
 import wgb.app.Project;
 import wgb.app.ProjectAware;
 import wgb.domain.Airfoil;
-import wgb.domain.Length;
 import wgb.domain.Side;
-import wgb.domain.Unit;
+import wgb.domain.measure.Length;
+import wgb.domain.measure.Unit;
+import wgb.fx.SpringFxmlLoader;
 
 @Component
 public class MainController implements Initializable, ProjectAware {
@@ -74,6 +79,8 @@ public class MainController implements Initializable, ProjectAware {
 	FileChooserHelper fcHelper;
 	@Autowired
 	private ApplicationEventPublisher publisher;
+	@Autowired
+	private SpringFxmlLoader loader;
 
 	@FXML
 	private MenuBar menuBar;
@@ -312,6 +319,17 @@ public class MainController implements Initializable, ProjectAware {
 	}
 
 	@FXML
+	protected void processModelProperties(ActionEvent event) throws Exception {
+		Stage stage = new Stage();
+		Parent root = (Parent) loader.load(getClass().getResource("/fx/Model.fxml").toURI());
+		stage.setScene(new Scene(root));
+		stage.setTitle("Model Properties");
+		stage.initModality(Modality.WINDOW_MODAL);
+		stage.initOwner(((Node) menuBar).getScene().getWindow());
+		stage.show();
+	}
+
+	@FXML
 	protected void ontvSectionsMouseClicked(MouseEvent event) {
 
 		if (event.getClickCount() == 2) {
@@ -385,6 +403,8 @@ public class MainController implements Initializable, ProjectAware {
 
 		if (type.equals(AppEventType.REFRESH)) {
 			tvSections.refresh();
+			Main.primaryStage.setTitle(String.format("%s %s", title,
+					project.getModelName() == null ? "" : "(" + project.getModelName() + ")"));
 		}
 
 	}

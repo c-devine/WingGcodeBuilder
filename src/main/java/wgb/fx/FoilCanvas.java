@@ -10,7 +10,7 @@ import javafx.scene.paint.Color;
 import wgb.domain.Airfoil;
 import wgb.domain.Densifier;
 import wgb.domain.Transform;
-import wgb.domain.Unit;
+import wgb.domain.measure.Unit;
 import wgb.util.FoilUtil;
 
 public class FoilCanvas extends ResizableCanvas {

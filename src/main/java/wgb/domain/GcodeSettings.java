@@ -9,6 +9,8 @@ import org.springframework.beans.BeanWrapperImpl;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import wgb.domain.measure.Length;
+import wgb.domain.measure.Unit;
 import wgb.fx.MapEntry;
 
 public class GcodeSettings {

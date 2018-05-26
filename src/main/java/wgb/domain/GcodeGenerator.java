@@ -12,6 +12,8 @@ import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import javafx.geometry.Point2D;
 import wgb.StatusBarController;
+import wgb.domain.measure.Length;
+import wgb.domain.measure.Unit;
 import wgb.util.FoilUtil;
 
 @Component

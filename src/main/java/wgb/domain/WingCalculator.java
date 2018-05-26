@@ -1,9 +1,15 @@
 package wgb.domain;
 
+import wgb.domain.measure.Area;
+import wgb.domain.measure.Length;
+import wgb.domain.measure.Unit;
+import wgb.domain.measure.Weight;
+
 public class WingCalculator {
 
 	private Airfoil root;
 	private Airfoil tip;
+	private Weight weight;
 	private Area wingArea;
 	private Length macDistance;
 	private Length macLength;
@@ -11,9 +17,10 @@ public class WingCalculator {
 	private Length cgDistance20;
 	private Length cgDistance25;
 
-	public WingCalculator(Airfoil root, Airfoil tip) {
+	public WingCalculator(Airfoil root, Airfoil tip, Weight weight) {
 		this.root = root;
 		this.tip = tip;
+		this.weight = weight;
 		calculate();
 	}
 
@@ -48,6 +55,17 @@ public class WingCalculator {
 		macDistance = new Length(mac_x, Unit.MM);
 		macLength = new Length(te_mac_y - le_mac_y, Unit.MM);
 
+	}
+
+	public String getFormattedLoading(Unit unit) {
+		if (weight == null)
+			return "";
+
+		if (unit.equals(Unit.GM)) {
+			return String.format("%.2f %s", weight.asGM() / (wingArea.asSqMM() / 10000), "gm/sq dm(s)");
+		} else {
+			return String.format("%.2f %s", weight.asOunce() / (wingArea.asSqInch() / 144), "oz/sq ft");
+		}
 	}
 
 	public Airfoil getRoot() {
@@ -112,6 +130,14 @@ public class WingCalculator {
 
 	public void setCgDistance25(Length cgDistance25) {
 		this.cgDistance25 = cgDistance25;
+	}
+
+	public Weight getWeight() {
+		return weight;
+	}
+
+	public void setWeight(Weight weight) {
+		this.weight = weight;
 	}
 
 }

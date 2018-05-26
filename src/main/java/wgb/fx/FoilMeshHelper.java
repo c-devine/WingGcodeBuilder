@@ -15,7 +15,7 @@ import wgb.domain.Airfoil;
 import wgb.domain.Densifier;
 import wgb.domain.Transform;
 import wgb.domain.Triangle;
-import wgb.domain.Unit;
+import wgb.domain.measure.Unit;
 import wgb.util.FoilUtil;
 import wgb.util.Triangulator;
 

@@ -1,8 +1,11 @@
-package wgb.domain;
+package wgb.domain.measure;
 
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
+
+import wgb.domain.measure.Length;
+import wgb.domain.measure.Unit;
 
 public class LengthTest {
 

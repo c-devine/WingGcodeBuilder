@@ -1,4 +1,4 @@
-package wgb.domain;
+package wgb.domain.measure;
 
 import java.io.IOException;
 
@@ -8,20 +8,20 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 
 @SuppressWarnings("serial")
-public class LengthSerializer extends StdSerializer<Length> {
+public class WeightSerializer extends StdSerializer<Weight> {
 
-	public LengthSerializer() {
+	public WeightSerializer() {
 		this(null);
 	}
 
-	public LengthSerializer(Class<Length> t) {
+	public WeightSerializer(Class<Weight> t) {
 		super(t);
 	}
 
 	@Override
-	public void serialize(Length value, JsonGenerator gen, SerializerProvider arg2)
+	public void serialize(Weight value, JsonGenerator gen, SerializerProvider arg2)
 			throws IOException, JsonProcessingException {
-		gen.writeNumber(value.getLength(Unit.MM));
+		gen.writeNumber(value.getWeight(Unit.GM));
 	}
 
 }

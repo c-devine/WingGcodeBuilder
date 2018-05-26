@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import javafx.geometry.Point2D;
 import toxi.geom.LineStrip2D;
 import toxi.geom.Vec2D;
+import wgb.domain.measure.Length;
 import wgb.util.FoilUtil;
 
 @Component

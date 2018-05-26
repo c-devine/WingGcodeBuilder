@@ -7,6 +7,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 import javafx.geometry.Point2D;
+import wgb.domain.measure.Length;
+import wgb.domain.measure.Unit;
 import wgb.util.FoilUtil;
 
 public class Airfoil {

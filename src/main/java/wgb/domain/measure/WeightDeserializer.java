@@ -1,4 +1,4 @@
-package wgb.domain;
+package wgb.domain.measure;
 
 import java.io.IOException;
 
@@ -8,18 +8,18 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 
 @SuppressWarnings("serial")
-public class LengthDeserializer extends StdDeserializer<Length> {
+public class WeightDeserializer extends StdDeserializer<Weight> {
 
-	public LengthDeserializer() {
+	public WeightDeserializer() {
 		this(null);
 	}
 
-	public LengthDeserializer(Class<?> vc) {
+	public WeightDeserializer(Class<?> vc) {
 		super(vc);
 	}
 
 	@Override
-	public Length deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
-		return new Length(jp.getDoubleValue(), Unit.MM);
+	public Weight deserialize(JsonParser jp, DeserializationContext ctxt) throws IOException, JsonProcessingException {
+		return new Weight(jp.getDoubleValue(), Unit.GM);
 	}
 }

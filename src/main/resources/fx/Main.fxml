@@ -25,6 +25,11 @@
 						<MenuItem text="Exit" onAction="#processExit" />
 					</items>
 				</Menu>
+				<Menu text="Model">
+					<items>
+						<MenuItem text="Model Propeties" onAction="#processModelProperties" />
+					</items>
+				</Menu>
 				<Menu text="Gcode Settings">
 					<items>
 						<MenuItem text="Save as Default" onAction="#processSaveDefaultGCS" />

@@ -44,8 +44,8 @@ import wgb.app.Project;
 import wgb.app.ProjectAware;
 import wgb.domain.GcodeGenerator;
 import wgb.domain.GcodeSettings;
-import wgb.domain.Length;
 import wgb.domain.Side;
+import wgb.domain.measure.Length;
 import wgb.fx.MapEntry;
 import wgb.fx.SpringFxmlLoader;
 

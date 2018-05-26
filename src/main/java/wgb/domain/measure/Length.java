@@ -1,4 +1,4 @@
-package wgb.domain;
+package wgb.domain.measure;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -16,26 +16,44 @@ public class Length {
 		setLength(length, unit);
 	}
 
-	// recreate the length from the string passed in
+	// recreate the length from the string passed in: "1.0 mm" or "1.0
+	// millimeter"
 	public Length(String sLength) {
 		String[] split = sLength.split("\\s+");
 		this.len = new Length(Double.parseDouble(split[0]), Unit.getEnum(split[1])).asMM();
 	}
 
 	public String toFormattedString(Unit unit) {
-		return String.format("%.2f %s", getLength(unit), unit.equals(Unit.MM) ? " mm(s)" : " inch(es)");
+
+		String ext = "";
+		switch (unit) {
+		case INCH:
+			ext = "inch(es)";
+			break;
+		case MM:
+		default:
+			ext = "mm(s)";
+			break;
+		}
+
+		return String.format("%.2f %s", getLength(unit), ext);
 	}
 
 	// only support mm and inch
 	public double getLength(Unit unit) {
-		if (unit.getName().equals(Unit.MM.getName()))
-			return len;
-		else
+
+		switch (unit) {
+		case INCH:
 			return asInch();
+		case MM:
+		default:
+			return len;
+		}
 	}
 
 	// only support mm and inch
 	public void setLength(double length, Unit unit) {
+
 		switch (unit) {
 		case MM:
 			len = length;

@@ -1,10 +1,10 @@
-package wgb.domain;
+package wgb.domain.measure;
 
 import java.util.EnumSet;
 
 public enum Unit {
 
-	MM("millimeter", "mm"), INCH("inch", "in");
+	MM("millimeter", "mm"), INCH("inch", "in"), GM("gram", "gm"), OZ("ounce", "oz");
 
 	private String name;
 	private String shortName;

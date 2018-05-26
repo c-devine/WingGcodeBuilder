@@ -12,8 +12,8 @@ import toxi.geom.Plane;
 import toxi.geom.Ray3D;
 import toxi.geom.ReadonlyVec3D;
 import toxi.geom.Vec3D;
-import wgb.domain.Length;
 import wgb.domain.Triangle;
+import wgb.domain.measure.Length;
 
 public class FoilUtil {
 

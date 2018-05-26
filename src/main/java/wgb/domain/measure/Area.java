@@ -1,4 +1,4 @@
-package wgb.domain;
+package wgb.domain.measure;
 
 public class Area {
 
@@ -26,14 +26,32 @@ public class Area {
 	}
 
 	public String toFormattedString(Unit unit) {
-		return String.format("%.2f %s", getArea(unit), unit.equals(Unit.MM) ? " sq mm(s)" : " sq inch(es)");
+
+		String ext = "";
+
+		switch (unit) {
+		case INCH:
+			ext = "sq inch(es)";
+			break;
+		case MM:
+		default:
+			ext = "sq mm(s)";
+			break;
+		}
+
+		return String.format("%.2f %s", getArea(unit), ext);
 	}
 
 	public double getArea(Unit unit) {
-		if (unit.getName().equals(Unit.MM.getName()))
-			return sqArea;
-		else
+
+		switch (unit) {
+		case INCH:
 			return asSqInch();
+		case MM:
+		default:
+			return sqArea;
+		}
+
 	}
 
 	public static double fromSqInch(double sqInch) {

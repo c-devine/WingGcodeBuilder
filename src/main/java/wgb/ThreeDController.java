@@ -28,9 +28,11 @@ import javafx.scene.shape.MeshView;
 import javafx.scene.shape.TriangleMesh;
 import javafx.scene.transform.Rotate;
 import wgb.app.AppEventType;
+import wgb.app.Project;
 import wgb.domain.Airfoil;
 import wgb.domain.Side;
 import wgb.domain.WingCalculator;
+import wgb.domain.measure.Unit;
 import wgb.fx.FoilMeshHelper;
 
 @Component
@@ -51,6 +53,8 @@ public class ThreeDController implements Initializable {
 	MainController mainController;
 	@Autowired
 	FoilMeshHelper meshHelper;
+	@Autowired
+	Project project;
 
 	@FXML
 	private Pane threeDPane;
@@ -187,12 +191,17 @@ public class ThreeDController implements Initializable {
 
 		Airfoil root = mainController.getAirfoil(Side.ROOT);
 		Airfoil tip = mainController.getAirfoil(Side.TIP);
-		WingCalculator calc = new WingCalculator(root, tip);
+		WingCalculator calc = new WingCalculator(root, tip, project.getModelWeight());
 
 		txtGroup.getChildren().clear();
 		VBox vBox = new VBox(1);
 
+		vBox.getChildren().add(createTxtHbox("Model Name: ", project.getModelName()));
+		Unit weightUnit = (MainController.unit.equals(Unit.INCH) ? Unit.OZ : Unit.GM);
+		vBox.getChildren().add(createTxtHbox("Model Weight: ",
+				project.getModelWeight() == null ? "" : project.getModelWeight().toFormattedString(weightUnit)));
 		vBox.getChildren().add(createTxtHbox("Wing Area: ", calc.getWingArea().toFormattedString(MainController.unit)));
+		vBox.getChildren().add(createTxtHbox("Wing Loading: ", calc.getFormattedLoading(weightUnit)));
 		vBox.getChildren()
 				.add(createTxtHbox("MAC Distance : ", calc.getMacDistance().toFormattedString(MainController.unit)));
 		vBox.getChildren()

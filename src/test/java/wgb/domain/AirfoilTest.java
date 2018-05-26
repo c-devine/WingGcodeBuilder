@@ -13,6 +13,8 @@ import org.apache.logging.log4j.Logger;
 import org.junit.Test;
 
 import javafx.geometry.Point2D;
+import wgb.domain.measure.Length;
+import wgb.domain.measure.Unit;
 import wgb.util.FoilUtil;
 
 public class AirfoilTest {

@@ -18,6 +18,7 @@ import wgb.fx.SpringFxmlLoader;
 public class Main extends AbstractJavaFxApplicationSupport {
 
 	private final static Logger logger = LogManager.getLogger();
+	public static Stage primaryStage;
 
 	@Autowired
 	private ApplicationEventPublisher publisher;
@@ -30,6 +31,7 @@ public class Main extends AbstractJavaFxApplicationSupport {
 
 	@Override
 	public void start(Stage primaryStage) {
+		Main.primaryStage = primaryStage;
 		try {
 			VBox root = (VBox) loader.load(getClass().getResource("/fx/Main.fxml").toURI());
 			Scene scene = new Scene(root, 1200, 800);

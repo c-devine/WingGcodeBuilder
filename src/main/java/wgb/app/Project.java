@@ -7,10 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import wgb.domain.Airfoil;
+import wgb.domain.measure.Weight;
 
 @Component
 public class Project extends JsonPropertiesFile {
 
+	private String modelName;
+	private Weight modelWeight;
 	private Airfoil root;
 	private Airfoil tip;
 
@@ -33,6 +36,22 @@ public class Project extends JsonPropertiesFile {
 
 		listeners.forEach(l -> l.onProjectSave(this));
 		return super.save(f);
+	}
+
+	public String getModelName() {
+		return modelName;
+	}
+
+	public void setModelName(String modelName) {
+		this.modelName = modelName;
+	}
+
+	public Weight getModelWeight() {
+		return modelWeight;
+	}
+
+	public void setModelWeight(Weight modelWeight) {
+		this.modelWeight = modelWeight;
 	}
 
 	public Airfoil getRoot() {
