@@ -288,6 +288,7 @@ public class MainController implements Initializable, ProjectAware {
 		fileChooser.getExtensionFilters().add(extFilter);
 		File f = fileChooser.showSaveDialog(((Node) menuBar).getScene().getWindow());
 		if (f != null) {
+			fcHelper.saveLastFileLocation(f);
 			try {
 				if (!f.getName().endsWith(".json"))
 					f.getName().concat(".json");
@@ -306,11 +307,12 @@ public class MainController implements Initializable, ProjectAware {
 		fileChooser.getExtensionFilters().add(extFilter);
 		File f = fileChooser.showOpenDialog(((Node) menuBar).getScene().getWindow());
 		if (f != null)
-			try {
-				project.load(f);
-			} catch (Exception e) {
-				logger.error("Error loading project.", e);
-			}
+			fcHelper.saveLastFileLocation(f);
+		try {
+			project.load(f);
+		} catch (Exception e) {
+			logger.error("Error loading project.", e);
+		}
 	}
 
 	@FXML
