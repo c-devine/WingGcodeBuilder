@@ -16,6 +16,10 @@ public class Length {
 		setLength(length, unit);
 	}
 
+	public Length(Length length) {
+		this.len = length.asMM();
+	}
+
 	// recreate the length from the string passed in: "1.0 mm" or "1.0
 	// millimeter"
 	public Length(String sLength) {

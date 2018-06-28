@@ -34,6 +34,9 @@ import javafx.scene.control.TableColumn.CellEditEvent;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
@@ -86,6 +89,10 @@ public class MainController implements Initializable, ProjectAware {
 	private MenuBar menuBar;
 	@FXML
 	private RadioMenuItem menuMirror;
+	@FXML
+	private RadioMenuItem setMM;
+	@FXML
+	private RadioMenuItem setIn;
 	@FXML
 	private TableView<Airfoil> tvSections;
 
@@ -187,6 +194,9 @@ public class MainController implements Initializable, ProjectAware {
 		tvSections.getColumns().addAll(posCol, nameCol, spanCol, chordCol, offsetCol, twistCol, yScaleCol, sweepCol,
 				thicknessCol);
 		tvSections.setItems(airFoilList);
+
+		setMM.setAccelerator(new KeyCodeCombination(KeyCode.M, KeyCombination.CONTROL_DOWN));
+		setIn.setAccelerator(new KeyCodeCombination(KeyCode.I, KeyCombination.CONTROL_DOWN));
 	}
 
 	public Airfoil getAirfoil(Side side) {
@@ -318,6 +328,17 @@ public class MainController implements Initializable, ProjectAware {
 	@FXML
 	protected void processMirrorWing(ActionEvent event) {
 		publisher.publishEvent(AppEventType.REFRESH);
+	}
+
+	@FXML
+	protected void processLayout(ActionEvent event) throws Exception {
+		Stage stage = new Stage();
+		Parent root = (Parent) loader.load(getClass().getResource("/fx/Layout.fxml").toURI());
+		stage.setScene(new Scene(root));
+		stage.setTitle("Layout");
+		stage.initModality(Modality.WINDOW_MODAL);
+		stage.initOwner(((Node) menuBar).getScene().getWindow());
+		stage.show();
 	}
 
 	@FXML

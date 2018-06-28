@@ -35,6 +35,16 @@ public class Airfoil {
 
 	}
 
+	public Airfoil(Airfoil afIn) {
+		this.name = afIn.name;
+		this.chord = new Length(afIn.getChord());
+		this.offset = new Length(afIn.getOffset());
+		this.span = new Length(afIn.getSpan());
+		this.yScale = afIn.getyScale();
+		this.twist = afIn.getTwist();
+		afIn.xy.forEach(p -> this.xy.add(new Point2D(p.getX(), p.getY())));
+	}
+
 	public Airfoil(Length span) {
 		this.span = span;
 	}
@@ -111,7 +121,7 @@ public class Airfoil {
 	@JsonIgnore
 	public double getSweep() {
 
-		return span.asMM() == 0 ? 0 : Math.atan(offset.asMM() / span.asMM()) * 180 / Math.PI;
+		return span.asMM() == 0 ? 0 : Math.toDegrees(Math.atan(offset.asMM() / span.asMM()));
 	}
 
 	@JsonIgnore

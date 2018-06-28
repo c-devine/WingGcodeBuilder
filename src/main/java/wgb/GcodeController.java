@@ -77,6 +77,8 @@ public class GcodeController implements Initializable, ProjectAware {
 	TextArea postGcodeTextArea;
 	@FXML
 	CheckBox cbMirrored;
+	@FXML
+	CheckBox cbUnswept;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -128,7 +130,7 @@ public class GcodeController implements Initializable, ProjectAware {
 		gcSettings.setEntries(oList);
 
 		generator.setup(mainController.getAirfoil(Side.ROOT), mainController.getAirfoil(Side.TIP), gcSettings,
-				MainController.unit, cbMirrored.isSelected());
+				MainController.unit, cbMirrored.isSelected(), cbUnswept.isSelected());
 
 		generator.setOnSucceeded(w -> {
 			List<String> gcList = generator.getValue();

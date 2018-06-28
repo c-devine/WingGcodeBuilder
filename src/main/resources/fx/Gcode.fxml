@@ -52,6 +52,15 @@
 									<Tooltip text="Generate GCODE for opposite (Left) wing." />
 								</tooltip>
 							</CheckBox>
+							<CheckBox fx:id="cbUnswept" mnemonicParsing="false"
+								text="Use Unswept">
+								<tooltip>
+									<Tooltip text="Generate GCODE without sweep." />
+								</tooltip>
+								<HBox.margin>
+									<Insets left="20.0" right="20.0" />
+								</HBox.margin>
+							</CheckBox>
 							<Button mnemonicParsing="false" text="Generate GCODE"
 								onMouseClicked="#onGenerateGcode">
 								<HBox.margin>

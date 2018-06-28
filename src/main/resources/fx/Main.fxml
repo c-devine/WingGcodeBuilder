@@ -42,6 +42,8 @@
 					<items>
 						<RadioMenuItem fx:id="menuMirror" selected="false"
 							onAction="#processMirrorWing" text="Mirror Wing" />
+						<SeparatorMenuItem />
+						<MenuItem onAction="#processLayout" text="Unswept Layout" />
 					</items>
 				</Menu>
 				<fx:define>
@@ -49,9 +51,9 @@
 				</fx:define>
 				<Menu text="Units">
 					<items>
-						<RadioMenuItem toggleGroup="$toggleGroup1" selected="true"
+						<RadioMenuItem fx:id="setMM" toggleGroup="$toggleGroup1" selected="true"
 							onAction="#processSetMillimeters" text="Millimeters" />
-						<RadioMenuItem toggleGroup="$toggleGroup1" onAction="#processSetInches"
+						<RadioMenuItem fx:id="setIn" toggleGroup="$toggleGroup1" onAction="#processSetInches"
 							text="Inches" />
 					</items>
 				</Menu>

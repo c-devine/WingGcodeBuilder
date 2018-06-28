@@ -20,23 +20,35 @@ import wgb.util.FoilUtil;
 public class GcodeGenerator extends Service<List<String>> {
 
 	private final static Logger logger = LogManager.getLogger();
-	private Airfoil left;
-	private Airfoil right;
+	private Airfoil root;
+	private Airfoil tip;
 	private GcodeSettings settings;
 	private Unit unit;
 	private boolean mirrored;
+	private boolean unswept;
 
 	@Autowired
 	private Densifier densifier;
 	@Autowired
 	private StatusBarController sbc;
 
-	public void setup(Airfoil left, Airfoil right, GcodeSettings settings, Unit unit, boolean mirrored) {
-		this.left = left;
-		this.right = right;
+	public void setup(Airfoil root, Airfoil tip, GcodeSettings settings, Unit unit, boolean mirrored, boolean unswept) {
+
 		this.settings = settings;
 		this.unit = unit;
 		this.mirrored = mirrored;
+		this.unswept = unswept;
+
+		if (unswept) {
+			LayoutCalculator lc = new LayoutCalculator(root, tip);
+			Airfoil[] foils = lc.getUnsweptAirfoils();
+			this.root = foils[0];
+			this.tip = foils[1];
+
+		} else {
+			this.root = root;
+			this.tip = tip;
+		}
 	}
 
 	@Override
@@ -46,7 +58,7 @@ public class GcodeGenerator extends Service<List<String>> {
 
 			@Override
 			protected List<String> call() {
-				return generateGcode(left, right, settings, unit, mirrored);
+				return generateGcode(root, tip, settings, unit, mirrored, unswept);
 			}
 		};
 	}
@@ -56,17 +68,17 @@ public class GcodeGenerator extends Service<List<String>> {
 		reset();
 	}
 
-	private List<String> generateGcode(Airfoil left, Airfoil right, GcodeSettings settings, Unit unit,
-			boolean mirrored) {
+	private List<String> generateGcode(Airfoil root, Airfoil tip, GcodeSettings settings, Unit unit, boolean mirrored,
+			boolean unswept) {
 
 		// start updating the progress bar
 		updateProgress("Starting G-code generation...", -1.0);
 
 		// try to create a point list of equal size and ~1mm in length
-		int numSegments = (int) (FoilUtil.findRawLength(left.getXy()) * left.getChord().asMM());
+		int numSegments = (int) (FoilUtil.findRawLength(root.getXy()) * root.getChord().asMM());
 
-		List<Point2D> lPts = densifier.densify(left.getXy(), numSegments);
-		List<Point2D> rPts = densifier.densify(right.getXy(), numSegments);
+		List<Point2D> lPts = densifier.densify(root.getXy(), numSegments);
+		List<Point2D> rPts = densifier.densify(tip.getXy(), numSegments);
 
 		if (lPts.size() != rPts.size())
 			logger.warn(String.format(
@@ -74,23 +86,23 @@ public class GcodeGenerator extends Service<List<String>> {
 					lPts.size(), rPts.size()));
 		// yscale
 		Point2D origin = new Point2D(0.0, 0.0);
-		lPts = FoilUtil.scale(lPts, origin, 1.0, left.getyScale());
-		rPts = FoilUtil.scale(rPts, origin, 1.0, right.getyScale());
+		lPts = FoilUtil.scale(lPts, origin, 1.0, root.getyScale());
+		rPts = FoilUtil.scale(rPts, origin, 1.0, tip.getyScale());
 
 		// scale + kerf
 		double kerf = settings.getKerf().getLength(unit);
-		lPts = FoilUtil.scale(lPts, origin, left.getChord().getLength(unit) + kerf,
-				left.getChord().getLength(unit) + kerf);
-		rPts = FoilUtil.scale(rPts, origin, right.getChord().getLength(unit) + kerf,
-				right.getChord().getLength(unit) + kerf);
+		lPts = FoilUtil.scale(lPts, origin, root.getChord().getLength(unit) + kerf,
+				root.getChord().getLength(unit) + kerf);
+		rPts = FoilUtil.scale(rPts, origin, tip.getChord().getLength(unit) + kerf,
+				tip.getChord().getLength(unit) + kerf);
 
 		// apply twist
-		lPts = FoilUtil.rotate(lPts, new Point2D(FoilUtil.findMaxX(lPts), 0.0), left.getTwist());
-		rPts = FoilUtil.rotate(rPts, new Point2D(FoilUtil.findMaxX(rPts), 0.0), right.getTwist());
+		lPts = FoilUtil.rotate(lPts, new Point2D(FoilUtil.findMaxX(lPts), 0.0), root.getTwist());
+		rPts = FoilUtil.rotate(rPts, new Point2D(FoilUtil.findMaxX(rPts), 0.0), tip.getTwist());
 
 		// offset
-		lPts = FoilUtil.offset(lPts, left.getOffset().getLength(unit), 0);
-		rPts = FoilUtil.offset(rPts, right.getOffset().getLength(unit), 0);
+		lPts = FoilUtil.offset(lPts, root.getOffset().getLength(unit), 0);
+		rPts = FoilUtil.offset(rPts, tip.getOffset().getLength(unit), 0);
 
 		// project foil coordinates to the axis of the machine
 		List<List<Point2D>> projected = FoilUtil.projectPoints(lPts, rPts, settings.getTowerWidth(),
@@ -109,7 +121,7 @@ public class GcodeGenerator extends Service<List<String>> {
 
 		List<String> retList = new ArrayList<String>();
 		// add the summary info
-		retList.addAll(getSummaryInfo(left, lPts, right, rPts, unit));
+		retList.addAll(getSummaryInfo(root, lPts, tip, rPts, unit));
 		retList.addAll(getMainPrefix(settings, unit));
 
 		for (int i = 0; i < Math.min(lPts.size(), rPts.size()); i++) {
