@@ -26,6 +26,8 @@ import wgb.domain.measure.Length;
 public class LayoutController implements Initializable {
 
 	private final static Logger logger = LogManager.getLogger();
+	private final static int BUFFER = 50;
+	private final static double MIN_SCALE = 1.0;
 
 	@FXML
 	private VBox vBox;
@@ -35,8 +37,6 @@ public class LayoutController implements Initializable {
 
 	@Autowired
 	MainController mainController;
-
-	private int buffer = 50;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -66,8 +66,10 @@ public class LayoutController implements Initializable {
 		LayoutCalculator lc = new LayoutCalculator(mainController.getAirfoil(Side.ROOT),
 				mainController.getAirfoil(Side.TIP));
 
-		gc.setTransform(getScale(lc), 0, 0, getScale(lc), buffer, buffer);
-		gc.clearRect(-buffer, -buffer, canvas.getWidth() + buffer, canvas.getHeight() + buffer);
+		gc.clearRect(-BUFFER, -BUFFER, canvas.getWidth() + BUFFER, canvas.getHeight() + BUFFER);
+		gc.setTransform(getScale(lc), 0, 0, getScale(lc),
+				(canvas.getWidth() - (lc.getBlockWidth().asMM() * getScale(lc))) / 2,
+				(canvas.getHeight() - (lc.getBlockHeight().asMM() * getScale(lc))) / 2);
 
 		// draw block
 		double[] xPoints1 = { lc.getBlockRootLe().getX(), lc.getBlockTipLe().getX(), lc.getBlockTipTe().getX(),
@@ -121,7 +123,7 @@ public class LayoutController implements Initializable {
 		String sSweep = String.format("%.2f deg", lc.getSweep());
 		drawText(sSweep, 10, 50, gc);
 		drawText(getLenString(lc.getRootChord()), -10, lc.getRootChord().asMM() / 2.0, gc);
-		drawText(getLenString(lc.getBlockWidth()), lc.getBlockWidth().asMM() / 2.0, lc.getBlockHeight().asMM() + 30,
+		drawText(getLenString(lc.getBlockWidth()), lc.getBlockWidth().asMM() / 2.0, lc.getBlockHeight().asMM() + 15,
 				gc);
 		drawText(getLenString(lc.getTipChord()), lc.getBlockWidth().asMM() - 70, lc.getTipTe().getY() / 2.0, gc);
 
@@ -154,8 +156,8 @@ public class LayoutController implements Initializable {
 
 	private double getScale(LayoutCalculator lc) {
 
-		return Math.min((canvas.getWidth() - (2 * buffer)) / lc.getBlockWidth().asMM(),
-				(canvas.getHeight() - (2 * buffer)) / lc.getBlockHeight().asMM());
+		return Math.max(Math.min((canvas.getWidth() - (2 * BUFFER)) / lc.getBlockWidth().asMM(),
+				(canvas.getHeight() - (2 * BUFFER)) / lc.getBlockHeight().asMM()), MIN_SCALE);
 	}
 
 }
