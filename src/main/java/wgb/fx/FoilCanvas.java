@@ -26,7 +26,10 @@ public class FoilCanvas extends ResizableCanvas {
 	@Override
 	public void paint() {
 
-		super.paint();
+		GraphicsContext gc = this.getGraphicsContext2D();
+		gc.setFill(Color.BLACK);
+		gc.fillRect(0, 0, this.getWidth(), this.getHeight());
+
 		drawLine();
 		if (airFoil != null) {
 			drawFoil();

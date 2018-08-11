@@ -9,9 +9,24 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.canvas.Canvas?>
+<?import wgb.fx.ResizableCanvas?>
 
-<VBox fx:id="vBox" xmlns:fx="http://javafx.com/fxml/1" fx:controller="wgb.LayoutController" prefHeight="500" prefWidth="1000">
-	<Canvas fx:id="canvas" style="-fx-background-color: #000000;"
-		VBox.vgrow="ALWAYS">
-	</Canvas>
+
+<VBox fx:id="vBox" prefHeight="500" prefWidth="1000"
+	xmlns:fx="http://javafx.com/fxml/1" fx:controller="wgb.LayoutController"
+	VBox.vgrow="ALWAYS">
+	<VBox VBox.vgrow="ALWAYS">
+		<ResizableCanvas fx:id="canvas"
+			style="-fx-background-color: #000000;" VBox.vgrow="ALWAYS">
+		</ResizableCanvas>
+	</VBox>
+	<VBox VBox.vgrow="NEVER">
+		<Button mnemonicParsing="false" text="Print" onMouseClicked="#onPrintLayout"
+			VBox.vgrow="NEVER">
+			<HBox.margin>
+				<Insets left="20.0" right="20.0" />
+			</HBox.margin>
+		</Button>
+	</VBox>
 </VBox>
+

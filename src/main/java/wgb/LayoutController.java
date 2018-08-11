@@ -10,17 +10,26 @@ import org.springframework.stereotype.Component;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.canvas.Canvas;
+import javafx.print.PageLayout;
+import javafx.print.PageOrientation;
+import javafx.print.Paper;
+import javafx.print.Printer;
+import javafx.print.PrinterJob;
+import javafx.scene.Node;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.scene.transform.Scale;
+import javafx.stage.Window;
 import wgb.domain.Airfoil;
 import wgb.domain.LayoutCalculator;
 import wgb.domain.Side;
 import wgb.domain.measure.Length;
+import wgb.fx.ResizableCanvas;
 
 @Component
 public class LayoutController implements Initializable {
@@ -33,7 +42,7 @@ public class LayoutController implements Initializable {
 	private VBox vBox;
 
 	@FXML
-	private Canvas canvas;
+	private ResizableCanvas canvas;
 
 	@Autowired
 	MainController mainController;
@@ -41,8 +50,6 @@ public class LayoutController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 
-		canvas.widthProperty().bind(vBox.widthProperty());
-		canvas.heightProperty().bind(vBox.heightProperty());
 		canvas.widthProperty().addListener(cl -> draw());
 		canvas.heightProperty().addListener(cl -> draw());
 
@@ -158,6 +165,36 @@ public class LayoutController implements Initializable {
 
 		return Math.max(Math.min((canvas.getWidth() - (2 * BUFFER)) / lc.getBlockWidth().asMM(),
 				(canvas.getHeight() - (2 * BUFFER)) / lc.getBlockHeight().asMM()), MIN_SCALE);
+	}
+
+	@FXML
+	protected void onPrintLayout(MouseEvent event) {
+		print(canvas);
+	}
+
+	public void print(final Node node) {
+
+		Printer printer = Printer.getDefaultPrinter();
+		PageLayout pageLayout = printer.createPageLayout(Paper.NA_LETTER, PageOrientation.LANDSCAPE,
+				Printer.MarginType.DEFAULT);
+		double scaleX = pageLayout.getPrintableWidth() / node.getBoundsInParent().getWidth();
+		double scaleY = pageLayout.getPrintableHeight() / node.getBoundsInParent().getHeight();
+		node.getTransforms().add(new Scale(scaleX, scaleY));
+
+		PrinterJob job = PrinterJob.createPrinterJob();
+		Window w = vBox.getScene().getWindow();
+		// TODO Need to figure out how to get the print preview or printer setup
+		// working
+		// job.showPageSetupDialog(vBox.getScene().getWindow());
+
+		if (job != null) {
+			boolean success = job.printPage(pageLayout, node);
+			if (success) {
+				job.endJob();
+			}
+		}
+
+		node.getTransforms().remove(node.getTransforms().size() - 1);
 	}
 
 }
