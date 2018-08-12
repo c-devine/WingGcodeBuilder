@@ -166,19 +166,6 @@ public class LayoutController implements Initializable {
 				(canvas.getHeight() - (2 * BUFFER)) / lc.getBlockHeight().asMM()), MIN_SCALE);
 	}
 
-	// @FXML
-	// private void onPrintLayout(MouseEvent event) {
-	// Printer printer = Printer.getDefaultPrinter();
-	// printer.createPageLayout(Paper.NA_LETTER, PageOrientation.PORTRAIT,
-	// Printer.MarginType.EQUAL);
-	// PrinterJob job = PrinterJob.createPrinterJob(printer);
-	// job.showPrintDialog(printNode.getScene().getWindow());
-	// if (job != null) {
-	// engine.print(job);
-	// job.endJob();
-	// }
-	// }
-
 	@FXML
 	protected void onPrintLayout(MouseEvent event) {
 		print(canvas);
