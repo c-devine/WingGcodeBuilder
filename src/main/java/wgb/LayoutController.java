@@ -11,9 +11,7 @@ import org.springframework.stereotype.Component;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.print.PageLayout;
-import javafx.print.PageOrientation;
-import javafx.print.Paper;
-import javafx.print.Printer;
+import javafx.print.PageRange;
 import javafx.print.PrinterJob;
 import javafx.scene.Node;
 import javafx.scene.canvas.GraphicsContext;
@@ -24,7 +22,6 @@ import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.transform.Scale;
-import javafx.stage.Window;
 import wgb.domain.Airfoil;
 import wgb.domain.LayoutCalculator;
 import wgb.domain.Side;
@@ -46,6 +43,8 @@ public class LayoutController implements Initializable {
 
 	@Autowired
 	MainController mainController;
+
+	Node printNode;
 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
@@ -167,6 +166,19 @@ public class LayoutController implements Initializable {
 				(canvas.getHeight() - (2 * BUFFER)) / lc.getBlockHeight().asMM()), MIN_SCALE);
 	}
 
+	// @FXML
+	// private void onPrintLayout(MouseEvent event) {
+	// Printer printer = Printer.getDefaultPrinter();
+	// printer.createPageLayout(Paper.NA_LETTER, PageOrientation.PORTRAIT,
+	// Printer.MarginType.EQUAL);
+	// PrinterJob job = PrinterJob.createPrinterJob(printer);
+	// job.showPrintDialog(printNode.getScene().getWindow());
+	// if (job != null) {
+	// engine.print(job);
+	// job.endJob();
+	// }
+	// }
+
 	@FXML
 	protected void onPrintLayout(MouseEvent event) {
 		print(canvas);
@@ -174,27 +186,21 @@ public class LayoutController implements Initializable {
 
 	public void print(final Node node) {
 
-		Printer printer = Printer.getDefaultPrinter();
-		PageLayout pageLayout = printer.createPageLayout(Paper.NA_LETTER, PageOrientation.LANDSCAPE,
-				Printer.MarginType.DEFAULT);
-		double scaleX = pageLayout.getPrintableWidth() / node.getBoundsInParent().getWidth();
-		double scaleY = pageLayout.getPrintableHeight() / node.getBoundsInParent().getHeight();
-		node.getTransforms().add(new Scale(scaleX, scaleY));
-
 		PrinterJob job = PrinterJob.createPrinterJob();
-		Window w = vBox.getScene().getWindow();
-		// TODO Need to figure out how to get the print preview or printer setup
-		// working
-		// job.showPageSetupDialog(vBox.getScene().getWindow());
+		job.getJobSettings().setPageRanges(new PageRange(1, 1));
 
-		if (job != null) {
+		if (job != null && job.showPrintDialog(node.getScene().getWindow())) {
+			PageLayout pageLayout = job.getJobSettings().getPageLayout();
+			double scaleX = pageLayout.getPrintableWidth() / node.getBoundsInParent().getWidth();
+			double scaleY = pageLayout.getPrintableHeight() / node.getBoundsInParent().getHeight();
+			node.getTransforms().add(new Scale(scaleX, scaleY));
+
 			boolean success = job.printPage(pageLayout, node);
 			if (success) {
 				job.endJob();
 			}
+			node.getTransforms().remove(node.getTransforms().size() - 1);
 		}
-
-		node.getTransforms().remove(node.getTransforms().size() - 1);
 	}
 
 }

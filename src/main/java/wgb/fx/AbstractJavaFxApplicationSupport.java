@@ -15,7 +15,7 @@
  */
 package wgb.fx;
 
-import org.springframework.boot.SpringApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
 
 import javafx.application.Application;
@@ -31,7 +31,7 @@ public abstract class AbstractJavaFxApplicationSupport extends Application {
 
 	@Override
 	public void init() throws Exception {
-		applicationContext = SpringApplication.run(getClass(), savedArgs);
+		applicationContext = new SpringApplicationBuilder(getClass()).headless(false).run(savedArgs);
 		applicationContext.getAutowireCapableBeanFactory().autowireBean(this);
 	}
 
