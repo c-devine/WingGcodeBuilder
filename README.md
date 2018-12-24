@@ -38,6 +38,14 @@ cutter.  See [wiki](https://github.com/c-devine/WingGcodeBuilder/wiki).
 
 ## Getting Started
 
+The easiest way to get started is to download and install the application through the latest release
+[installer](https://github.com/c-devine/WingGcodeBuilder/releases).
+On startup, the app looks for newer versions, and will prompt for installation of the most recent version if you
+have an older version.
+
+--  or --
+
+
 Clone the repository:
 ```
 git clone https://github.com/c-devine/WingGcodeBuilder.git
