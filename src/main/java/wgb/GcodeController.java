@@ -223,13 +223,13 @@ public class GcodeController implements Initializable, ProjectAware {
 	protected void processSaveGCS(ActionEvent event) {
 
 		FileChooser fileChooser = fcHelper.getFileChooser();
-		ExtensionFilter extFilter = new FileChooser.ExtensionFilter("GcodeSettings files (*.json)", "*.json");
+		ExtensionFilter extFilter = new FileChooser.ExtensionFilter("GcodeSettings files (*.gcs)", "*.gcs");
 		fileChooser.getExtensionFilters().add(extFilter);
 		File f = fileChooser.showSaveDialog(((Node) gcodePropTable).getScene().getWindow());
 		if (f != null) {
 			try {
-				if (!f.getName().endsWith(".json"))
-					f.getName().concat(".json");
+				if (!f.getName().endsWith(".gcs"))
+					f.getName().concat(".gcs");
 				gcSettings.setEntries(oList);
 				gcManager.save(gcSettings, f);
 			} catch (Exception e) {
@@ -242,7 +242,7 @@ public class GcodeController implements Initializable, ProjectAware {
 	protected void processLoadGCS(ActionEvent event) {
 
 		FileChooser fileChooser = fcHelper.getFileChooser();
-		ExtensionFilter extFilter = new FileChooser.ExtensionFilter("GcodeSettings files (*.json)", "*.json");
+		ExtensionFilter extFilter = new FileChooser.ExtensionFilter("GcodeSettings files (*.gcs)", "*.gcs");
 		fileChooser.getExtensionFilters().add(extFilter);
 		File f = fileChooser.showOpenDialog(((Node) gcodePropTable).getScene().getWindow());
 		if (f != null)

@@ -294,14 +294,14 @@ public class MainController implements Initializable, ProjectAware {
 	protected void processSaveAs(ActionEvent event) {
 
 		FileChooser fileChooser = fcHelper.getFileChooser();
-		ExtensionFilter extFilter = new FileChooser.ExtensionFilter("WGB files (*.json)", "*.json");
+		ExtensionFilter extFilter = new FileChooser.ExtensionFilter("WGB files (*.prj)", "*.prj");
 		fileChooser.getExtensionFilters().add(extFilter);
 		File f = fileChooser.showSaveDialog(((Node) menuBar).getScene().getWindow());
 		if (f != null) {
 			fcHelper.saveLastFileLocation(f);
 			try {
-				if (!f.getName().endsWith(".json"))
-					f.getName().concat(".json");
+				if (!f.getName().endsWith(".prj"))
+					f.getName().concat(".prj");
 				project.save(f);
 			} catch (Exception e) {
 				logger.error("Error saving project: " + f.getAbsolutePath(), e);
@@ -313,7 +313,7 @@ public class MainController implements Initializable, ProjectAware {
 	protected void processOpen(ActionEvent event) {
 
 		FileChooser fileChooser = fcHelper.getFileChooser();
-		ExtensionFilter extFilter = new FileChooser.ExtensionFilter("WGB files (*.json)", "*.json");
+		ExtensionFilter extFilter = new FileChooser.ExtensionFilter("WGB files (*.prj)", "*.prj");
 		fileChooser.getExtensionFilters().add(extFilter);
 		File f = fileChooser.showOpenDialog(((Node) menuBar).getScene().getWindow());
 		if (f != null)
